@@ -25,6 +25,7 @@ seo_rows      = read_latest_csv("seo_*.csv")
 content_rows  = read_latest_csv("content_*.csv")
 perf_rows     = read_latest_csv("performance_*.csv")
 broken_rows   = read_latest_csv("broken_links_*.csv")
+vuln_rows     = read_latest_csv("passive_vuln_*.csv")
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -86,14 +87,17 @@ seo_issues_total      = count_issues(seo_rows,       "issues_count")
 content_issues_total  = count_issues(content_rows,  "issues_count")
 perf_issues_total     = count_issues(perf_rows,      "issues_count")
 broken_total          = len(broken_rows)
+passive_vulns_total   = count_issues(vuln_rows,     "vuln_count")
+
 unlabelled_btns       = count_issues(access_rows,   "buttons_no_label")
 missing_alt           = count_issues(access_rows,   "imgs_no_alt")
 avg_ttfb              = avg_val(perf_rows, "ttfb_ms")
 avg_score_a11y        = avg_val(access_rows, "score")
 blocking_scripts      = count_issues(perf_rows, "scripts_blocking")
 images_no_lazy        = count_issues(perf_rows, "images_no_lazy")
+
 total_issues = (missing_headers_total + a11y_issues_total + seo_issues_total +
-                content_issues_total + perf_issues_total + broken_total)
+                content_issues_total + perf_issues_total + broken_total + passive_vulns_total)
 
 # ─── Before/After Card Builder ────────────────────────────────────────────────
 
@@ -150,6 +154,23 @@ ba_cards.append(ba_card(
         "Remove <code>Server: cloudflare</code> and <code>X-Powered-By</code> headers (info disclosure)",
         "Fix CORS wildcard: change <code>Access-Control-Allow-Origin: *</code> to specific domains",
         "<strong>Estimated fix time: 1–2 days</strong> (Cloudflare header rules or Nginx config change)",
+    ]
+))
+
+# 1.5 Passive Vulnerabilities
+ba_cards.append(ba_card(
+    "🛡️", "Passive Vulnerability Test",
+    before_val=f"{passive_vulns_total} issues",
+    after_val="0 issues",
+    before_label="CORS misconfigurations, missing SRI, dangerous HTTP methods, and server info leaks",
+    after_label="Secure default configurations across APIs and resources",
+    effort="Low", impact="Critical",
+    recommendations=[
+        "Ensure CORS <code>Access-Control-Allow-Origin</code> never reflects exactly the user origin or uses wildcards for sensitive endpoints.",
+        "Add <code>integrity</code> hashes to all scripts fetched from third-party domains.",
+        "Disable HTTP methods like <code>PUT</code>, <code>DELETE</code>, and <code>TRACE</code> at the server level if unused.",
+        "Remove framework headers like <code>X-AspNet-Version</code> to prevent easy server fingerprinting.",
+        "<strong>Estimated fix time: 1–2 days</strong> (Server configuration)",
     ]
 ))
 
@@ -380,6 +401,7 @@ td[title]:hover::after{{
   <span class="tag">🔍 SEO</span>
   <span class="tag">⚡ Performance</span>
   <span class="tag">📝 Content</span>
+  <span class="tag">🛡️ Vulnerability</span>
   <span class="tag">✨ Before vs After</span>
   <p style="margin-top:14px;font-size:0.8rem;position:relative;">
     Generated: {datetime.now().strftime('%d %B %Y at %I:%M %p')}
@@ -404,6 +426,7 @@ td[title]:hover::after{{
   <a href="#accessibility">♿ Accessibility</a>
   <a href="#seo">🔍 SEO</a>
   <a href="#content">📝 Content & Vulns</a>
+  <a href="#vulnerability">🛡️ Vulnerability</a>
   <a href="#performance">⚡ Performance</a>
   <a href="#broken">🔗 Broken Links</a>
 </nav>
@@ -433,6 +456,7 @@ td[title]:hover::after{{
 {make_table(access_rows,   "♿ Accessibility Audit (WCAG 2.1)", "#a371f7", "accessibility")}
 {make_table(seo_rows,      "🔍 SEO Analysis", "#d29922", "seo")}
 {make_table(content_rows,  "📝 Content & Passive Vulnerability Audit", "#f0883e", "content")}
+{make_table(vuln_rows,     "🛡️ Passive Vulnerability Audit", "#ff4d4f", "vulnerability")}
 {make_table(perf_rows,     "⚡ Performance & Network Audit", "#3fb950", "performance")}
 {make_table(broken_rows,   "🔗 Broken Links Report", "#58a6ff", "broken")}
 

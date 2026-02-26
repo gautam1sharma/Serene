@@ -333,6 +333,7 @@ if __name__ == "__main__":
         ("04_seo_checker",      "run_seo_audit"),
         ("05_content_checker",  "run_content_audit"),
         ("06_performance",      "run_performance_audit"),
+        ("07_vulnerability_passive", "run_vulnerability_audit"),
     ]
 
     for fname, func_name in modules:
