@@ -1,0 +1,239 @@
+HYUNDAI INDIA - PERFORMANCE & NETWORK REPORT
+Generated: 2026-02-25 20:37:07
+======================================================================
+
+PAGE: https://www.hyundai.com/in/en
+  TTFB: 1839.0ms | Size: 737.5KB
+  Compression: Gzip
+  Scripts: 56 (23 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, maxcdn.bootstrapcdn.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 737.5 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 1839.0ms is slow (>1.5s, target: <800ms)
+  ⚠️  23 render-blocking scripts (add async/defer attributes)
+  ⚠️  112 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  110 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car
+  TTFB: 232.1ms | Size: 557.3KB
+  Compression: Gzip
+  Scripts: 44 (15 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 557.3 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  15 render-blocking scripts (add async/defer attributes)
+  ⚠️  65 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  64 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/click-to-buy.html
+  TTFB: 1509.4ms | Size: 497.7KB
+  Compression: Gzip
+  Scripts: 41 (15 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 1509.4ms is slow (>1.5s, target: <800ms)
+  ⚠️  HTML size 497.7 KB (consider reducing)
+  ⚠️  15 render-blocking scripts (add async/defer attributes)
+  ⚠️  51 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  50 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/connect-to-service.html
+  TTFB: 1473.8ms | Size: 490.8KB
+  Compression: Gzip
+  Scripts: 38 (15 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 1473.8ms could be improved (target: <800ms)
+  ⚠️  HTML size 490.8 KB (consider reducing)
+  ⚠️  15 render-blocking scripts (add async/defer attributes)
+  ⚠️  50 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  49 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/contact-us.html
+  TTFB: 440.8ms | Size: 486.6KB
+  Compression: Gzip
+  Scripts: 36 (12 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, developers.google.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 486.6 KB (consider reducing)
+  ⚠️  12 render-blocking scripts (add async/defer attributes)
+  ⚠️  45 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  44 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/utility/contact-us
+  TTFB: 304.7ms | Size: 486.6KB
+  Compression: Gzip
+  Scripts: 36 (12 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, developers.google.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 486.6 KB (consider reducing)
+  ⚠️  12 render-blocking scripts (add async/defer attributes)
+  ⚠️  45 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  44 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/creta/highlights.html
+  TTFB: 398.3ms | Size: 697.2KB
+  Compression: Gzip
+  Scripts: 62 (24 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 697.2 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  24 render-blocking scripts (add async/defer attributes)
+  ⚠️  129 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  127 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/venue/highlights.html
+  TTFB: 290.5ms | Size: 698.9KB
+  Compression: Gzip
+  Scripts: 66 (22 blocking)
+  Third-party domains: assets.adobedtm.com, cdn.jsdelivr.net, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 698.9 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  22 render-blocking scripts (add async/defer attributes)
+  ⚠️  119 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  118 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/i20/highlights.html
+  TTFB: 460.7ms | Size: 629.2KB
+  Compression: Gzip
+  Scripts: 64 (24 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 629.2 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  24 render-blocking scripts (add async/defer attributes)
+  ⚠️  85 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  83 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/verna/highlights.html
+  TTFB: 818.5ms | Size: 612.4KB
+  Compression: Gzip
+  Scripts: 54 (20 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 612.4 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 818.5ms could be improved (target: <800ms)
+  ⚠️  20 render-blocking scripts (add async/defer attributes)
+  ⚠️  81 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  80 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/tucson/highlights.html
+  TTFB: 1087.2ms | Size: 547.1KB
+  Compression: Gzip
+  Scripts: 39 (13 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 547.1 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 1087.2ms could be improved (target: <800ms)
+  ⚠️  13 render-blocking scripts (add async/defer attributes)
+  ⚠️  86 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  85 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/alcazar/highlights.html
+  TTFB: 264.1ms | Size: 653.9KB
+  Compression: Gzip
+  Scripts: 61 (23 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 653.9 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  23 render-blocking scripts (add async/defer attributes)
+  ⚠️  100 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  98 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/ioniq5/highlights.html
+  TTFB: 269.4ms | Size: 486.9KB
+  Compression: Gzip
+  Scripts: 35 (11 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No Cache-Control header set
+  ⚠️  No ETag header found
+  ⚠️  HTML size 486.9 KB (consider reducing)
+  ⚠️  11 render-blocking scripts (add async/defer attributes)
+  ⚠️  51 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  50 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/find-a-car/exter/highlights.html
+  TTFB: 964.3ms | Size: 661.0KB
+  Compression: Gzip
+  Scripts: 61 (22 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 661.0 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  TTFB 964.3ms could be improved (target: <800ms)
+  ⚠️  22 render-blocking scripts (add async/defer attributes)
+  ⚠️  87 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  85 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/hyundai-story
+  TTFB: 396.7ms | Size: 497.2KB
+  Compression: Gzip
+  Scripts: 42 (16 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 497.2 KB (consider reducing)
+  ⚠️  16 render-blocking scripts (add async/defer attributes)
+  ⚠️  50 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  49 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/blog
+  TTFB: 270.7ms | Size: 547.1KB
+  Compression: Gzip
+  Scripts: 39 (13 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ❌ Large HTML payload: 547.1 KB (target: <100 KB)
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  13 render-blocking scripts (add async/defer attributes)
+  ⚠️  86 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  85 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/utility/find-a-dealer
+  TTFB: 364.8ms | Size: 486.9KB
+  Compression: Gzip
+  Scripts: 35 (11 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 486.9 KB (consider reducing)
+  ⚠️  11 render-blocking scripts (add async/defer attributes)
+  ⚠️  51 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  50 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/utility/contact-us/enquiry/sales-enquiry
+  TTFB: 307.6ms | Size: 493.1KB
+  Compression: Gzip
+  Scripts: 37 (14 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.google.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 493.1 KB (consider reducing)
+  ⚠️  14 render-blocking scripts (add async/defer attributes)
+  ⚠️  45 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  44 images without width/height (causes Cumulative Layout Shift)
+
+PAGE: https://www.hyundai.com/in/en/utility/contact-us/enquiry/service-enquiry
+  TTFB: 314.5ms | Size: 494.1KB
+  Compression: Gzip
+  Scripts: 36 (13 blocking)
+  Third-party domains: assets.adobedtm.com, cdnjs.cloudflare.com, static.cloudflareinsights.com, www.google.com, www.googletagmanager.com
+  ⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2
+  ⚠️  No ETag header found
+  ⚠️  HTML size 494.1 KB (consider reducing)
+  ⚠️  13 render-blocking scripts (add async/defer attributes)
+  ⚠️  45 images without lazy-loading (add loading='lazy' attribute)
+  ⚠️  44 images without width/height (causes Cumulative Layout Shift)
+

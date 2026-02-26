@@ -1,0 +1,270 @@
+HYUNDAI INDIA - SECURITY HEADERS AUDIT REPORT
+Generated: 2026-02-25 20:33:51
+======================================================================
+
+SSL CERTIFICATE
+----------------------------------------
+  valid: True
+  expiry_date: 2026-10-27
+  days_until_expiry: 244
+  issuer: {'countryName': 'GB', 'stateOrProvinceName': 'Greater Manchester', 'localityName': 'Salford', 'organizationName': 'Sectigo Limited', 'commonName': 'Sectigo RSA Organization Validation Secure Server CA'}
+  subject: {'countryName': 'KR', 'stateOrProvinceName': 'Seoul', 'organizationName': 'Hyundai Motor Company', 'commonName': '*.hyundai.com'}
+  protocol: TLSv1.3
+  error: None
+
+HTTPS REDIRECT
+----------------------------------------
+  redirects_to_https: True
+  redirect_chain: ['http://www.hyundai.com/', 'https://www.hyundai.com/in/', 'https://www.hyundai.com/in/en']
+  final_url: https://www.hyundai.com/in/en
+  status: 200
+
+SECURITY HEADERS PER PAGE
+----------------------------------------
+
+URL: https://www.hyundai.com/in/en
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/click-to-buy.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/connect-to-service.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/contact-us.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/utility/contact-us
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/creta/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/venue/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/i20/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/verna/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/tucson/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/alcazar/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/ioniq5/highlights.html
+  Missing (5):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (2):
+    ✅ X-Frame-Options: SAMEORIGIN, SAMEORIGIN
+    ✅ X-Content-Type-Options: nosniff
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/find-a-car/exter/highlights.html
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/hyundai-story
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/blog
+  Missing (6):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ X-Content-Type-Options: Prevents MIME-type sniffing
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (1):
+    ✅ X-Frame-Options: SAMEORIGIN
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/utility/find-a-dealer
+  Missing (5):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (2):
+    ✅ X-Frame-Options: SAMEORIGIN, SAMEORIGIN
+    ✅ X-Content-Type-Options: nosniff
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/utility/contact-us/enquiry/sales-enquiry
+  Missing (5):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (2):
+    ✅ X-Frame-Options: SAMEORIGIN, SAMEORIGIN
+    ✅ X-Content-Type-Options: nosniff
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare
+
+URL: https://www.hyundai.com/in/en/utility/contact-us/enquiry/service-enquiry
+  Missing (5):
+    ❌ Content-Security-Policy: Restricts sources for scripts/styles (XSS prevention)
+    ❌ Strict-Transport-Security: Enforces HTTPS (HSTS)
+    ❌ Referrer-Policy: Controls referrer info sent to other sites
+    ❌ Permissions-Policy: Controls browser feature access
+    ❌ X-XSS-Protection: Legacy XSS filter (older browsers)
+  Present (2):
+    ✅ X-Frame-Options: SAMEORIGIN, SAMEORIGIN
+    ✅ X-Content-Type-Options: nosniff
+  Sensitive Info Leaked:
+    ⚠️  Server: cloudflare

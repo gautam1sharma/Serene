@@ -1,0 +1,987 @@
+[
+  {
+    "url": "https://www.hyundai.com/in/en",
+    "ttfb_ms": 1839.0,
+    "total_size_bytes": 755199,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 737.5 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 1839.0ms is slow (>1.5s, target: <800ms)",
+      "⚠️  23 render-blocking scripts (add async/defer attributes)",
+      "⚠️  112 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  110 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'maxcdn.bootstrapcdn.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 56,
+      "inline": 33,
+      "external": 23,
+      "render_blocking": 23,
+      "third_party": 10
+    },
+    "stylesheets": {
+      "total": 15,
+      "inline": 0,
+      "external": 13,
+      "render_blocking": 13
+    },
+    "images": {
+      "total": 112,
+      "no_lazy": 112,
+      "no_dimensions": 110
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "maxcdn.bootstrapcdn.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car",
+    "ttfb_ms": 232.1,
+    "total_size_bytes": 570642,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 557.3 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  15 render-blocking scripts (add async/defer attributes)",
+      "⚠️  65 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  64 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 232.1ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 44,
+      "inline": 29,
+      "external": 15,
+      "render_blocking": 15,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 11,
+      "inline": 0,
+      "external": 11,
+      "render_blocking": 11
+    },
+    "images": {
+      "total": 65,
+      "no_lazy": 65,
+      "no_dimensions": 64
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/click-to-buy.html",
+    "ttfb_ms": 1509.4,
+    "total_size_bytes": 509647,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 1509.4ms is slow (>1.5s, target: <800ms)",
+      "⚠️  HTML size 497.7 KB (consider reducing)",
+      "⚠️  15 render-blocking scripts (add async/defer attributes)",
+      "⚠️  51 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  50 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 41,
+      "inline": 26,
+      "external": 15,
+      "render_blocking": 15,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 8,
+      "inline": 0,
+      "external": 8,
+      "render_blocking": 8
+    },
+    "images": {
+      "total": 51,
+      "no_lazy": 51,
+      "no_dimensions": 50
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/connect-to-service.html",
+    "ttfb_ms": 1473.8,
+    "total_size_bytes": 502578,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 1473.8ms could be improved (target: <800ms)",
+      "⚠️  HTML size 490.8 KB (consider reducing)",
+      "⚠️  15 render-blocking scripts (add async/defer attributes)",
+      "⚠️  50 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  49 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 38,
+      "inline": 23,
+      "external": 15,
+      "render_blocking": 15,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 7,
+      "inline": 0,
+      "external": 7,
+      "render_blocking": 7
+    },
+    "images": {
+      "total": 50,
+      "no_lazy": 50,
+      "no_dimensions": 49
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/contact-us.html",
+    "ttfb_ms": 440.8,
+    "total_size_bytes": 498239,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 486.6 KB (consider reducing)",
+      "⚠️  12 render-blocking scripts (add async/defer attributes)",
+      "⚠️  45 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  44 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 440.8ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'developers.google.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 36,
+      "inline": 24,
+      "external": 12,
+      "render_blocking": 12,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 7,
+      "inline": 0,
+      "external": 7,
+      "render_blocking": 7
+    },
+    "images": {
+      "total": 45,
+      "no_lazy": 45,
+      "no_dimensions": 44
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "developers.google.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/utility/contact-us",
+    "ttfb_ms": 304.7,
+    "total_size_bytes": 498239,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 486.6 KB (consider reducing)",
+      "⚠️  12 render-blocking scripts (add async/defer attributes)",
+      "⚠️  45 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  44 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 304.7ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'developers.google.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 36,
+      "inline": 24,
+      "external": 12,
+      "render_blocking": 12,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 7,
+      "inline": 0,
+      "external": 7,
+      "render_blocking": 7
+    },
+    "images": {
+      "total": 45,
+      "no_lazy": 45,
+      "no_dimensions": 44
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "developers.google.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/creta/highlights.html",
+    "ttfb_ms": 398.3,
+    "total_size_bytes": 713945,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 697.2 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  24 render-blocking scripts (add async/defer attributes)",
+      "⚠️  129 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  127 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 398.3ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 62,
+      "inline": 38,
+      "external": 24,
+      "render_blocking": 24,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 10,
+      "inline": 0,
+      "external": 10,
+      "render_blocking": 10
+    },
+    "images": {
+      "total": 129,
+      "no_lazy": 129,
+      "no_dimensions": 127
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/venue/highlights.html",
+    "ttfb_ms": 290.5,
+    "total_size_bytes": 715700,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 698.9 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  22 render-blocking scripts (add async/defer attributes)",
+      "⚠️  119 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  118 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 290.5ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdn.jsdelivr.net', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 66,
+      "inline": 44,
+      "external": 22,
+      "render_blocking": 22,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 18,
+      "inline": 0,
+      "external": 18,
+      "render_blocking": 18
+    },
+    "images": {
+      "total": 119,
+      "no_lazy": 119,
+      "no_dimensions": 118
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdn.jsdelivr.net",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/i20/highlights.html",
+    "ttfb_ms": 460.7,
+    "total_size_bytes": 644291,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 629.2 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  24 render-blocking scripts (add async/defer attributes)",
+      "⚠️  85 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  83 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 460.7ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 64,
+      "inline": 40,
+      "external": 24,
+      "render_blocking": 24,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 11,
+      "inline": 0,
+      "external": 11,
+      "render_blocking": 11
+    },
+    "images": {
+      "total": 85,
+      "no_lazy": 85,
+      "no_dimensions": 83
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/verna/highlights.html",
+    "ttfb_ms": 818.5,
+    "total_size_bytes": 627120,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 612.4 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 818.5ms could be improved (target: <800ms)",
+      "⚠️  20 render-blocking scripts (add async/defer attributes)",
+      "⚠️  81 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  80 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 54,
+      "inline": 34,
+      "external": 20,
+      "render_blocking": 20,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 11,
+      "inline": 0,
+      "external": 11,
+      "render_blocking": 11
+    },
+    "images": {
+      "total": 81,
+      "no_lazy": 81,
+      "no_dimensions": 80
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/tucson/highlights.html",
+    "ttfb_ms": 1087.2,
+    "total_size_bytes": 560202,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 547.1 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 1087.2ms could be improved (target: <800ms)",
+      "⚠️  13 render-blocking scripts (add async/defer attributes)",
+      "⚠️  86 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  85 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 39,
+      "inline": 26,
+      "external": 13,
+      "render_blocking": 13,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 8,
+      "inline": 0,
+      "external": 8,
+      "render_blocking": 8
+    },
+    "images": {
+      "total": 86,
+      "no_lazy": 86,
+      "no_dimensions": 85
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/alcazar/highlights.html",
+    "ttfb_ms": 264.1,
+    "total_size_bytes": 669559,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 653.9 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  23 render-blocking scripts (add async/defer attributes)",
+      "⚠️  100 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  98 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 264.1ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 61,
+      "inline": 38,
+      "external": 23,
+      "render_blocking": 23,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 11,
+      "inline": 0,
+      "external": 11,
+      "render_blocking": 11
+    },
+    "images": {
+      "total": 100,
+      "no_lazy": 100,
+      "no_dimensions": 98
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/ioniq5/highlights.html",
+    "ttfb_ms": 269.4,
+    "total_size_bytes": 498591,
+    "status_code": 404,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No Cache-Control header set",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 486.9 KB (consider reducing)",
+      "⚠️  11 render-blocking scripts (add async/defer attributes)",
+      "⚠️  51 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  50 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "✅ Good TTFB: 269.4ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 35,
+      "inline": 24,
+      "external": 11,
+      "render_blocking": 11,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 6,
+      "inline": 0,
+      "external": 6,
+      "render_blocking": 6
+    },
+    "images": {
+      "total": 51,
+      "no_lazy": 51,
+      "no_dimensions": 50
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/find-a-car/exter/highlights.html",
+    "ttfb_ms": 964.3,
+    "total_size_bytes": 676879,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 661.0 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  TTFB 964.3ms could be improved (target: <800ms)",
+      "⚠️  22 render-blocking scripts (add async/defer attributes)",
+      "⚠️  87 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  85 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 61,
+      "inline": 39,
+      "external": 22,
+      "render_blocking": 22,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 10,
+      "inline": 0,
+      "external": 10,
+      "render_blocking": 10
+    },
+    "images": {
+      "total": 87,
+      "no_lazy": 87,
+      "no_dimensions": 85
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/hyundai-story",
+    "ttfb_ms": 396.7,
+    "total_size_bytes": 509103,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 497.2 KB (consider reducing)",
+      "⚠️  16 render-blocking scripts (add async/defer attributes)",
+      "⚠️  50 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  49 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 396.7ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 42,
+      "inline": 26,
+      "external": 16,
+      "render_blocking": 16,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 8,
+      "inline": 0,
+      "external": 8,
+      "render_blocking": 8
+    },
+    "images": {
+      "total": 50,
+      "no_lazy": 50,
+      "no_dimensions": 49
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/blog",
+    "ttfb_ms": 270.7,
+    "total_size_bytes": 560202,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [
+      "❌ Large HTML payload: 547.1 KB (target: <100 KB)"
+    ],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  13 render-blocking scripts (add async/defer attributes)",
+      "⚠️  86 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  85 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 270.7ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 39,
+      "inline": 26,
+      "external": 13,
+      "render_blocking": 13,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 8,
+      "inline": 0,
+      "external": 8,
+      "render_blocking": 8
+    },
+    "images": {
+      "total": 86,
+      "no_lazy": 86,
+      "no_dimensions": 85
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/utility/find-a-dealer",
+    "ttfb_ms": 364.8,
+    "total_size_bytes": 498591,
+    "status_code": 404,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 486.9 KB (consider reducing)",
+      "⚠️  11 render-blocking scripts (add async/defer attributes)",
+      "⚠️  51 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  50 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 364.8ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 35,
+      "inline": 24,
+      "external": 11,
+      "render_blocking": 11,
+      "third_party": 5
+    },
+    "stylesheets": {
+      "total": 6,
+      "inline": 0,
+      "external": 6,
+      "render_blocking": 6
+    },
+    "images": {
+      "total": 51,
+      "no_lazy": 51,
+      "no_dimensions": 50
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/utility/contact-us/enquiry/sales-enquiry",
+    "ttfb_ms": 307.6,
+    "total_size_bytes": 504936,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 493.1 KB (consider reducing)",
+      "⚠️  14 render-blocking scripts (add async/defer attributes)",
+      "⚠️  45 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  44 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 307.6ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.google.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 37,
+      "inline": 23,
+      "external": 14,
+      "render_blocking": 14,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 9,
+      "inline": 0,
+      "external": 9,
+      "render_blocking": 9
+    },
+    "images": {
+      "total": 45,
+      "no_lazy": 45,
+      "no_dimensions": 44
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.google.com",
+      "www.googletagmanager.com"
+    ]
+  },
+  {
+    "url": "https://www.hyundai.com/in/en/utility/contact-us/enquiry/service-enquiry",
+    "ttfb_ms": 314.5,
+    "total_size_bytes": 505967,
+    "status_code": 200,
+    "http_version": 11,
+    "gzip": true,
+    "brotli": false,
+    "cache_control": "max-age=43200",
+    "etag": "",
+    "issues": [],
+    "warnings": [
+      "⚠️  Using HTTP/1.1 - consider upgrading to HTTP/2",
+      "⚠️  No ETag header found",
+      "⚠️  HTML size 494.1 KB (consider reducing)",
+      "⚠️  13 render-blocking scripts (add async/defer attributes)",
+      "⚠️  45 images without lazy-loading (add loading='lazy' attribute)",
+      "⚠️  44 images without width/height (causes Cumulative Layout Shift)"
+    ],
+    "info": [
+      "✅ Gzip compression enabled",
+      "Cache-Control: max-age=43200",
+      "✅ Good TTFB: 314.5ms",
+      "Third-party domains: ['assets.adobedtm.com', 'cdnjs.cloudflare.com', 'static.cloudflareinsights.com', 'www.google.com', 'www.googletagmanager.com']"
+    ],
+    "scripts": {
+      "total": 36,
+      "inline": 23,
+      "external": 13,
+      "render_blocking": 13,
+      "third_party": 6
+    },
+    "stylesheets": {
+      "total": 8,
+      "inline": 0,
+      "external": 8,
+      "render_blocking": 8
+    },
+    "images": {
+      "total": 45,
+      "no_lazy": 45,
+      "no_dimensions": 44
+    },
+    "iframes": 3,
+    "third_party_domains": [
+      "assets.adobedtm.com",
+      "cdnjs.cloudflare.com",
+      "static.cloudflareinsights.com",
+      "www.google.com",
+      "www.googletagmanager.com"
+    ]
+  }
+]

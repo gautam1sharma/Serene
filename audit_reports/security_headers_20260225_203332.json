@@ -1,0 +1,1336 @@
+{
+  "ssl": {
+    "valid": true,
+    "expiry_date": "2026-10-27",
+    "days_until_expiry": 244,
+    "issuer": {
+      "countryName": "GB",
+      "stateOrProvinceName": "Greater Manchester",
+      "localityName": "Salford",
+      "organizationName": "Sectigo Limited",
+      "commonName": "Sectigo RSA Organization Validation Secure Server CA"
+    },
+    "subject": {
+      "countryName": "KR",
+      "stateOrProvinceName": "Seoul",
+      "organizationName": "Hyundai Motor Company",
+      "commonName": "*.hyundai.com"
+    },
+    "protocol": "TLSv1.3",
+    "error": null
+  },
+  "https_redirect": {
+    "redirects_to_https": true,
+    "redirect_chain": [
+      "http://www.hyundai.com/",
+      "https://www.hyundai.com/in/",
+      "https://www.hyundai.com/in/en"
+    ],
+    "final_url": "https://www.hyundai.com/in/en",
+    "status": 200
+  },
+  "http_methods": {
+    "dangerous": [],
+    "checked": [
+      "OPTIONS",
+      "PUT",
+      "DELETE",
+      "TRACE",
+      "PATCH",
+      "CONNECT"
+    ]
+  },
+  "page_findings": [
+    {
+      "url": "https://www.hyundai.com/in/en",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:35 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38171c1e3f1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12471",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=241,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:35:44 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:35 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38171e1b501203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12326",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=403,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:38:09 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/click-to-buy.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:38 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38172fbd3c1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12108",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=171,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:41:50 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/connect-to-service.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:38 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817325c841203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "11613",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=168,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:50:05 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/contact-us.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:39 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817350a981203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12424",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=199,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:36:35 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/utility/contact-us",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:40 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38173c6c061203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12425",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=155,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:36:35 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/creta/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:40 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38173ddf511203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "3231",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=171,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 14:09:49 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/venue/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:41 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38173fbba41203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "0",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=389,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 15:03:41 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/i20/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:41 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817430b9f1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "1777",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=187,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 14:34:04 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/verna/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:41 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38174509281203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "0",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=359,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 15:03:41 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/tucson/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:42 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817490bc71203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12503",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=419,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:35:19 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/alcazar/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:44 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817521bbb1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "0",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=645,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 15:03:44 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/ioniq5/highlights.html",
+      "status_code": 404,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN, SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "value": "nosniff",
+          "description": "Prevents MIME-type sniffing"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:45 GMT",
+        "Content-Type": "text/html;charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38175cf8251203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "Access-Control-Allow-Origin": "*",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Server": "cloudflare",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN, SAMEORIGIN",
+        "X-UA-Compatible": "IE=edge",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=192,cfOrigin;dur=0",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/find-a-car/exter/highlights.html",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:46 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38175ebc4c1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "7908",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=438,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 12:51:58 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/hyundai-story",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:48 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817703e041203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "11086",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=166,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:59:02 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/blog",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "description": "Prevents MIME-type sniffing"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:49 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817723ab91203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "X-UA-Compatible": "IE=edge",
+        "Access-Control-Allow-Origin": "*",
+        "Age": "12509",
+        "Cache-Control": "max-age=43200",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=168,cfOrigin;dur=0",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Last-Modified": "Wed, 25 Feb 2026 11:35:19 GMT",
+        "Server": "cloudflare",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/utility/find-a-dealer",
+      "status_code": 404,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN, SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "value": "nosniff",
+          "description": "Prevents MIME-type sniffing"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:50 GMT",
+        "Content-Type": "text/html;charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d381779fdee1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "max-age=43200",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Server": "cloudflare",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN, SAMEORIGIN",
+        "X-UA-Compatible": "IE=edge",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=194,cfOrigin;dur=0",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/utility/contact-us/enquiry/sales-enquiry",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN, SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "value": "nosniff",
+          "description": "Prevents MIME-type sniffing"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:50 GMT",
+        "Content-Type": "text/html;charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d38177d5eaa1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "max-age=43200",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Server": "cloudflare",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN, SAMEORIGIN",
+        "X-UA-Compatible": "IE=edge",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=240,cfOrigin;dur=0",
+        "Content-Encoding": "gzip"
+      }
+    },
+    {
+      "url": "https://www.hyundai.com/in/en/utility/contact-us/enquiry/service-enquiry",
+      "status_code": 200,
+      "missing_security_headers": [
+        {
+          "header": "Content-Security-Policy",
+          "description": "Restricts sources for scripts/styles (XSS prevention)"
+        },
+        {
+          "header": "Strict-Transport-Security",
+          "description": "Enforces HTTPS (HSTS)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "description": "Controls referrer info sent to other sites"
+        },
+        {
+          "header": "Permissions-Policy",
+          "description": "Controls browser feature access"
+        },
+        {
+          "header": "X-XSS-Protection",
+          "description": "Legacy XSS filter (older browsers)"
+        }
+      ],
+      "present_security_headers": [
+        {
+          "header": "X-Frame-Options",
+          "value": "SAMEORIGIN, SAMEORIGIN",
+          "description": "Prevents clickjacking attacks"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "value": "nosniff",
+          "description": "Prevents MIME-type sniffing"
+        }
+      ],
+      "sensitive_info_exposed": [
+        {
+          "header": "Server",
+          "value": "cloudflare",
+          "risk": "Server information disclosure - attackers can fingerprint software versions"
+        }
+      ],
+      "cookie_issues": [],
+      "cors_issues": [
+        "⚠️  Access-Control-Allow-Origin: * (wildcard) - any origin can read responses"
+      ],
+      "csp_analysis": null,
+      "hsts_analysis": null,
+      "raw_headers": {
+        "Date": "Wed, 25 Feb 2026 15:03:52 GMT",
+        "Content-Type": "text/html;charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "CF-Ray": "9d3817864ddc1203-MAA",
+        "CF-Cache-Status": "DYNAMIC",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "max-age=43200",
+        "Expires": "Sun, 08 Dec 2019 16:00:00 GMT",
+        "Server": "cloudflare",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN, SAMEORIGIN",
+        "X-UA-Compatible": "IE=edge",
+        "Server-Timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=219,cfOrigin;dur=0",
+        "Content-Encoding": "gzip"
+      }
+    }
+  ]
+}
