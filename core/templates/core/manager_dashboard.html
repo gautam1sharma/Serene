@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Manager Dashboard</h2>
+<p>Overview of your assigned Dealerships.</p>
+
+<h3>Your Dealerships</h3>
+<ul>
+{% for d in dealerships %}
+    <li>{{ d.name }} - {{ d.location }}</li>
+{% endfor %}
+</ul>
+
+<h3>Service Requests (Your Dealerships)</h3>
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
+    <tr>
+        <th>Customer</th>
+        <th>Car Model</th>
+        <th>Dealership</th>
+        <th>Status</th>
+    </tr>
+{% for req in service_requests %}
+    <tr>
+        <td>{{ req.customer.username }}</td>
+        <td>{{ req.car_model }}</td>
+        <td>{{ req.dealership.name }}</td>
+        <td>{{ req.get_status_display }}</td>
+    </tr>
+{% empty %}
+    <tr><td colspan="4">No service requests.</td></tr>
+{% endfor %}
+</table>
+
+<h3>Dealership Inventory</h3>
+<ul>
+{% for car in inventory %}
+    <li>{{ car.car_model.name }} at {{ car.dealership.name }} (VIN: {{ car.vin }}) - {{ car.get_status_display }}</li>
+{% empty %}
+    <li>No inventory in managed dealerships.</li>
+{% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Customer Dashboard</h2>
+<p>Welcome to the Hyundai Customer Hub!</p>
+
+<h3>Your Service Requests</h3>
+{% if service_requests %}
+    <ul>
+    {% for req in service_requests %}
+        <li><strong>{{ req.car_model }}</strong> at {{ req.dealership.name }} - Status: {{ req.get_status_display }} (Requested on: {{ req.date_requested|date:"M d, Y" }})</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You have no active service requests.</p>
+{% endif %}
+{% endblock %}

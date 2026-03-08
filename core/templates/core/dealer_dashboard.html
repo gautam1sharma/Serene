@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Dealer Dashboard</h2>
+<p>Manage your inventory and sales.</p>
+
+<h3>All Available Inventory Across Dealerships</h3>
+{% if inventory %}
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
+        <tr>
+            <th>Dealership</th>
+            <th>Car Model</th>
+            <th>VIN</th>
+            <th>Status</th>
+        </tr>
+    {% for car in inventory %}
+        <tr>
+            <td>{{ car.dealership.name }}</td>
+            <td>{{ car.car_model.name }}</td>
+            <td>{{ car.vin }}</td>
+            <td>{{ car.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No inventory found.</p>
+{% endif %}
+{% endblock %}
