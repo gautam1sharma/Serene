@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Management Dashboard</h2>
+<p>High-level overview of regional operations.</p>
+
+<div style="display: flex; gap: 20px;">
+    <div style="background: #e9ecef; padding: 20px; border-radius: 5px; flex: 1;">
+        <h3>Total Dealerships</h3>
+        <p style="font-size: 24px;">{{ total_dealerships }}</p>
+    </div>
+    <div style="background: #e9ecef; padding: 20px; border-radius: 5px; flex: 1;">
+        <h3>Total Inventory (All Regions)</h3>
+        <p style="font-size: 24px;">{{ total_inventory }}</p>
+    </div>
+    <div style="background: #e9ecef; padding: 20px; border-radius: 5px; flex: 1;">
+        <h3>Total Service Requests</h3>
+        <p style="font-size: 24px;">{{ total_service_requests }}</p>
+    </div>
+</div>
+{% endblock %}
