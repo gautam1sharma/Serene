@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Initialize auth state from storage
   useEffect(() => {
     const initAuth = () => {
-      const storedUser = localStorage.getItem('hyundai_auth_user');
-      const token = localStorage.getItem('hyundai_auth_token');
+      const storedUser = localStorage.getItem('serene_auth_user');
+      const token = localStorage.getItem('serene_auth_token');
       
       if (storedUser && token) {
         try {
@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
 
     const checkTokenExpiry = () => {
-      const expiresAt = localStorage.getItem('hyundai_auth_expires');
+      const expiresAt = localStorage.getItem('serene_auth_expires');
       if (expiresAt && new Date(expiresAt) <= new Date()) {
         toast.error('Session expired. Please login again.');
         logout();
@@ -71,10 +71,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { user, token, refreshToken, expiresAt } = response.data;
         
         // Store auth data securely
-        localStorage.setItem('hyundai_auth_token', token);
-        localStorage.setItem('hyundai_auth_refresh', refreshToken);
-        localStorage.setItem('hyundai_auth_expires', expiresAt.toISOString());
-        localStorage.setItem('hyundai_auth_user', JSON.stringify(user));
+        localStorage.setItem('serene_auth_token', token);
+        localStorage.setItem('serene_auth_refresh', refreshToken);
+        localStorage.setItem('serene_auth_expires', expiresAt.toISOString());
+        localStorage.setItem('serene_auth_user', JSON.stringify(user));
         
         setUser(user);
         toast.success(`Welcome back, ${user.firstName}!`);
@@ -94,10 +94,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = useCallback(() => {
     authService.logout().catch(console.error);
     
-    localStorage.removeItem('hyundai_auth_token');
-    localStorage.removeItem('hyundai_auth_refresh');
-    localStorage.removeItem('hyundai_auth_expires');
-    localStorage.removeItem('hyundai_auth_user');
+    localStorage.removeItem('serene_auth_token');
+    localStorage.removeItem('serene_auth_refresh');
+    localStorage.removeItem('serene_auth_expires');
+    localStorage.removeItem('serene_auth_user');
     
     setUser(null);
     toast.info('You have been logged out');
@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authService.getCurrentUser();
       if (response.success && response.data) {
         setUser(response.data);
-        localStorage.setItem('hyundai_auth_user', JSON.stringify(response.data));
+        localStorage.setItem('serene_auth_user', JSON.stringify(response.data));
       }
     } catch (error) {
       console.error('Failed to refresh user:', error);

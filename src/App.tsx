@@ -6,11 +6,14 @@ import { UserRole } from '@/types';
 
 // Layouts
 import { MainLayout } from '@/components/layout/MainLayout';
-import { AuthLayout } from '@/components/layout/AuthLayout';
+import { CustomerAuthLayout } from '@/components/layout/CustomerAuthLayout';
+import { AdminAuthLayout } from '@/components/layout/AdminAuthLayout';
 
 // Auth Pages
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
+import { AdminLoginPage } from '@/pages/auth/AdminLoginPage';
+import { LandingPage } from '@/pages/LandingPage';
 
 // Role-Based Dashboards
 import { CustomerDashboard } from '@/dashboards/customer/CustomerDashboard';
@@ -113,16 +116,24 @@ const AutoRedirect: React.FC = () => {
 function AppRoutes() {
   return (
     <Routes>
-      {/* Public Routes */}
-      <Route element={<AuthLayout />}>
+      {/* Public Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Customer Auth Routes (light theme) */}
+      <Route element={<CustomerAuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
 
+      {/* Admin/Staff Auth Routes (dark DMS theme) */}
+      <Route element={<AdminAuthLayout />}>
+        <Route path="/admin-login" element={<AdminLoginPage />} />
+      </Route>
+
       {/* Protected Routes */}
       <Route element={<MainLayout />}>
-        {/* Auto-redirect root to appropriate dashboard */}
-        <Route path="/" element={<AutoRedirect />} />
+        {/* Auto-redirect dashboard to appropriate role dashboard */}
+        <Route path="/dashboard" element={<AutoRedirect />} />
 
         {/* Customer Routes */}
         <Route
@@ -194,8 +205,8 @@ function AppRoutes() {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      {/* Catch all */}
-      <Route path="*" element={<AutoRedirect />} />
+      {/* Catch all — send unknown routes to landing */}
+      <Route path="*" element={<LandingPage />} />
     </Routes>
   );
 }

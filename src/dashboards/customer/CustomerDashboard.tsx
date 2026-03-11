@@ -103,7 +103,7 @@ export const CustomerDashboard: React.FC = () => {
               Welcome back, {user?.firstName}!
             </h1>
             <p className="text-blue-100">
-              Explore our latest vehicles and manage your Hyundai experience.
+              Explore our latest vehicles and manage your Serene experience.
             </p>
           </div>
           <Link to="/customer/cars">

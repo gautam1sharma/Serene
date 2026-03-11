@@ -184,12 +184,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Car className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 bg-[#1a2a44] rounded-xl flex items-center justify-center flex-shrink-0">
+            <span className="material-symbols-outlined text-xl text-white">electric_car</span>
           </div>
           {!collapsed && (
             <div>
-              <h1 className="font-bold text-gray-900 text-sm">Hyundai Hub</h1>
+              <h1 className="font-bold text-gray-900 text-sm">Serene</h1>
               <p className="text-xs text-gray-500">Dealership System</p>
             </div>
           )}
@@ -220,13 +220,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
                     active 
-                      ? "bg-blue-50 text-blue-600" 
+                      ? "bg-slate-100 text-[#1a2a44]" 
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   )}
                 >
                   <item.icon className={cn(
                     "w-5 h-5 flex-shrink-0 transition-colors",
-                    active ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"
+                    active ? "text-[#1a2a44]" : "text-gray-400 group-hover:text-gray-600"
                   )} />
                   
                   {!collapsed && (
@@ -264,7 +264,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
                   isActive('/notifications')
-                    ? "bg-blue-50 text-blue-600"
+                    ? "bg-slate-100 text-[#1a2a44]"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >
@@ -278,7 +278,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
                   isActive('/profile')
-                    ? "bg-blue-50 text-blue-600"
+                    ? "bg-slate-100 text-[#1a2a44]"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >
@@ -292,7 +292,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
                   isActive('/settings')
-                    ? "bg-blue-50 text-blue-600"
+                    ? "bg-slate-100 text-[#1a2a44]"
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >

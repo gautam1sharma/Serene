@@ -9,7 +9,7 @@ class AuthService {
   private token: string | null = null;
 
   constructor() {
-    this.token = localStorage.getItem('hyundai_auth_token');
+    this.token = localStorage.getItem('serene_auth_token');
   }
 
   async login(credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> {
@@ -97,7 +97,7 @@ class AuthService {
   async getCurrentUser(): Promise<ApiResponse<User>> {
     await delay(500);
 
-    const storedUser = localStorage.getItem('hyundai_auth_user');
+    const storedUser = localStorage.getItem('serene_auth_user');
     if (storedUser) {
       return {
         success: true,

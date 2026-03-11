@@ -1,5 +1,5 @@
 // ============================================
-// HYUNDAI DEALERSHIP MANAGEMENT SYSTEM
+// SERENE DEALERSHIP MANAGEMENT SYSTEM
 // Type Definitions - Multi-Layer Architecture
 // ============================================
 

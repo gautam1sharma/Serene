@@ -26,21 +26,14 @@ export const LoginPage: React.FC = () => {
     const success = await login({ email, password });
     
     if (success) {
-      navigate('/');
+      navigate('/dashboard');
     }
     
     setIsLoading(false);
   };
 
-  const fillDemoCredentials = (role: string) => {
-    const credentials: Record<string, string> = {
-      customer: 'john.customer@email.com',
-      dealer: 'alex.dealer@hyundai.com',
-      manager: 'lisa.manager@hyundai.com',
-      ceo: 'robert.ceo@hyundai.com'
-    };
-    
-    setEmail(credentials[role] || '');
+  const fillCustomerDemo = () => {
+    setEmail('john.customer@email.com');
     setPassword('password123');
   };
 
@@ -48,7 +41,7 @@ export const LoginPage: React.FC = () => {
     <div className="p-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-        <p className="text-gray-600">Sign in to your Hyundai Hub account</p>
+        <p className="text-gray-600">Sign in to your customer account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -104,7 +97,7 @@ export const LoginPage: React.FC = () => {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-serene-primary hover:bg-blue-900 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -117,39 +110,15 @@ export const LoginPage: React.FC = () => {
         </Button>
       </form>
 
-      {/* Quick Login Buttons */}
+      {/* Quick Login */}
       <div className="mt-6 pt-6 border-t border-gray-200">
-        <p className="text-sm text-gray-500 text-center mb-3">Quick login as:</p>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => fillDemoCredentials('customer')}
-            className="px-3 py-2 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
-          >
-            Customer
-          </button>
-          <button
-            type="button"
-            onClick={() => fillDemoCredentials('dealer')}
-            className="px-3 py-2 text-xs font-medium text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
-          >
-            Dealer
-          </button>
-          <button
-            type="button"
-            onClick={() => fillDemoCredentials('manager')}
-            className="px-3 py-2 text-xs font-medium text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
-          >
-            Manager
-          </button>
-          <button
-            type="button"
-            onClick={() => fillDemoCredentials('ceo')}
-            className="px-3 py-2 text-xs font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors"
-          >
-            CEO
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={fillCustomerDemo}
+          className="w-full px-4 py-2.5 text-sm font-medium text-[#1a2a44] bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200"
+        >
+          Use demo customer credentials
+        </button>
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">

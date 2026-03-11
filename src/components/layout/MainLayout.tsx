@@ -27,7 +27,7 @@ export const MainLayout: React.FC = () => {
         {/* Footer */}
         <footer className="bg-white border-t border-gray-200 py-4 px-6">
           <div className="flex items-center justify-between text-sm text-gray-500">
-            <p>© 2024 Hyundai Dealership Hub. All rights reserved.</p>
+            <p>© 2024 Serene Automotive. All rights reserved.</p>
             <p>Version 1.0.0</p>
           </div>
         </footer>

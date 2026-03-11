@@ -55,7 +55,7 @@ export const mockUsers: User[] = [
   // Dealer Users
   {
     id: 'dealer_001',
-    email: 'alex.dealer@hyundai.com',
+    email: 'alex.dealer@serene.com',
     firstName: 'Alex',
     lastName: 'Johnson',
     role: UserRole.DEALER,
@@ -69,7 +69,7 @@ export const mockUsers: User[] = [
   },
   {
     id: 'dealer_002',
-    email: 'emma.sales@hyundai.com',
+    email: 'emma.sales@serene.com',
     firstName: 'Emma',
     lastName: 'Davis',
     role: UserRole.DEALER,
@@ -83,7 +83,7 @@ export const mockUsers: User[] = [
   },
   {
     id: 'dealer_003',
-    email: 'carlos.martinez@hyundai.com',
+    email: 'carlos.martinez@serene.com',
     firstName: 'Carlos',
     lastName: 'Martinez',
     role: UserRole.DEALER,
@@ -99,7 +99,7 @@ export const mockUsers: User[] = [
   // Manager Users
   {
     id: 'mgr_001',
-    email: 'lisa.manager@hyundai.com',
+    email: 'lisa.manager@serene.com',
     firstName: 'Lisa',
     lastName: 'Anderson',
     role: UserRole.MANAGER,
@@ -113,7 +113,7 @@ export const mockUsers: User[] = [
   },
   {
     id: 'mgr_002',
-    email: 'david.manager@hyundai.com',
+    email: 'david.manager@serene.com',
     firstName: 'David',
     lastName: 'Thompson',
     role: UserRole.MANAGER,
@@ -129,7 +129,7 @@ export const mockUsers: User[] = [
   // CEO User
   {
     id: 'ceo_001',
-    email: 'robert.ceo@hyundai.com',
+    email: 'robert.ceo@serene.com',
     firstName: 'Robert',
     lastName: 'Chen',
     role: UserRole.CEO,
@@ -144,7 +144,7 @@ export const mockUsers: User[] = [
   // Admin User
   {
     id: 'admin_001',
-    email: 'admin@hyundai.com',
+    email: 'admin@serene.com',
     firstName: 'System',
     lastName: 'Administrator',
     role: UserRole.ADMIN,
@@ -164,7 +164,7 @@ export const mockUsers: User[] = [
 export const mockDealerships: Dealership[] = [
   {
     id: 'dealership_001',
-    name: 'Hyundai Downtown Motors',
+    name: 'Serene Downtown Motors',
     code: 'HDM001',
     address: {
       street: '123 Main Street',
@@ -174,7 +174,7 @@ export const mockDealerships: Dealership[] = [
       country: 'USA'
     },
     phone: '+1 (213) 555-0100',
-    email: 'downtown@hyundaimotors.com',
+    email: 'downtown@sereneauto.com',
     managerId: 'mgr_001',
     status: 'active',
     openingHours: {
@@ -192,7 +192,7 @@ export const mockDealerships: Dealership[] = [
   },
   {
     id: 'dealership_002',
-    name: 'Hyundai Westside Auto',
+    name: 'Serene Westside Auto',
     code: 'HWA002',
     address: {
       street: '456 Ocean Boulevard',
@@ -202,7 +202,7 @@ export const mockDealerships: Dealership[] = [
       country: 'USA'
     },
     phone: '+1 (310) 555-0200',
-    email: 'westside@hyundaimotors.com',
+    email: 'westside@sereneauto.com',
     managerId: 'mgr_002',
     status: 'active',
     openingHours: {
@@ -220,7 +220,7 @@ export const mockDealerships: Dealership[] = [
   },
   {
     id: 'dealership_003',
-    name: 'Hyundai Valley Center',
+    name: 'Serene Valley Center',
     code: 'HVC003',
     address: {
       street: '789 Valley Road',
@@ -230,7 +230,7 @@ export const mockDealerships: Dealership[] = [
       country: 'USA'
     },
     phone: '+1 (626) 555-0300',
-    email: 'valley@hyundaimotors.com',
+    email: 'valley@sereneauto.com',
     status: 'active',
     openingHours: {
       monday: { open: '09:00', close: '18:00' },
@@ -255,7 +255,7 @@ export const mockCars: Car[] = [
   // SUVs
   {
     id: 'car_001',
-    model: 'Hyundai Tucson',
+    model: 'Serene Aura',
     year: 2024,
     category: CarCategory.SUV,
     price: 28500,
@@ -267,15 +267,15 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Apple CarPlay', 'Android Auto', 'Blind Spot Monitor', 'Lane Keep Assist', ' heated seats'],
-    images: ['https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'],
-    description: 'The 2024 Hyundai Tucson combines bold design with advanced technology and safety features.',
+    images: ['https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800'],
+    description: 'The 2024 Serene Aura combines bold design with advanced technology and safety features.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     id: 'car_002',
-    model: 'Hyundai Santa Fe',
+    model: 'Serene Haven',
     year: 2024,
     category: CarCategory.SUV,
     price: 35000,
@@ -287,15 +287,15 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Panoramic Sunroof', 'Leather Seats', '360 Camera', 'Smart Cruise Control', 'Wireless Charging'],
-    images: ['https://images.unsplash.com/photo-1619844175408-4e1f074e5ddb?w=800'],
-    description: 'The Santa Fe offers premium comfort and cutting-edge technology for the whole family.',
+    images: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
+    description: 'The Haven offers premium comfort and cutting-edge technology for the whole family.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     id: 'car_003',
-    model: 'Hyundai Palisade',
+    model: 'Serene Grandeur',
     year: 2024,
     category: CarCategory.SUV,
     price: 42000,
@@ -307,7 +307,7 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['3-Row Seating', 'Premium Audio', 'Heads-Up Display', 'Massage Seats', 'Highway Driving Assist'],
-    images: ['https://images.unsplash.com/photo-1606220838315-056192d5e927?w=800'],
+    images: ['https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800'],
     description: 'The ultimate family SUV with luxury features and spacious three-row seating.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -317,7 +317,7 @@ export const mockCars: Car[] = [
   // Sedans
   {
     id: 'car_004',
-    model: 'Hyundai Sonata',
+    model: 'Serene Lyric',
     year: 2024,
     category: CarCategory.SEDAN,
     price: 28000,
@@ -329,7 +329,7 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Digital Key', 'Bose Premium Audio', 'Remote Smart Parking', 'Wireless Apple CarPlay'],
-    images: ['https://images.unsplash.com/photo-1623869675781-23c7f0babd3a?w=800'],
+    images: ['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800'],
     description: 'A sophisticated sedan with striking design and innovative technology.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
@@ -337,7 +337,7 @@ export const mockCars: Car[] = [
   },
   {
     id: 'car_005',
-    model: 'Hyundai Elantra',
+    model: 'Serene Breeze',
     year: 2024,
     category: CarCategory.SEDAN,
     price: 22500,
@@ -349,8 +349,8 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['8-inch Touchscreen', 'Forward Collision Avoidance', 'Driver Attention Warning'],
-    images: ['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800'],
-    description: 'The Elantra delivers exceptional value with modern styling and advanced safety.',
+    images: ['https://images.unsplash.com/photo-1550355291-bbee04a92027?w=800'],
+    description: 'The Breeze delivers exceptional value with modern styling and advanced safety.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
     updatedAt: new Date()
@@ -359,7 +359,7 @@ export const mockCars: Car[] = [
   // Electric
   {
     id: 'car_006',
-    model: 'Hyundai IONIQ 5',
+    model: 'Serene Volt',
     year: 2024,
     category: CarCategory.ELECTRIC,
     price: 48000,
@@ -371,15 +371,15 @@ export const mockCars: Car[] = [
     fuelType: 'Electric',
     mileage: 0,
     features: ['303-mile Range', '800V Fast Charging', 'Vehicle-to-Load', 'Augmented Reality HUD', 'Relaxation Seats'],
-    images: ['https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'],
-    description: 'The IONIQ 5 redefines electric mobility with ultra-fast charging and innovative design.',
+    images: ['https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800'],
+    description: 'The Volt redefines electric mobility with ultra-fast charging and innovative design.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     id: 'car_007',
-    model: 'Hyundai IONIQ 6',
+    model: 'Serene Pulse',
     year: 2024,
     category: CarCategory.ELECTRIC,
     price: 52000,
@@ -391,7 +391,7 @@ export const mockCars: Car[] = [
     fuelType: 'Electric',
     mileage: 0,
     features: ['361-mile Range', '0-60 in 5.1s', 'Ultra-fast Charging', 'Digital Side Mirrors'],
-    images: ['https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800'],
+    images: ['https://images.unsplash.com/photo-1620891549027-942fdc95d3f5?w=800'],
     description: 'A streamlined electric sedan with exceptional efficiency and performance.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -401,7 +401,7 @@ export const mockCars: Car[] = [
   // Hybrid
   {
     id: 'car_008',
-    model: 'Hyundai Tucson Hybrid',
+    model: 'Serene Aura Hybrid',
     year: 2024,
     category: CarCategory.HYBRID,
     price: 32000,
@@ -413,8 +413,8 @@ export const mockCars: Car[] = [
     fuelType: 'Hybrid',
     mileage: 0,
     features: ['38 MPG Combined', 'HTRAC AWD', 'Regenerative Braking', 'EV Mode'],
-    images: ['https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'],
-    description: 'The Tucson Hybrid delivers impressive fuel efficiency without compromising capability.',
+    images: ['https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800'],
+    description: 'The Serene Aura Hybrid delivers impressive fuel efficiency without compromising capability.',
     dealershipId: 'dealership_003',
     createdAt: new Date(),
     updatedAt: new Date()
@@ -423,7 +423,7 @@ export const mockCars: Car[] = [
   // Luxury
   {
     id: 'car_009',
-    model: 'Genesis G80',
+    model: 'Serene Prestige',
     year: 2024,
     category: CarCategory.LUXURY,
     price: 58000,
@@ -435,15 +435,15 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Lexicon Audio', 'Nappa Leather', 'Ergo Motion Seats', 'Remote Parking', 'Highway Driving Assist 2'],
-    images: ['https://images.unsplash.com/photo-1563720360172-67b8f3dce741?w=800'],
-    description: 'The Genesis G80 represents the pinnacle of Korean luxury and craftsmanship.',
+    images: ['https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800'],
+    description: 'The Serene Prestige represents the pinnacle of Serene luxury and craftsmanship.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
     id: 'car_010',
-    model: 'Genesis GV70',
+    model: 'Serene Apex',
     year: 2024,
     category: CarCategory.LUXURY,
     price: 62000,
@@ -455,7 +455,7 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Sport+ Mode', 'Active Sound Design', 'Carbon Fiber Trim', 'Heads-Up Display'],
-    images: ['https://images.unsplash.com/photo-1606220838315-056192d5e927?w=800'],
+    images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'],
     description: 'A performance luxury SUV that delivers exhilarating driving dynamics.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -470,13 +470,13 @@ export const mockCars: Car[] = [
 export const mockOrders: Order[] = [
   {
     id: 'order_001',
-    orderNumber: 'HYD-2024-001',
+    orderNumber: 'SRN-2024-001',
     customerId: 'cust_001',
     customerName: 'John Smith',
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
     carId: 'car_001',
-    carModel: 'Hyundai Tucson',
+    carModel: 'Serene Aura',
     carPrice: 28500,
     dealershipId: 'dealership_001',
     dealerId: 'dealer_001',
@@ -494,13 +494,13 @@ export const mockOrders: Order[] = [
   },
   {
     id: 'order_002',
-    orderNumber: 'HYD-2024-002',
+    orderNumber: 'SRN-2024-002',
     customerId: 'cust_002',
     customerName: 'Sarah Wilson',
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
     carId: 'car_006',
-    carModel: 'Hyundai IONIQ 5',
+    carModel: 'Serene Volt',
     carPrice: 48000,
     dealershipId: 'dealership_001',
     dealerId: 'dealer_002',
@@ -518,13 +518,13 @@ export const mockOrders: Order[] = [
   },
   {
     id: 'order_003',
-    orderNumber: 'HYD-2024-003',
+    orderNumber: 'SRN-2024-003',
     customerId: 'cust_003',
     customerName: 'Mike Brown',
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
     carId: 'car_009',
-    carModel: 'Genesis G80',
+    carModel: 'Serene Prestige',
     carPrice: 58000,
     dealershipId: 'dealership_001',
     dealerId: 'dealer_001',
@@ -554,7 +554,7 @@ export const mockTestDrives: TestDrive[] = [
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
     carId: 'car_001',
-    carModel: 'Hyundai Tucson',
+    carModel: 'Serene Aura',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-15'),
     preferredTime: '10:00 AM',
@@ -573,7 +573,7 @@ export const mockTestDrives: TestDrive[] = [
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
     carId: 'car_006',
-    carModel: 'Hyundai IONIQ 5',
+    carModel: 'Serene Volt',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-20'),
     preferredTime: '2:00 PM',
@@ -590,7 +590,7 @@ export const mockTestDrives: TestDrive[] = [
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
     carId: 'car_009',
-    carModel: 'Genesis G80',
+    carModel: 'Serene Prestige',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-25'),
     preferredTime: '11:00 AM',
@@ -613,8 +613,8 @@ export const mockInquiries: CarInquiry[] = [
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
     carId: 'car_002',
-    carModel: 'Hyundai Santa Fe',
-    message: 'Is there any discount available for the Santa Fe? I am interested in the Caligraphy trim.',
+    carModel: 'Serene Haven',
+    message: 'Is there any discount available for the Haven? I am interested in the Caligraphy trim.',
     status: 'responded',
     assignedDealerId: 'dealer_001',
     createdAt: new Date('2024-03-10'),
@@ -627,8 +627,8 @@ export const mockInquiries: CarInquiry[] = [
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
     carId: 'car_007',
-    carModel: 'Hyundai IONIQ 6',
-    message: 'When will the IONIQ 6 be available for test drive?',
+    carModel: 'Serene Pulse',
+    message: 'When will the Pulse be available for test drive?',
     status: 'pending',
     createdAt: new Date('2024-03-12'),
     updatedAt: new Date()
@@ -640,8 +640,8 @@ export const mockInquiries: CarInquiry[] = [
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
     carId: 'car_009',
-    carModel: 'Genesis G80',
-    message: 'What financing options are available for the Genesis G80?',
+    carModel: 'Serene Prestige',
+    message: 'What financing options are available for the Serene Prestige?',
     status: 'pending',
     createdAt: new Date('2024-03-14'),
     updatedAt: new Date()
@@ -658,7 +658,7 @@ export const mockNotifications: Notification[] = [
     userId: 'dealer_001',
     type: NotificationType.INQUIRY,
     title: 'New Inquiry Received',
-    message: 'John Smith has inquired about Hyundai Santa Fe',
+    message: 'John Smith has inquired about Serene Haven',
     read: false,
     data: { inquiryId: 'inq_001' },
     createdAt: new Date()
@@ -668,7 +668,7 @@ export const mockNotifications: Notification[] = [
     userId: 'dealer_002',
     type: NotificationType.TEST_DRIVE,
     title: 'Test Drive Scheduled',
-    message: 'Sarah Wilson scheduled a test drive for IONIQ 5',
+    message: 'Sarah Wilson scheduled a test drive for Volt',
     read: false,
     data: { testDriveId: 'td_002' },
     createdAt: new Date()
@@ -678,7 +678,7 @@ export const mockNotifications: Notification[] = [
     userId: 'mgr_001',
     type: NotificationType.ORDER,
     title: 'New Order Placed',
-    message: 'Order HYD-2024-003 has been confirmed',
+    message: 'Order SRN-2024-003 has been confirmed',
     read: true,
     data: { orderId: 'order_003' },
     createdAt: new Date()
@@ -696,9 +696,9 @@ export const mockSalesReport: SalesReport = {
   averageOrderValue: 41111,
   carsSold: 45,
   topSellingModels: [
-    { model: 'Hyundai Tucson', count: 15, revenue: 427500 },
-    { model: 'Hyundai IONIQ 5', count: 12, revenue: 576000 },
-    { model: 'Hyundai Santa Fe', count: 10, revenue: 350000 }
+    { model: 'Serene Aura', count: 15, revenue: 427500 },
+    { model: 'Serene Volt', count: 12, revenue: 576000 },
+    { model: 'Serene Haven', count: 10, revenue: 350000 }
   ],
   salesByCategory: {
     [CarCategory.SUV]: 28,
@@ -713,7 +713,7 @@ export const mockSalesReport: SalesReport = {
 export const mockDealershipPerformance: DealershipPerformance[] = [
   {
     dealershipId: 'dealership_001',
-    dealershipName: 'Hyundai Downtown Motors',
+    dealershipName: 'Serene Downtown Motors',
     totalSales: 28,
     totalRevenue: 1150000,
     customerSatisfaction: 4.8,
@@ -722,7 +722,7 @@ export const mockDealershipPerformance: DealershipPerformance[] = [
   },
   {
     dealershipId: 'dealership_002',
-    dealershipName: 'Hyundai Westside Auto',
+    dealershipName: 'Serene Westside Auto',
     totalSales: 17,
     totalRevenue: 700000,
     customerSatisfaction: 4.6,
@@ -731,7 +731,7 @@ export const mockDealershipPerformance: DealershipPerformance[] = [
   },
   {
     dealershipId: 'dealership_003',
-    dealershipName: 'Hyundai Valley Center',
+    dealershipName: 'Serene Valley Center',
     totalSales: 0,
     totalRevenue: 0,
     customerSatisfaction: 0,

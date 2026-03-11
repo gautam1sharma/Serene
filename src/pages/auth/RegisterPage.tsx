@@ -76,7 +76,7 @@ export const RegisterPage: React.FC = () => {
     <div className="p-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h2>
-        <p className="text-gray-600">Join Hyundai Hub and explore our vehicles</p>
+        <p className="text-gray-600">Create your Serene customer account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -215,7 +215,7 @@ export const RegisterPage: React.FC = () => {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-[#1a2a44] hover:bg-slate-800 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

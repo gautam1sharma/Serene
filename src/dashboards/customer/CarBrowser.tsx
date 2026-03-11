@@ -93,7 +93,7 @@ export const CarBrowser: React.FC = () => {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Browse Vehicles</h1>
-        <p className="text-gray-600">Explore our full range of Hyundai vehicles</p>
+        <p className="text-gray-600">Explore our full range of Serene vehicles</p>
       </div>
 
       {/* Search and Filters */}
