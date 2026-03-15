@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import logoBlack from '@/assets/default-monochrome-black.svg';
 
 export const CustomerAuthLayout: React.FC = () => {
   return (
@@ -13,11 +14,10 @@ export const CustomerAuthLayout: React.FC = () => {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-3 group">
-            <span className="material-symbols-outlined text-3xl text-[#1a2a44]">electric_car</span>
-            <span className="text-2xl font-bold text-slate-900 tracking-wider uppercase">Serene</span>
+          <Link to="/" className="inline-flex flex-col items-center group">
+             <img src={logoBlack} alt="Serene" className="h-10 mb-2" />
           </Link>
-          <p className="text-slate-500 font-light mt-2">Customer Portal</p>
+          <p className="text-slate-500 font-light">Customer Portal</p>
         </div>
 
         {/* Auth Card */}

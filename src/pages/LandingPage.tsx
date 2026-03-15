@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import logoBlack from '@/assets/default-monochrome-black.svg';
 import { useAuth } from '@/contexts/AuthContext';
 
 export const LandingPage: React.FC = () => {
@@ -47,27 +48,25 @@ export const LandingPage: React.FC = () => {
 
           {/* === Header === */}
           <header className="flex items-center justify-between whitespace-nowrap border-b border-slate-200 px-4 sm:px-10 py-4 mb-8">
-            <Link to="/" className="flex items-center gap-4 group">
-              <div className="text-[#1a2a44] size-6 flex items-center justify-center">
-                <span className="material-symbols-outlined text-2xl">electric_car</span>
-              </div>
-              <h2 className="text-slate-900 text-xl font-bold leading-tight tracking-wider uppercase">
-                Serene
-              </h2>
+            <Link to="/" className="flex items-center group">
+              <img src={logoBlack} alt="Serene" className="h-8" />
             </Link>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex flex-1 justify-end gap-8">
               <nav className="flex items-center gap-8">
-                <a href="#philosophy" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
+                <Link to="/cars" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
+                  Vehicles
+                </Link>
+                <Link to="/dealerships" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
+                  Dealerships
+                </Link>
+                <Link to="/about" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
                   Philosophy
-                </a>
-                <a href="#vehicle" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
-                  The Vehicle
-                </a>
-                <a href="#innovation" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
-                  Innovation
-                </a>
+                </Link>
+                <Link to="/support" className="text-slate-600 hover:text-[#1a2a44] transition-colors text-sm font-medium tracking-wide uppercase">
+                  Support
+                </Link>
               </nav>
 
               {isAuthenticated ? (
@@ -113,9 +112,10 @@ export const LandingPage: React.FC = () => {
             }`}
           >
             <div className="flex flex-col gap-4 px-4 py-4 bg-white rounded-xl shadow-sm border border-slate-100">
-              <a href="#philosophy" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Philosophy</a>
-              <a href="#vehicle" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">The Vehicle</a>
-              <a href="#innovation" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Innovation</a>
+              <Link to="/cars" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Vehicles</Link>
+              <Link to="/dealerships" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Dealerships</Link>
+              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Philosophy</Link>
+              <Link to="/support" onClick={() => setMobileMenuOpen(false)} className="text-slate-600 text-sm font-medium tracking-wide uppercase py-2">Support</Link>
               <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
                 {isAuthenticated ? (
                   <Link to={getDashboardLink()} className="rounded-full h-10 px-6 bg-[#1a2a44] text-white text-sm font-bold tracking-wide uppercase flex items-center justify-center">
@@ -158,12 +158,12 @@ export const LandingPage: React.FC = () => {
                   Experience the Serene electric vehicle, where absolute minimalist design meets unparalleled cutting-edge innovation.
                 </h2>
                 <div className="mt-4 flex flex-col sm:flex-row justify-center gap-4">
-                  <a
-                    href="#vehicle"
+                  <Link
+                    to="/cars"
                     className="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-8 bg-slate-900 text-white text-sm font-bold tracking-wider uppercase transition-transform hover:scale-105"
                   >
                     Discover Serene
-                  </a>
+                  </Link>
                   {!isAuthenticated && (
                     <Link
                       to="/register"
@@ -262,10 +262,10 @@ export const LandingPage: React.FC = () => {
 
           {/* === Innovation Specs === */}
           <div
-            id="innovation-specs"
+            id="innovation"
             data-animate
             className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-16 transition-all duration-1000 ${
-              isVisible('innovation-specs') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              isVisible('innovation') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             {[
@@ -333,10 +333,48 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* === Footer === */}
-          <footer className="mt-12 py-8 border-t border-slate-200 text-center">
-            <p className="text-slate-400 text-sm font-light">
-              © 2024 Serene Automotive. All rights reserved.
-            </p>
+          <footer className="mt-12 py-12 border-t border-slate-200">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
+              <div className="flex flex-col items-center md:items-start gap-4">
+                <Link to="/" className="flex items-center group">
+                  <img src={logoBlack} alt="Serene" className="h-8" />
+                </Link>
+                <p className="text-slate-500 text-sm font-light mt-2 max-w-xs">
+                  Redefining the driving experience with minimalist style and electric innovation.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3">
+                <h4 className="text-slate-900 font-medium tracking-wide">Company</h4>
+                <Link to="/about" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">About Us</Link>
+                <Link to="/dealerships" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Dealerships</Link>
+                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Careers</a>
+              </div>
+              <div className="flex flex-col gap-3">
+                <h4 className="text-slate-900 font-medium tracking-wide">Vehicles</h4>
+                <Link to="/cars" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">All Models</Link>
+                <Link to="/cars" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Configure Vehicle</Link>
+                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Accessories</a>
+              </div>
+              <div className="flex flex-col gap-3">
+                <h4 className="text-slate-900 font-medium tracking-wide">Help & Legal</h4>
+                <Link to="/support" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Support & FAQ</Link>
+                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Privacy Policy</a>
+                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Terms of Service</a>
+              </div>
+            </div>
+            <div className="text-center border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-slate-400 text-sm font-light">
+                © {new Date().getFullYear()} Serene Automotive. All rights reserved.
+              </p>
+              <div className="flex gap-4">
+                <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
+                  <span className="material-symbols-outlined text-xl">language</span>
+                </a>
+                <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
+                  <span className="material-symbols-outlined text-xl">share</span>
+                </a>
+              </div>
+            </div>
           </footer>
 
         </div>

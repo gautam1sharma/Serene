@@ -24,6 +24,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { UserRole, Permission } from '@/types';
 import { hasPermission } from '@/utils/permissions';
 import { cn } from '@/lib/utils';
+import logoBlack from '@/assets/default-monochrome-black.svg';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -177,20 +178,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transition-all duration-300 flex flex-col",
-        collapsed ? "w-20" : "w-64"
+        "fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transition-all duration-300 flex flex-col transform",
+        collapsed ? "w-20" : "w-64",
+        "max-md:-translate-x-full md:translate-x-0" // Hide on mobile entirely for now
       )}
     >
       {/* Logo */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#1a2a44] rounded-xl flex items-center justify-center flex-shrink-0">
-            <span className="material-symbols-outlined text-xl text-white">electric_car</span>
-          </div>
-          {!collapsed && (
-            <div>
-              <h1 className="font-bold text-gray-900 text-sm">Serene</h1>
-              <p className="text-xs text-gray-500">Dealership System</p>
+        <div className="flex justify-center items-center w-full">
+          {!collapsed ? (
+            <div className="flex flex-col items-start w-full">
+              <img src={logoBlack} alt="Serene" className="h-8 mb-1" />
+              <p className="text-xs text-gray-500 font-medium">Dealership System</p>
+            </div>
+          ) : (
+            <div className="w-10 h-10 bg-[#1a2a44] rounded-xl flex items-center justify-center flex-shrink-0">
+               {/* Keep the icon for collapsed state since the wordmark will be unreadable */}
+               <span className="material-symbols-outlined text-xl text-white">directions_car</span>
             </div>
           )}
         </div>

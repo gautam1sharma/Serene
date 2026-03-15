@@ -182,8 +182,30 @@ export const CarBrowser: React.FC = () => {
 
       {/* Cars Grid */}
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm animate-pulse">
+              <div className="aspect-video bg-gray-200 w-full" />
+              <div className="p-5 space-y-4">
+                <div className="flex justify-between">
+                  <div className="h-6 bg-gray-200 rounded w-1/2" />
+                  <div className="h-6 bg-gray-200 rounded w-1/4" />
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-full" />
+                  <div className="h-4 bg-gray-200 rounded w-5/6" />
+                </div>
+                <div className="flex gap-4">
+                  <div className="h-4 bg-gray-200 rounded w-16" />
+                  <div className="h-4 bg-gray-200 rounded w-16" />
+                </div>
+                <div className="flex gap-2">
+                  <div className="h-6 bg-gray-200 rounded w-16" />
+                  <div className="h-6 bg-gray-200 rounded w-16" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : filteredCars.length === 0 ? (
         <div className="text-center py-16">
@@ -194,7 +216,7 @@ export const CarBrowser: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCars.map((car) => (
-            <Link key={car.id} to={`/customer/cars/${car.id}`}>
+            <Link key={car.id} to={`/cars/${car.id}`}>
               <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all group">
                 {/* Image */}
                 <div className="aspect-video bg-gray-100 relative overflow-hidden">

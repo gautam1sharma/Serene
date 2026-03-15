@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import logoWhite from '@/assets/default-monochrome-white.svg';
 
 export const AdminAuthLayout: React.FC = () => {
   return (
@@ -14,12 +15,10 @@ export const AdminAuthLayout: React.FC = () => {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-3 group">
-            <div className="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/10">
-              <span className="material-symbols-outlined text-3xl text-white">electric_car</span>
-            </div>
+          <Link to="/" className="inline-flex flex-col items-center group">
+            <img src={logoWhite} alt="Serene" className="h-12 mb-4" />
           </Link>
-          <h1 className="text-2xl font-bold text-white mt-4 tracking-wider uppercase">Serene DMS</h1>
+          <h1 className="text-2xl font-bold text-white tracking-wider uppercase">DMS Portal</h1>
           <p className="text-slate-400 font-light mt-1">Dealership Management System</p>
         </div>
 

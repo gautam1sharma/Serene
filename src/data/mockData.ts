@@ -254,7 +254,7 @@ export const mockDealerships: Dealership[] = [
 export const mockCars: Car[] = [
   // SUVs
   {
-    id: 'car_001',
+    id: 'serene-aura',
     model: 'Serene Aura',
     year: 2024,
     category: CarCategory.SUV,
@@ -267,14 +267,19 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Apple CarPlay', 'Android Auto', 'Blind Spot Monitor', 'Lane Keep Assist', ' heated seats'],
-    images: ['https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1714538701027-790deaef725b?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1731317913350-df41a6c3ab3b?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1710929234539-19289cfc5c1c?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1720347408602-adcef90d115c?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The 2024 Serene Aura combines bold design with advanced technology and safety features.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: 'car_002',
+    id: 'serene-haven',
     model: 'Serene Haven',
     year: 2024,
     category: CarCategory.SUV,
@@ -287,14 +292,19 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Panoramic Sunroof', 'Leather Seats', '360 Camera', 'Smart Cruise Control', 'Wireless Charging'],
-    images: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1740098159737-73673d741ebb?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1619114664520-1d1dbf9f224c?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1618213221550-c32da08997db?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1570374910698-6db3d787e6fb?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The Haven offers premium comfort and cutting-edge technology for the whole family.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: 'car_003',
+    id: 'serene-grandeur',
     model: 'Serene Grandeur',
     year: 2024,
     category: CarCategory.SUV,
@@ -307,7 +317,12 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['3-Row Seating', 'Premium Audio', 'Heads-Up Display', 'Massage Seats', 'Highway Driving Assist'],
-    images: ['https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1702558306309-6d51217f9bed?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1728458602463-294dd50623e2?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1695334692673-1b7176b32407?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1695334650970-21f964219461?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The ultimate family SUV with luxury features and spacious three-row seating.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -316,7 +331,7 @@ export const mockCars: Car[] = [
 
   // Sedans
   {
-    id: 'car_004',
+    id: 'serene-lyric',
     model: 'Serene Lyric',
     year: 2024,
     category: CarCategory.SEDAN,
@@ -329,14 +344,19 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Digital Key', 'Bose Premium Audio', 'Remote Smart Parking', 'Wireless Apple CarPlay'],
-    images: ['https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070',
+      'https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2070',
+      'https://images.unsplash.com/photo-1617788123235-b447a17730e1?q=80&w=2070',
+      'https://images.unsplash.com/photo-1620888806611-396825026402?q=80&w=2070'
+    ],
     description: 'A sophisticated sedan with striking design and innovative technology.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: 'car_005',
+    id: 'serene-breeze',
     model: 'Serene Breeze',
     year: 2024,
     category: CarCategory.SEDAN,
@@ -349,7 +369,12 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['8-inch Touchscreen', 'Forward Collision Avoidance', 'Driver Attention Warning'],
-    images: ['https://images.unsplash.com/photo-1550355291-bbee04a92027?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=2070',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=2070',
+      'https://images.unsplash.com/photo-1554670560-660c733d146c?q=80&w=2070',
+      'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=2070'
+    ],
     description: 'The Breeze delivers exceptional value with modern styling and advanced safety.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -358,7 +383,7 @@ export const mockCars: Car[] = [
 
   // Electric
   {
-    id: 'car_006',
+    id: 'serene-volt',
     model: 'Serene Volt',
     year: 2024,
     category: CarCategory.ELECTRIC,
@@ -371,14 +396,19 @@ export const mockCars: Car[] = [
     fuelType: 'Electric',
     mileage: 0,
     features: ['303-mile Range', '800V Fast Charging', 'Vehicle-to-Load', 'Augmented Reality HUD', 'Relaxation Seats'],
-    images: ['https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1716558964076-1abe07448abf?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1617704548623-340376564e68?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1698514326382-603bb5b273de?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1716558964038-79542bf366af?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The Volt redefines electric mobility with ultra-fast charging and innovative design.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: 'car_007',
+    id: 'serene-pulse',
     model: 'Serene Pulse',
     year: 2024,
     category: CarCategory.ELECTRIC,
@@ -391,7 +421,12 @@ export const mockCars: Car[] = [
     fuelType: 'Electric',
     mileage: 0,
     features: ['361-mile Range', '0-60 in 5.1s', 'Ultra-fast Charging', 'Digital Side Mirrors'],
-    images: ['https://images.unsplash.com/photo-1620891549027-942fdc95d3f5?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1716558964076-1abe07448abf?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1617704548623-340376564e68?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1698514326382-603bb5b273de?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1716558964038-79542bf366af?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'A streamlined electric sedan with exceptional efficiency and performance.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -400,7 +435,7 @@ export const mockCars: Car[] = [
 
   // Hybrid
   {
-    id: 'car_008',
+    id: 'serene-aura-hybrid',
     model: 'Serene Aura Hybrid',
     year: 2024,
     category: CarCategory.HYBRID,
@@ -413,7 +448,12 @@ export const mockCars: Car[] = [
     fuelType: 'Hybrid',
     mileage: 0,
     features: ['38 MPG Combined', 'HTRAC AWD', 'Regenerative Braking', 'EV Mode'],
-    images: ['https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1714538701027-790deaef725b?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1731317913350-df41a6c3ab3b?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1710929234539-19289cfc5c1c?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1720347408602-adcef90d115c?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The Serene Aura Hybrid delivers impressive fuel efficiency without compromising capability.',
     dealershipId: 'dealership_003',
     createdAt: new Date(),
@@ -422,7 +462,7 @@ export const mockCars: Car[] = [
 
   // Luxury
   {
-    id: 'car_009',
+    id: 'serene-prestige',
     model: 'Serene Prestige',
     year: 2024,
     category: CarCategory.LUXURY,
@@ -435,14 +475,19 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Lexicon Audio', 'Nappa Leather', 'Ergo Motion Seats', 'Remote Parking', 'Highway Driving Assist 2'],
-    images: ['https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1702558306309-6d51217f9bed?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1728458602463-294dd50623e2?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1695334692673-1b7176b32407?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1695334650970-21f964219461?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'The Serene Prestige represents the pinnacle of Serene luxury and craftsmanship.',
     dealershipId: 'dealership_001',
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: 'car_010',
+    id: 'serene-apex',
     model: 'Serene Apex',
     year: 2024,
     category: CarCategory.LUXURY,
@@ -455,7 +500,12 @@ export const mockCars: Car[] = [
     fuelType: 'Gasoline',
     mileage: 0,
     features: ['Sport+ Mode', 'Active Sound Design', 'Carbon Fiber Trim', 'Heads-Up Display'],
-    images: ['https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800'],
+    images: [
+      'https://images.unsplash.com/photo-1627454820903-9646d6ca61f5?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1661198550180-2ba17bfe108c?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1635975231394-61336236b7ba?fm=jpg&q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1688417438893-7d4b4da14a87?fm=jpg&q=80&w=1600&auto=format&fit=crop'
+    ],
     description: 'A performance luxury SUV that delivers exhilarating driving dynamics.',
     dealershipId: 'dealership_002',
     createdAt: new Date(),
@@ -475,7 +525,7 @@ export const mockOrders: Order[] = [
     customerName: 'John Smith',
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
-    carId: 'car_001',
+    carId: 'serene-aura',
     carModel: 'Serene Aura',
     carPrice: 28500,
     dealershipId: 'dealership_001',
@@ -499,7 +549,7 @@ export const mockOrders: Order[] = [
     customerName: 'Sarah Wilson',
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
-    carId: 'car_006',
+    carId: 'serene-volt',
     carModel: 'Serene Volt',
     carPrice: 48000,
     dealershipId: 'dealership_001',
@@ -523,7 +573,7 @@ export const mockOrders: Order[] = [
     customerName: 'Mike Brown',
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
-    carId: 'car_009',
+    carId: 'serene-prestige',
     carModel: 'Serene Prestige',
     carPrice: 58000,
     dealershipId: 'dealership_001',
@@ -553,7 +603,7 @@ export const mockTestDrives: TestDrive[] = [
     customerName: 'John Smith',
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
-    carId: 'car_001',
+    carId: 'serene-aura',
     carModel: 'Serene Aura',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-15'),
@@ -572,7 +622,7 @@ export const mockTestDrives: TestDrive[] = [
     customerName: 'Sarah Wilson',
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
-    carId: 'car_006',
+    carId: 'serene-volt',
     carModel: 'Serene Volt',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-20'),
@@ -589,7 +639,7 @@ export const mockTestDrives: TestDrive[] = [
     customerName: 'Mike Brown',
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
-    carId: 'car_009',
+    carId: 'serene-prestige',
     carModel: 'Serene Prestige',
     dealershipId: 'dealership_001',
     preferredDate: new Date('2024-03-25'),
@@ -612,7 +662,7 @@ export const mockInquiries: CarInquiry[] = [
     customerName: 'John Smith',
     customerEmail: 'john.customer@email.com',
     customerPhone: '+1 (555) 123-4567',
-    carId: 'car_002',
+    carId: 'serene-haven',
     carModel: 'Serene Haven',
     message: 'Is there any discount available for the Haven? I am interested in the Caligraphy trim.',
     status: 'responded',
@@ -626,7 +676,7 @@ export const mockInquiries: CarInquiry[] = [
     customerName: 'Sarah Wilson',
     customerEmail: 'sarah.wilson@email.com',
     customerPhone: '+1 (555) 234-5678',
-    carId: 'car_007',
+    carId: 'serene-pulse',
     carModel: 'Serene Pulse',
     message: 'When will the Pulse be available for test drive?',
     status: 'pending',
@@ -639,7 +689,7 @@ export const mockInquiries: CarInquiry[] = [
     customerName: 'Mike Brown',
     customerEmail: 'mike.brown@email.com',
     customerPhone: '+1 (555) 345-6789',
-    carId: 'car_009',
+    carId: 'serene-prestige',
     carModel: 'Serene Prestige',
     message: 'What financing options are available for the Serene Prestige?',
     status: 'pending',

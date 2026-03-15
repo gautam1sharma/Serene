@@ -14,8 +14,13 @@ import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { AdminLoginPage } from '@/pages/auth/AdminLoginPage';
 import { LandingPage } from '@/pages/LandingPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
 
 // Role-Based Dashboards
+import { CarConfigurator } from '@/pages/public/CarConfigurator';
+import { AboutPage } from '@/pages/public/AboutPage';
+import { SupportPage } from '@/pages/public/SupportPage';
+import { DealershipLocator } from '@/pages/public/DealershipLocator';
 import { CustomerDashboard } from '@/dashboards/customer/CustomerDashboard';
 import { DealerDashboard } from '@/dashboards/dealer/DealerDashboard';
 import { ManagerDashboard } from '@/dashboards/manager/ManagerDashboard';
@@ -120,18 +125,22 @@ function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
 
       {/* Customer Auth Routes (light theme) */}
-      <Route element={<CustomerAuthLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Route>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       {/* Admin/Staff Auth Routes (dark DMS theme) */}
-      <Route element={<AdminAuthLayout />}>
-        <Route path="/admin-login" element={<AdminLoginPage />} />
-      </Route>
+      <Route path="/admin-login" element={<AdminLoginPage />} />
 
       {/* Protected Routes */}
       <Route element={<MainLayout />}>
+        {/* Public routes within MainLayout */}
+        <Route path="/cars" element={<CarBrowser />} />
+        <Route path="/cars/:id" element={<CarDetails />} />
+        <Route path="/cars/:id/build" element={<CarConfigurator />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route path="/dealerships" element={<DealershipLocator />} />
+
         {/* Auto-redirect dashboard to appropriate role dashboard */}
         <Route path="/dashboard" element={<AutoRedirect />} />
 
@@ -142,8 +151,6 @@ function AppRoutes() {
             <RoleGuard allowedRoles={[UserRole.CUSTOMER]}>
               <Routes>
                 <Route index element={<CustomerDashboard />} />
-                <Route path="cars" element={<CarBrowser />} />
-                <Route path="cars/:id" element={<CarDetails />} />
                 <Route path="test-drives" element={<MyTestDrives />} />
                 <Route path="orders" element={<MyOrders />} />
                 <Route path="inquiries" element={<MyInquiries />} />
@@ -205,8 +212,8 @@ function AppRoutes() {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      {/* Catch all — send unknown routes to landing */}
-      <Route path="*" element={<LandingPage />} />
+      {/* Catch all — send unknown routes to 404 */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

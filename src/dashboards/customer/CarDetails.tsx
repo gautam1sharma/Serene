@@ -51,13 +51,23 @@ export const CarDetails: React.FC = () => {
       setCar(response.data);
     } else {
       toast.error('Car not found');
-      navigate('/customer/cars');
+      navigate('/cars');
     }
     setIsLoading(false);
   };
 
   const handleScheduleTestDrive = async () => {
-    if (!user || !car) return;
+    if (!user) {
+      toast.info('Please sign in to schedule a test drive');
+      navigate('/login');
+      return;
+    }
+    if (!car) return;
+
+    if (!testDriveDate || !testDriveTime) {
+      toast.error('Please select both a date and time');
+      return;
+    }
 
     const response = await testDriveService.scheduleTestDrive({
       customerId: user.id,
@@ -81,7 +91,17 @@ export const CarDetails: React.FC = () => {
   };
 
   const handleSubmitInquiry = async () => {
-    if (!user || !car) return;
+    if (!user) {
+      toast.info('Please sign in to submit an inquiry');
+      navigate('/login');
+      return;
+    }
+    if (!car) return;
+
+    if (!inquiryMessage.trim()) {
+      toast.error('Please enter a message');
+      return;
+    }
 
     const response = await inquiryService.createInquiry({
       customerId: user.id,
@@ -116,7 +136,7 @@ export const CarDetails: React.FC = () => {
     <div className="space-y-6">
       {/* Back Button */}
       <button
-        onClick={() => navigate('/customer/cars')}
+        onClick={() => navigate('/cars')}
         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />
@@ -134,17 +154,19 @@ export const CarDetails: React.FC = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="grid grid-cols-4 gap-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                <img
-                  src={car.images[0] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'}
-                  alt={`${car.model} view ${i}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
+          {car.images.length > 1 && (
+            <div className={`grid grid-cols-4 gap-2`}>
+              {car.images.slice(0, 4).map((image, i) => (
+                <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                  <img
+                    src={image}
+                    alt={`${car.model} view ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Details Section */}
@@ -214,17 +236,31 @@ export const CarDetails: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex gap-4">
             <Button
-              onClick={() => setShowTestDriveModal(true)}
-              className="flex-1 bg-blue-600 hover:bg-blue-700"
+              onClick={() => {
+                if (!user) {
+                  toast.info('Please sign in to schedule a test drive');
+                  navigate('/login', { state: { returnTo: `/cars/${car.id}` } });
+                  return;
+                }
+                setShowTestDriveModal(true);
+              }}
+              className="flex-1 bg-[#1a2a44] hover:bg-slate-800 text-white"
               disabled={car.status !== 'available'}
             >
               <Calendar className="w-4 h-4 mr-2" />
               Schedule Test Drive
             </Button>
             <Button
-              onClick={() => setShowInquiryModal(true)}
+              onClick={() => {
+                if (!user) {
+                  toast.info('Please sign in to ask a question');
+                  navigate('/login', { state: { returnTo: `/cars/${car.id}` } });
+                  return;
+                }
+                setShowInquiryModal(true);
+              }}
               variant="outline"
-              className="flex-1"
+              className="flex-1 border-[#1a2a44] text-[#1a2a44] hover:bg-[#1a2a44] hover:text-white"
             >
               <MessageSquare className="w-4 h-4 mr-2" />
               Ask a Question
