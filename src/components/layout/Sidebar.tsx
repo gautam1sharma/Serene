@@ -179,8 +179,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
     <aside 
       className={cn(
         "fixed left-0 top-0 h-full bg-white border-r border-gray-200 z-50 transition-all duration-300 flex flex-col transform",
-        collapsed ? "w-20" : "w-64",
-        "max-md:-translate-x-full md:translate-x-0" // Hide on mobile entirely for now
+        collapsed ? "max-md:-translate-x-full md:w-20" : "translate-x-0 w-64"
       )}
     >
       {/* Logo */}

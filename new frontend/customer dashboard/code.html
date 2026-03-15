@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Serene | Luxury Automotive Portal</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Elegant Sans-Serif -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Playfair+Display:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            serene: {
+              silver: '#E5E7EB',
+              brushed: '#C0C0C0',
+              matte: '#1A1A1A',
+              accent: '#F3F4F6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-effects">
+    /* Glassmorphism effect for summary cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Brushed silver border effect */
+    .brushed-border {
+      position: relative;
+      background: #fff;
+    }
+    .brushed-border::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 50%, #d1d5db 100%);
+      border-radius: inherit;
+    }
+
+    /* Elegant transition for interaction */
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-serene-matte font-sans">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100" data-purpose="primary-navigation">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<!-- Logo -->
+<div class="flex items-center">
+<span class="text-2xl font-serif tracking-[0.2em] uppercase font-medium">Serene</span>
+</div>
+<!-- Navigation & Search -->
+<div class="hidden md:flex items-center space-x-8">
+<nav class="flex space-x-8 text-sm uppercase tracking-widest font-medium text-gray-500">
+<a class="text-serene-matte border-b border-serene-matte pb-1" href="#">Dashboard</a>
+<a class="hover:text-serene-matte transition-colors" href="#">Showroom</a>
+<a class="hover:text-serene-matte transition-colors" href="#">Experience</a>
+<a class="hover:text-serene-matte transition-colors" href="#">Support</a>
+</nav>
+<div class="h-6 w-px bg-gray-200"></div>
+<!-- Search -->
+<button class="p-2 text-gray-400 hover:text-serene-matte transition-colors">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</button>
+<!-- User Profile -->
+<div class="flex items-center space-x-3 cursor-pointer group" data-purpose="user-profile-trigger">
+<div class="text-right">
+<p class="text-xs font-semibold uppercase tracking-tighter">John Smith</p>
+<p class="text-[10px] text-gray-400">Premium Member</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-serene-silver flex items-center justify-center overflow-hidden border border-gray-200 group-hover:border-serene-brushed transition-colors">
+<img alt="John Smith" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_7ExRWGslI3cwyiioo2dbDEw2t9P_706MdeSHQC2ncS0msznpeor338MNykruhOBrMUVTGnEbRM0Rfu_Q3BVauk035TiWhlMKHP_opXxJIVL-TiWhwYUvEwlbYcAGD5XIJpw-GE2S9tUoJxHU5p8kr2gmhvEsm6liYi1YBWQhGpLnLPWe3V5G-APBWueFaVuBd9OYOsIPVHsI998r1WilrSu2VtGkV6HVj6GJ5qyrfsVBgvzLyP-Pn7o9aOzPoKwnuOXvAWoQbNE"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
+<!-- BEGIN: HeroWelcome -->
+<section class="relative overflow-hidden rounded-3xl bg-serene-matte text-white p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between" data-purpose="hero-section">
+<div class="z-10 relative">
+<h1 class="text-4xl md:text-5xl font-serif mb-4">Welcome back, John!</h1>
+<p class="text-gray-400 max-w-md mb-8 text-lg font-light leading-relaxed">
+          Your journey with Serene continues. Discover our latest collection or manage your current inquiries.
+        </p>
+<button class="px-8 py-4 bg-white text-serene-matte font-semibold rounded-full hover:bg-serene-silver transition-all duration-300 uppercase tracking-widest text-xs brushed-border">
+          Browse Cars
+        </button>
+</div>
+<!-- Decorative element for luxury feel -->
+<div class="absolute right-0 top-0 w-1/2 h-full opacity-20 pointer-events-none">
+<svg class="w-full h-full" viewbox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+<circle cx="300" cy="100" fill="none" r="150" stroke="white" stroke-width="0.5"></circle>
+<circle cx="350" cy="150" fill="none" r="150" stroke="white" stroke-width="0.5"></circle>
+</svg>
+</div>
+</section>
+<!-- END: HeroWelcome -->
+<!-- BEGIN: SummaryCards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-purpose="stat-grid">
+<!-- Card: My Orders -->
+<div class="glass-card p-6 rounded-2xl hover-lift cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+<svg class="h-6 w-6 text-serene-matte" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-gray-500 text-xs uppercase tracking-widest mb-1">My Orders</h3>
+<p class="text-2xl font-semibold">02</p>
+</div>
+<!-- Card: Test Drives -->
+<div class="glass-card p-6 rounded-2xl hover-lift cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+<svg class="h-6 w-6 text-serene-matte" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-gray-500 text-xs uppercase tracking-widest mb-1">Test Drives</h3>
+<p class="text-2xl font-semibold">01</p>
+</div>
+<!-- Card: Inquiries -->
+<div class="glass-card p-6 rounded-2xl hover-lift cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+<svg class="h-6 w-6 text-serene-matte" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-gray-500 text-xs uppercase tracking-widest mb-1">Inquiries</h3>
+<p class="text-2xl font-semibold">04</p>
+</div>
+<!-- Card: Saved Cars -->
+<div class="glass-card p-6 rounded-2xl hover-lift cursor-pointer">
+<div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+<svg class="h-6 w-6 text-serene-matte" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<h3 class="text-gray-500 text-xs uppercase tracking-widest mb-1">Saved Cars</h3>
+<p class="text-2xl font-semibold">12</p>
+</div>
+</section>
+<!-- END: SummaryCards -->
+<!-- BEGIN: FeaturedVehicles -->
+<section data-purpose="product-showcase">
+<div class="flex items-end justify-between mb-8">
+<div>
+<h2 class="text-3xl font-serif">Featured Vehicles</h2>
+<p class="text-gray-400 font-light mt-1">Exquisite engineering met with unparalleled luxury.</p>
+</div>
+<a class="text-xs uppercase tracking-[0.2em] font-semibold border-b border-serene-matte pb-1 hover:text-gray-500 transition-colors" href="#">View All Models</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Vehicle 1: Serene Aura -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-serene-accent mb-4">
+<img alt="Serene Aura" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAacgqX6udCzZSpaA6O11Dks4cdtnKZpB0pDg8poi9lWVZgJXXlJZVuwYFII8N7qaJ2fwYbSjJ9znnKh_k93BeQ8SDXO4fCHL21BZZ4yCQpMXqbyatkV2QXIpbxvDezKhpqjbzEt06TLyKODvn7_D4wT_cBrOKxw19kTdw9nu325PneIiYJ45dzT0P3cqMwts9E9RrBWtdOh9_xCmbEyAlqxXyihHqs09J3LK2SN4Dx_04MZC9KCyuIcUMIA-WkEGeuiHhV-C_MVvE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-medium">Serene Aura</h4>
+<p class="text-xs text-gray-500 uppercase tracking-widest">Electric Luxury Sedan</p>
+</div>
+<p class="text-lg font-semibold tracking-tight">from $145,000</p>
+</div>
+<div class="mt-4 flex gap-4 text-[10px] text-gray-400 uppercase tracking-widest">
+<span>520mi Range</span>
+<span>•</span>
+<span>2.8s 0-60</span>
+</div>
+</div>
+<!-- Vehicle 2: Serene Haven -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-serene-accent mb-4">
+<img alt="Serene Haven" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMHLLLlS1ykVuURSiBkjWFtM6IHyoKLR-q2d41GVe3lPkDy-R3xOxhNEN4rxw5CzNL-ZtQ8RxpMGZJkM5WMTz3PlnI1DccDPvzx1ao8IA0sreEnN4RdglLUsBb0Jg0SqNsXBNbKJz1rjOkPOTx9uCFCbx194l6NJB-BP9Sq2csirB6M2Y5Llw-KMyBys6tGgjKcfXne0L1UCUVd5LhAWxqr-Zc9ofn_rFHSQPGhtYIH_jjehkAKd1mxJqz_cRwOO6LZU2u9678DuI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-medium">Serene Haven</h4>
+<p class="text-xs text-gray-500 uppercase tracking-widest">Full-Size Luxury SUV</p>
+</div>
+<p class="text-lg font-semibold tracking-tight">from $185,000</p>
+</div>
+<div class="mt-4 flex gap-4 text-[10px] text-gray-400 uppercase tracking-widest">
+<span>Seven Seats</span>
+<span>•</span>
+<span>Air Suspension</span>
+</div>
+</div>
+<!-- Vehicle 3: Serene Lyric -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-serene-accent mb-4">
+<img alt="Serene Lyric" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEoPfljpRmVtWjBjsJVk1zaWXYCeW3Xev5Ys2oVXPQp0-nKacPDKg2EngeJQWfD1CWYYavpKdTCVGDmzbS9wXxi1HW4iJC4NuB7k9rI79E9BYdit2aggjDUSHC9EoDBev0OKIpi7iAkKOScKyOVuBDOoilHdH2J8QFiQM667XjSNwescrbkU2I4uLJOE5UPIm5Vd_qAkF8zmThJ4vs1i97FRFTWxxmjfswI7JrENxeNiw4Ntu_0LPNGwy1IaHa0gXkA-CeaW-hQeI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-medium">Serene Lyric</h4>
+<p class="text-xs text-gray-500 uppercase tracking-widest">Grand Touring Coupe</p>
+</div>
+<p class="text-lg font-semibold tracking-tight">from $210,000</p>
+</div>
+<div class="mt-4 flex gap-4 text-[10px] text-gray-400 uppercase tracking-widest">
+<span>Hand-crafted Interior</span>
+<span>•</span>
+<span>V12 Hybrid</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: FeaturedVehicles -->
+<!-- BEGIN: ActivitySection -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8" data-purpose="activity-details">
+<!-- Upcoming Test Drives (Empty State) -->
+<div class="lg:col-span-1 space-y-6">
+<h2 class="text-xl font-serif">Upcoming Test Drives</h2>
+<div class="bg-white border border-gray-100 rounded-2xl p-8 flex flex-col items-center text-center">
+<div class="w-16 h-16 rounded-full bg-serene-accent flex items-center justify-center mb-4">
+<svg class="h-8 w-8 text-gray-300" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</div>
+<p class="text-sm font-medium text-serene-matte mb-2">No Scheduled Sessions</p>
+<p class="text-xs text-gray-400 mb-6">Experience the future of mobility at your convenience.</p>
+<button class="w-full py-3 bg-serene-matte text-white text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+            Schedule One
+          </button>
+</div>
+</div>
+<!-- Recent Orders -->
+<div class="lg:col-span-2 space-y-6">
+<h2 class="text-xl font-serif">Recent Orders</h2>
+<div class="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-gray-50/50 border-b border-gray-100">
+<tr>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Order ID</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Vehicle</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Status</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Delivery</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-50">
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-serene-matte">#SRN-9921</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-gray-100 overflow-hidden">
+<img alt="Aura" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOr9ec-gWHskNCz9aZK0jKQhlYJOaCg6rxsdx73lnEOpnxCYIeRsLVeCEJKULTSKptlbIXtxFa8NXayhTtUGPGx4OJ77z5SkN_9c1-shv7vSe7dsxQ8CIL-v5MOZFNsHhnFRfzbqjsI-lcClWYBeXGUzQWq-6kG-pC5YyR7dpDFRFzhFYfAvvYhsGMsb1ylfxYWHs71hLM9Amg8En3NOxazhf29-7wrDNeWUkepN-IwrKEatOreoJ3X4FoouFVmReIEKFKF3O9kSY"/>
+</div>
+<span class="text-sm font-medium">Serene Aura (Obsidian)</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-green-50 text-green-700">
+                    In Transit
+                  </span>
+</td>
+<td class="px-6 py-4 text-xs text-gray-500">Oct 24, 2023</td>
+</tr>
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-6 py-4 font-mono text-xs text-serene-matte">#SRN-8420</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-gray-100 overflow-hidden">
+<img alt="Haven" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvdWOe-6qkkQxujOHuWHBr7puPOUS23EvwG1pEVM19Pmx97kIMrf7DVkfIFuJPyxFMxtHfWSSp33Mc5yyBqoac_ZtyibbZq0dAQ4wMne1RhdWUarSNh_CXhOZIC9CSy1ZsSN0hHPj37CXZOlDCHa7d6cy6HC6ldSlx2cwr9iy_3lJRqgpIIMafBBQv386y7JPfzFM6az8nQSQPqaKchTl-HMb2HcU054ldg_ZJt_vkh06Jd7wYe9eBcZ_vyh2JRGwiTc7rAlG8xIQ"/>
+</div>
+<span class="text-sm font-medium">Serene Haven (Cloud)</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-50 text-blue-700">
+                    Processing
+                  </span>
+</td>
+<td class="px-6 py-4 text-xs text-gray-500">Nov 12, 2023</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 border-t border-gray-50 text-center">
+<button class="text-[10px] uppercase tracking-widest font-bold text-gray-400 hover:text-serene-matte transition-colors">View All Orders</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ActivitySection -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="border-t border-gray-200 mt-20 py-12 bg-white" data-purpose="site-footer">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs tracking-widest">
+<div class="mb-4 md:mb-0">
+<span class="font-serif uppercase tracking-[0.3em] text-serene-matte font-bold text-base">Serene</span>
+</div>
+<div class="flex space-x-8 uppercase">
+<a class="hover:text-serene-matte" href="#">Privacy Policy</a>
+<a class="hover:text-serene-matte" href="#">Terms of Service</a>
+<a class="hover:text-serene-matte" href="#">Contact</a>
+</div>
+<div class="mt-4 md:mt-0">
+        © 2023 Serene Automotive Group. All rights reserved.
+      </div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>

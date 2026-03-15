@@ -1,61 +1,71 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 
-// Layouts
+// Layouts — keep static since they wrap every page
 import { MainLayout } from '@/components/layout/MainLayout';
-import { CustomerAuthLayout } from '@/components/layout/CustomerAuthLayout';
-import { AdminAuthLayout } from '@/components/layout/AdminAuthLayout';
 
-// Auth Pages
+// Lightweight auth pages — keep static for fast initial paint
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { RegisterPage } from '@/pages/auth/RegisterPage';
 import { AdminLoginPage } from '@/pages/auth/AdminLoginPage';
+import { HomePage } from '@/pages/HomePage';
 import { LandingPage } from '@/pages/LandingPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
-// Role-Based Dashboards
-import { CarConfigurator } from '@/pages/public/CarConfigurator';
-import { AboutPage } from '@/pages/public/AboutPage';
-import { SupportPage } from '@/pages/public/SupportPage';
-import { DealershipLocator } from '@/pages/public/DealershipLocator';
-import { CustomerDashboard } from '@/dashboards/customer/CustomerDashboard';
-import { DealerDashboard } from '@/dashboards/dealer/DealerDashboard';
-import { ManagerDashboard } from '@/dashboards/manager/ManagerDashboard';
-import { CEODashboard } from '@/dashboards/ceo/CEODashboard';
+// ── Lazy-loaded route chunks ────────────────────────────────────────────
+// Public pages
+const CarConfigurator = React.lazy(() => import('@/pages/public/CarConfigurator').then(m => ({ default: m.CarConfigurator })));
+const AboutPage = React.lazy(() => import('@/pages/public/AboutPage').then(m => ({ default: m.AboutPage })));
+const SupportPage = React.lazy(() => import('@/pages/public/SupportPage').then(m => ({ default: m.SupportPage })));
+const DealershipLocator = React.lazy(() => import('@/pages/public/DealershipLocator').then(m => ({ default: m.DealershipLocator })));
 
-// Customer Pages
-import { CarBrowser } from '@/dashboards/customer/CarBrowser';
-import { CarDetails } from '@/dashboards/customer/CarDetails';
-import { MyTestDrives } from '@/dashboards/customer/MyTestDrives';
-import { MyOrders } from '@/dashboards/customer/MyOrders';
-import { MyInquiries } from '@/dashboards/customer/MyInquiries';
+// Customer dashboard + pages
+const CustomerDashboard = React.lazy(() => import('@/dashboards/customer/CustomerDashboard').then(m => ({ default: m.CustomerDashboard })));
+const CarBrowser = React.lazy(() => import('@/dashboards/customer/CarBrowser').then(m => ({ default: m.CarBrowser })));
+const CarDetails = React.lazy(() => import('@/dashboards/customer/CarDetails').then(m => ({ default: m.CarDetails })));
+const MyTestDrives = React.lazy(() => import('@/dashboards/customer/MyTestDrives').then(m => ({ default: m.MyTestDrives })));
+const MyOrders = React.lazy(() => import('@/dashboards/customer/MyOrders').then(m => ({ default: m.MyOrders })));
+const MyInquiries = React.lazy(() => import('@/dashboards/customer/MyInquiries').then(m => ({ default: m.MyInquiries })));
 
-// Dealer Pages
-import { InventoryManagement } from '@/dashboards/dealer/InventoryManagement';
-import { CustomerInquiries } from '@/dashboards/dealer/CustomerInquiries';
-import { TestDriveSchedule } from '@/dashboards/dealer/TestDriveSchedule';
-import { SalesProcessing } from '@/dashboards/dealer/SalesProcessing';
+// Dealer dashboard + pages
+const DealerDashboard = React.lazy(() => import('@/dashboards/dealer/DealerDashboard').then(m => ({ default: m.DealerDashboard })));
+const InventoryManagement = React.lazy(() => import('@/dashboards/dealer/InventoryManagement').then(m => ({ default: m.InventoryManagement })));
+const CustomerInquiries = React.lazy(() => import('@/dashboards/dealer/CustomerInquiries').then(m => ({ default: m.CustomerInquiries })));
+const TestDriveSchedule = React.lazy(() => import('@/dashboards/dealer/TestDriveSchedule').then(m => ({ default: m.TestDriveSchedule })));
+const SalesProcessing = React.lazy(() => import('@/dashboards/dealer/SalesProcessing').then(m => ({ default: m.SalesProcessing })));
 
-// Manager Pages
-import { TeamManagement } from '@/dashboards/manager/TeamManagement';
-import { DealershipOperations } from '@/dashboards/manager/DealershipOperations';
-import { SalesReports } from '@/dashboards/manager/SalesReports';
+// Manager dashboard + pages
+const ManagerDashboard = React.lazy(() => import('@/dashboards/manager/ManagerDashboard').then(m => ({ default: m.ManagerDashboard })));
+const TeamManagement = React.lazy(() => import('@/dashboards/manager/TeamManagement').then(m => ({ default: m.TeamManagement })));
+const DealershipOperations = React.lazy(() => import('@/dashboards/manager/DealershipOperations').then(m => ({ default: m.DealershipOperations })));
+const SalesReports = React.lazy(() => import('@/dashboards/manager/SalesReports').then(m => ({ default: m.SalesReports })));
 
-// CEO Pages
-import { MultiDealershipView } from '@/dashboards/ceo/MultiDealershipView';
-import { FinancialAnalytics } from '@/dashboards/ceo/FinancialAnalytics';
-import { StrategicPlanning } from '@/dashboards/ceo/StrategicPlanning';
-import { UserManagement } from '@/dashboards/ceo/UserManagement';
+// CEO dashboard + pages
+const CEODashboard = React.lazy(() => import('@/dashboards/ceo/CEODashboard').then(m => ({ default: m.CEODashboard })));
+const MultiDealershipView = React.lazy(() => import('@/dashboards/ceo/MultiDealershipView').then(m => ({ default: m.MultiDealershipView })));
+const FinancialAnalytics = React.lazy(() => import('@/dashboards/ceo/FinancialAnalytics').then(m => ({ default: m.FinancialAnalytics })));
+const StrategicPlanning = React.lazy(() => import('@/dashboards/ceo/StrategicPlanning').then(m => ({ default: m.StrategicPlanning })));
+const UserManagement = React.lazy(() => import('@/dashboards/ceo/UserManagement').then(m => ({ default: m.UserManagement })));
 
-// Shared Components
-import { NotificationsPage } from '@/pages/shared/NotificationsPage';
-import { ProfilePage } from '@/pages/shared/ProfilePage';
-import { SettingsPage } from '@/pages/shared/SettingsPage';
+// Shared pages
+const NotificationsPage = React.lazy(() => import('@/pages/shared/NotificationsPage').then(m => ({ default: m.NotificationsPage })));
+const ProfilePage = React.lazy(() => import('@/pages/shared/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const SettingsPage = React.lazy(() => import('@/pages/shared/SettingsPage').then(m => ({ default: m.SettingsPage })));
 
-// Role-Based Route Guard
+// ── Suspense Fallback ───────────────────────────────────────────────────
+const PageLoader: React.FC = () => (
+  <div className="flex items-center justify-center h-96">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-10 h-10 border-[3px] border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <p className="text-sm text-gray-400 animate-pulse">Loading…</p>
+    </div>
+  </div>
+);
+
+// ── Role-Based Route Guard ──────────────────────────────────────────────
 interface RoleGuardProps {
   children: React.ReactNode;
   allowedRoles: UserRole[];
@@ -120,101 +130,104 @@ const AutoRedirect: React.FC = () => {
 
 function AppRoutes() {
   return (
-    <Routes>
-      {/* Public Landing Page */}
-      <Route path="/" element={<LandingPage />} />
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        {/* Public Pages */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/alt" element={<LandingPage />} />
 
-      {/* Customer Auth Routes (light theme) */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+        {/* Customer Auth Routes (light theme) */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      {/* Admin/Staff Auth Routes (dark DMS theme) */}
-      <Route path="/admin-login" element={<AdminLoginPage />} />
+        {/* Admin/Staff Auth Routes (dark DMS theme) */}
+        <Route path="/admin-login" element={<AdminLoginPage />} />
 
-      {/* Protected Routes */}
-      <Route element={<MainLayout />}>
-        {/* Public routes within MainLayout */}
-        <Route path="/cars" element={<CarBrowser />} />
-        <Route path="/cars/:id" element={<CarDetails />} />
-        <Route path="/cars/:id/build" element={<CarConfigurator />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/support" element={<SupportPage />} />
-        <Route path="/dealerships" element={<DealershipLocator />} />
+        {/* Protected Routes */}
+        <Route element={<MainLayout />}>
+          {/* Public routes within MainLayout */}
+          <Route path="/cars" element={<CarBrowser />} />
+          <Route path="/cars/:id" element={<CarDetails />} />
+          <Route path="/cars/:id/build" element={<CarConfigurator />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/support" element={<SupportPage />} />
+          <Route path="/dealerships" element={<DealershipLocator />} />
 
-        {/* Auto-redirect dashboard to appropriate role dashboard */}
-        <Route path="/dashboard" element={<AutoRedirect />} />
+          {/* Auto-redirect dashboard to appropriate role dashboard */}
+          <Route path="/dashboard" element={<AutoRedirect />} />
 
-        {/* Customer Routes */}
-        <Route
-          path="/customer/*"
-          element={
-            <RoleGuard allowedRoles={[UserRole.CUSTOMER]}>
-              <Routes>
-                <Route index element={<CustomerDashboard />} />
-                <Route path="test-drives" element={<MyTestDrives />} />
-                <Route path="orders" element={<MyOrders />} />
-                <Route path="inquiries" element={<MyInquiries />} />
-              </Routes>
-            </RoleGuard>
-          }
-        />
+          {/* Customer Routes */}
+          <Route
+            path="/customer/*"
+            element={
+              <RoleGuard allowedRoles={[UserRole.CUSTOMER]}>
+                <Routes>
+                  <Route index element={<CustomerDashboard />} />
+                  <Route path="test-drives" element={<MyTestDrives />} />
+                  <Route path="orders" element={<MyOrders />} />
+                  <Route path="inquiries" element={<MyInquiries />} />
+                </Routes>
+              </RoleGuard>
+            }
+          />
 
-        {/* Dealer Routes */}
-        <Route
-          path="/dealer/*"
-          element={
-            <RoleGuard allowedRoles={[UserRole.DEALER]}>
-              <Routes>
-                <Route index element={<DealerDashboard />} />
-                <Route path="inventory" element={<InventoryManagement />} />
-                <Route path="inquiries" element={<CustomerInquiries />} />
-                <Route path="test-drives" element={<TestDriveSchedule />} />
-                <Route path="sales" element={<SalesProcessing />} />
-              </Routes>
-            </RoleGuard>
-          }
-        />
+          {/* Dealer Routes */}
+          <Route
+            path="/dealer/*"
+            element={
+              <RoleGuard allowedRoles={[UserRole.DEALER]}>
+                <Routes>
+                  <Route index element={<DealerDashboard />} />
+                  <Route path="inventory" element={<InventoryManagement />} />
+                  <Route path="inquiries" element={<CustomerInquiries />} />
+                  <Route path="test-drives" element={<TestDriveSchedule />} />
+                  <Route path="sales" element={<SalesProcessing />} />
+                </Routes>
+              </RoleGuard>
+            }
+          />
 
-        {/* Manager Routes */}
-        <Route
-          path="/manager/*"
-          element={
-            <RoleGuard allowedRoles={[UserRole.MANAGER]}>
-              <Routes>
-                <Route index element={<ManagerDashboard />} />
-                <Route path="team" element={<TeamManagement />} />
-                <Route path="operations" element={<DealershipOperations />} />
-                <Route path="reports" element={<SalesReports />} />
-              </Routes>
-            </RoleGuard>
-          }
-        />
+          {/* Manager Routes */}
+          <Route
+            path="/manager/*"
+            element={
+              <RoleGuard allowedRoles={[UserRole.MANAGER]}>
+                <Routes>
+                  <Route index element={<ManagerDashboard />} />
+                  <Route path="team" element={<TeamManagement />} />
+                  <Route path="operations" element={<DealershipOperations />} />
+                  <Route path="reports" element={<SalesReports />} />
+                </Routes>
+              </RoleGuard>
+            }
+          />
 
-        {/* CEO/Admin Routes */}
-        <Route
-          path="/ceo/*"
-          element={
-            <RoleGuard allowedRoles={[UserRole.CEO, UserRole.ADMIN]}>
-              <Routes>
-                <Route index element={<CEODashboard />} />
-                <Route path="dealerships" element={<MultiDealershipView />} />
-                <Route path="financials" element={<FinancialAnalytics />} />
-                <Route path="strategy" element={<StrategicPlanning />} />
-                <Route path="users" element={<UserManagement />} />
-              </Routes>
-            </RoleGuard>
-          }
-        />
+          {/* CEO/Admin Routes */}
+          <Route
+            path="/ceo/*"
+            element={
+              <RoleGuard allowedRoles={[UserRole.CEO, UserRole.ADMIN]}>
+                <Routes>
+                  <Route index element={<CEODashboard />} />
+                  <Route path="dealerships" element={<MultiDealershipView />} />
+                  <Route path="financials" element={<FinancialAnalytics />} />
+                  <Route path="strategy" element={<StrategicPlanning />} />
+                  <Route path="users" element={<UserManagement />} />
+                </Routes>
+              </RoleGuard>
+            }
+          />
 
-        {/* Shared Routes */}
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Route>
+          {/* Shared Routes */}
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
 
-      {/* Catch all — send unknown routes to 404 */}
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+        {/* Catch all — send unknown routes to 404 */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }
 

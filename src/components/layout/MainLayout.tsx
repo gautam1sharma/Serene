@@ -1,39 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Sidebar } from './Sidebar';
-import { Header } from './Header';
+import { TopNav } from './TopNav';
 
 export const MainLayout: React.FC = () => {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { user } = useAuth();
-
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <Sidebar 
-        collapsed={sidebarCollapsed} 
-        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
-      />
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Sticky top navigation — replaces sidebar entirely */}
+      <TopNav />
 
-      {/* Main Content */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${user ? (sidebarCollapsed ? 'md:ml-20' : 'md:ml-64') : ''}`}>
-        <Header />
-        
-        <main className="flex-1 p-6 overflow-auto">
-          <div className="max-w-7xl mx-auto">
-            <Outlet />
-          </div>
-        </main>
+      {/* Page Content */}
+      <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <Outlet />
+        </div>
+      </main>
 
-        {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 py-4 px-6">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <p>© 2024 Serene Automotive. All rights reserved.</p>
-            <p>Version 1.0.0</p>
+      {/* Footer — mirrors the reference design */}
+      <footer className="border-t border-gray-200 py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs tracking-widest gap-4">
+          <div>
+            <span className="font-serif uppercase tracking-[0.3em] text-serene-matte font-bold text-base">
+              Serene
+            </span>
           </div>
-        </footer>
-      </div>
+          <div className="flex space-x-8 uppercase">
+            <a href="/about" className="hover:text-serene-matte transition-colors">About</a>
+            <a href="/support" className="hover:text-serene-matte transition-colors">Support</a>
+            <a href="/dealerships" className="hover:text-serene-matte transition-colors">Dealerships</a>
+          </div>
+          <div className="text-center md:text-right">
+            © {new Date().getFullYear()} Serene Automotive Group. All rights reserved.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

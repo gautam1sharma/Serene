@@ -54,9 +54,15 @@ module.exports = {
         "serene-blue": "#e0f2f1",
         "serene-peach": "#fdf2f0",
         "serene-green": "#f1f8e9",
+        "serene-matte": "#1A1A1A",
+        "serene-silver": "#E5E7EB",
+        "serene-brushed": "#C0C0C0",
+        "serene-accent": "#F3F4F6",
       },
       fontFamily: {
         display: ['Public Sans', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

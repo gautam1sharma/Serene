@@ -68,9 +68,9 @@ export const NotFoundPage: React.FC = () => {
               <span>{new Date().getFullYear()} Serene. All rights reserved.</span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">Privacy Policy</a>
-              <a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">Terms of Service</a>
-              <a href="#" className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">System Status</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">Privacy Policy</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">Terms of Service</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#308ce8] transition-colors">System Status</a>
             </div>
           </div>
         </footer>

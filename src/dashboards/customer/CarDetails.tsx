@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Calendar, 
-  Fuel, 
-  Settings2, 
-  Gauge, 
+import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
+import {
+  ArrowLeft,
+  Calendar,
+  Fuel,
+  Settings2,
+  Gauge,
   Palette,
   MessageSquare,
   Heart,
-  Check
+  Check,
+  Car,
+  ChevronLeft,
+  ChevronRight,
+  X
 } from 'lucide-react';
 import { carService } from '@/services/carService';
 import { testDriveService } from '@/services/testDriveService';
@@ -30,31 +36,30 @@ export const CarDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [car, setCar] = useState<CarType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [showTestDriveModal, setShowTestDriveModal] = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [testDriveDate, setTestDriveDate] = useState('');
   const [testDriveTime, setTestDriveTime] = useState('');
-  const [inquiryMessage, setInquiryMessage] = useState('');
-
-  useEffect(() => {
-    if (id) {
-      loadCar();
-    }
-  }, [id]);
-
-  const loadCar = async () => {
-    setIsLoading(true);
-    const response = await carService.getCarById(id!);
-    if (response.success && response.data) {
-      setCar(response.data);
-    } else {
-      toast.error('Car not found');
-      navigate('/cars');
-    }
-    setIsLoading(false);
-  };
+  const [inquiryMessage, setInquiryMessage] = useState('');  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
+  // Use React Query to cache car details — going back and forward is instant
+  const { data: car, isLoading } = useQuery<CarType | null>({
+    queryKey: ['car', id],
+    queryFn: async () => {
+      if (!id) return null;
+      try {
+        const response = await carService.getCarById(id);
+        if (response.success && response.data) {
+          return response.data;
+        }
+      } catch (error) {
+        console.error("Failed to fetch car", error);
+      }
+      return null;
+    },
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
   const handleScheduleTestDrive = async () => {
     if (!user) {
@@ -130,10 +135,28 @@ export const CarDetails: React.FC = () => {
     );
   }
 
-  if (!car) return null;
+  if (!car) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <Car className="w-16 h-16 text-gray-300 mb-4" />
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Vehicle Not Found</h2>
+        <p className="text-gray-500 mb-6">The vehicle you are looking for does not exist or has been removed.</p>
+        <Button onClick={() => navigate('/cars')} className="gap-2">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Inventory
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
+      {/* Dynamic Page Title — shows car name in the browser tab */}
+      <Helmet>
+        <title>{car.model} | Serene Automotive</title>
+        <meta name="description" content={`${car.year} ${car.model} — ${car.description.slice(0, 150)}`} />
+      </Helmet>
+
       {/* Back Button */}
       <button
         onClick={() => navigate('/cars')}
@@ -147,23 +170,48 @@ export const CarDetails: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Image Section */}
         <div className="space-y-4">
-          <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden">
+          <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden relative group">
             <img
-              src={car.images[0] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'}
+              src={car.images[selectedImageIndex] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'}
               alt={car.model}
-              className="w-full h-full object-cover"
+              loading="lazy"
+              onClick={() => setShowImageModal(true)}
+              className="w-full h-full object-cover transition-all duration-300 cursor-pointer hover:scale-105"
             />
+            {car.images.length > 1 && (
+              <>
+                <button
+                  onClick={() => setSelectedImageIndex((prev) => (prev > 0 ? prev - 1 : car.images.length - 1))}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-gray-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setSelectedImageIndex((prev) => (prev < car.images.length - 1 ? prev + 1 : 0))}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-gray-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
           </div>
           {car.images.length > 1 && (
-            <div className={`grid grid-cols-4 gap-2`}>
-              {car.images.slice(0, 4).map((image, i) => (
-                <div key={i} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {car.images.map((image, i) => (
+                <button
+                  key={i}
+                  onClick={() => setSelectedImageIndex(i)}
+                  className={`relative flex-shrink-0 w-24 aspect-video rounded-lg overflow-hidden ${
+                    selectedImageIndex === i ? 'ring-2 ring-[#ec5b13]' : 'opacity-70 hover:opacity-100'
+                  } transition-all`}
+                >
                   <img
                     src={image}
                     alt={`${car.model} view ${i + 1}`}
+                    loading="lazy"
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -355,6 +403,49 @@ export const CarDetails: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Fullscreen Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
+          <button
+            onClick={() => setShowImageModal(false)}
+            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors z-50"
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
+            <img
+              src={car.images[selectedImageIndex] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'}
+              alt={car.model}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
+
+            {car.images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex((prev) => (prev > 0 ? prev - 1 : car.images.length - 1));
+                  }}
+                  className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors"
+                >
+                  <ChevronLeft className="w-8 h-8" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImageIndex((prev) => (prev < car.images.length - 1 ? prev + 1 : 0));
+                  }}
+                  className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 p-3 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors"
+                >
+                  <ChevronRight className="w-8 h-8" />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

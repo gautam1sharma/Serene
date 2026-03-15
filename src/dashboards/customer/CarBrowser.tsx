@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
 import { 
   Search, 
   Filter, 
@@ -12,6 +14,7 @@ import { carService } from '@/services/carService';
 import type { Car as CarType, CarStatus } from '@/types';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const categories = ['All', 'SUV', 'Sedan', 'Electric', 'Hybrid', 'Luxury'];
 const priceRanges = [
@@ -22,39 +25,51 @@ const priceRanges = [
   { label: 'Over $70k', min: 70000, max: Infinity }
 ];
 
+/**
+ * Downscale Unsplash image URLs for grid thumbnails.
+ * Replaces any existing `w=` parameter with 600px, or appends it.
+ */
+function getThumbnailUrl(url: string): string {
+  if (!url) return url;
+  if (url.includes('unsplash.com')) {
+    // Replace existing width parameter or append one
+    if (url.includes('w=')) {
+      return url.replace(/w=\d+/, 'w=600');
+    }
+    return url + (url.includes('?') ? '&' : '?') + 'w=600';
+  }
+  return url;
+}
+
 export const CarBrowser: React.FC = () => {
-  const [cars, setCars] = useState<CarType[]>([]);
-  const [filteredCars, setFilteredCars] = useState<CarType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedPriceRange, setSelectedPriceRange] = useState(priceRanges[0]);
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    loadCars();
-  }, []);
+  // Debounce search input by 300ms to avoid re-rendering the grid on every keystroke
+  const debouncedSearch = useDebounce(searchQuery, 300);
 
-  useEffect(() => {
-    filterCars();
-  }, [cars, searchQuery, selectedCategory, selectedPriceRange]);
+  // Use React Query to cache the data — navigating away and back renders instantly
+  const { data: cars = [], isLoading } = useQuery({
+    queryKey: ['cars', 'browse'],
+    queryFn: async () => {
+      const response = await carService.getCars(1, 100);
+      if (response.success && response.data) {
+        return response.data.data;
+      }
+      return [] as CarType[];
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
-  const loadCars = async () => {
-    setIsLoading(true);
-    const response = await carService.getCars(1, 100);
-    if (response.success && response.data) {
-      setCars(response.data.data);
-      setFilteredCars(response.data.data);
-    }
-    setIsLoading(false);
-  };
-
-  const filterCars = () => {
+  // Derived filtered list — uses the DEBOUNCED search value
+  const filteredCars = useMemo(() => {
     let filtered = [...cars];
 
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+    // Search filter (debounced)
+    if (debouncedSearch) {
+      const query = debouncedSearch.toLowerCase();
       filtered = filtered.filter(car =>
         car.model.toLowerCase().includes(query) ||
         car.description.toLowerCase().includes(query) ||
@@ -74,8 +89,8 @@ export const CarBrowser: React.FC = () => {
       car.price >= selectedPriceRange.min && car.price <= selectedPriceRange.max
     );
 
-    setFilteredCars(filtered);
-  };
+    return filtered;
+  }, [cars, debouncedSearch, selectedCategory, selectedPriceRange]);
 
   const getStatusBadge = (status: CarStatus) => {
     const styles = {
@@ -90,6 +105,12 @@ export const CarBrowser: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Dynamic Page Title */}
+      <Helmet>
+        <title>Browse Vehicles | Serene Automotive</title>
+        <meta name="description" content="Explore the full range of Serene luxury and performance vehicles. Search, filter, and compare models." />
+      </Helmet>
+
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Browse Vehicles</h1>
@@ -218,11 +239,12 @@ export const CarBrowser: React.FC = () => {
           {filteredCars.map((car) => (
             <Link key={car.id} to={`/cars/${car.id}`}>
               <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all group">
-                {/* Image */}
+                {/* Image — lazy loaded + downscaled for thumbnails */}
                 <div className="aspect-video bg-gray-100 relative overflow-hidden">
                   <img
-                    src={car.images[0] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800'}
+                    src={getThumbnailUrl(car.images[0] || 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600')}
                     alt={car.model}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3">

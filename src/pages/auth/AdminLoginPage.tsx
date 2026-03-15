@@ -114,7 +114,7 @@ export const AdminLoginPage: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
-                    <a href="#" className="text-xs font-semibold text-[#1a2a44] dark:text-[#308ce8] hover:underline">Forgot password?</a>
+                    <a href="#!" onClick={(e) => e.preventDefault()} className="text-xs font-semibold text-[#1a2a44] dark:text-[#308ce8] hover:underline">Forgot password?</a>
                   </div>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">lock</span>
@@ -207,9 +207,9 @@ export const AdminLoginPage: React.FC = () => {
         <footer className="bg-white dark:bg-[#111921] border-t border-slate-200 dark:border-slate-800 px-6 py-6 lg:px-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-400 uppercase tracking-wider">
             <div className="flex gap-6">
-              <a href="#" className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Contact Hub</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Privacy Policy</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Terms of Service</a>
+              <a href="#!" onClick={(e) => e.preventDefault()} className="hover:text-[#1a2a44] dark:hover:text-[#308ce8] transition-colors">Contact Hub</a>
             </div>
             <div>
               © 2024 Serene DMS. All rights reserved.

@@ -347,19 +347,19 @@ export const LandingPage: React.FC = () => {
                 <h4 className="text-slate-900 font-medium tracking-wide">Company</h4>
                 <Link to="/about" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">About Us</Link>
                 <Link to="/dealerships" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Dealerships</Link>
-                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Careers</a>
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Careers</a>
               </div>
               <div className="flex flex-col gap-3">
                 <h4 className="text-slate-900 font-medium tracking-wide">Vehicles</h4>
                 <Link to="/cars" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">All Models</Link>
                 <Link to="/cars" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Configure Vehicle</Link>
-                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Accessories</a>
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Accessories</a>
               </div>
               <div className="flex flex-col gap-3">
                 <h4 className="text-slate-900 font-medium tracking-wide">Help & Legal</h4>
                 <Link to="/support" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Support & FAQ</Link>
-                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Privacy Policy</a>
-                <a href="#" className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Terms of Service</a>
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Privacy Policy</a>
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-500 hover:text-slate-900 text-sm font-light transition-colors">Terms of Service</a>
               </div>
             </div>
             <div className="text-center border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -367,10 +367,10 @@ export const LandingPage: React.FC = () => {
                 © {new Date().getFullYear()} Serene Automotive. All rights reserved.
               </p>
               <div className="flex gap-4">
-                <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-400 hover:text-slate-900 transition-colors">
                   <span className="material-symbols-outlined text-xl">language</span>
                 </a>
-                <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-slate-400 hover:text-slate-900 transition-colors">
                   <span className="material-symbols-outlined text-xl">share</span>
                 </a>
               </div>

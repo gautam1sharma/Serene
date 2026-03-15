@@ -4,25 +4,33 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import logoBlack from '@/assets/default-monochrome-black.svg';
 import logoWhite from '@/assets/default-monochrome-white.svg';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  password: z.string().min(1, 'Password is required')
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const returnTo = location.state?.returnTo || '/dashboard';
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) {
-      toast.error('Please enter both email and password');
-      return;
-    }
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' }
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    const success = await login({ email, password });
+    const success = await login(data);
     if (success) {
       navigate(returnTo);
     }
@@ -30,13 +38,12 @@ export const LoginPage: React.FC = () => {
   };
 
   const fillCustomerDemo = () => {
-    setEmail('john.customer@email.com');
-    setPassword('password123');
+    setValue('email', 'john.customer@email.com');
+    setValue('password', 'password123');
   };
 
   return (
     <div className="bg-[#f8f6f6] dark:bg-[#221610] text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
-      {/* Top Navigation Bar */}
       <header className="w-full border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center group">
@@ -49,23 +56,21 @@ export const LoginPage: React.FC = () => {
               <span className="text-sm font-semibold">English</span>
               <span className="material-symbols-outlined text-lg">expand_more</span>
             </div>
+            <Link to="/register" className="hidden sm:block text-sm font-semibold hover:text-[#ec5b13] transition-colors">
+              New Customer? Register
+            </Link>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
-          {/* Heading Section */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-black text-slate-400 dark:text-slate-500 mb-1 leading-tight">Welcome Back</h1>
+      <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="text-center mb-8">
             <p className="text-2xl font-bold text-slate-900 dark:text-white">Customer Portal</p>
           </div>
 
-          {/* Login Card */}
           <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl shadow-slate-200/50 dark:shadow-black/20 p-8 border border-slate-100 dark:border-slate-800">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Email</label>
                 <div className="relative group">
@@ -74,18 +79,15 @@ export const LoginPage: React.FC = () => {
                   </div>
                   <input
                     id="email"
-                    name="email"
                     type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register('email')}
                     placeholder="john.customer@email.com"
-                    className="block w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#ec5b13]/50 transition-all placeholder:text-slate-400 outline-none"
+                    className={`block w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#ec5b13]/50 transition-all placeholder:text-slate-400 outline-none ${errors.email ? 'ring-2 ring-red-500/50 bg-red-50' : ''}`}
                   />
                 </div>
+                {errors.email && <p className="text-red-500 text-sm pl-1">{errors.email.message}</p>}
               </div>
 
-              {/* Password Field */}
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Password</label>
                 <div className="relative group">
@@ -94,23 +96,24 @@ export const LoginPage: React.FC = () => {
                   </div>
                   <input
                     id="password"
-                    name="password"
                     type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="block w-full pl-12 pr-12 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#ec5b13]/50 transition-all placeholder:text-slate-400 outline-none"
+                    {...register('password')}
+                    placeholder="Enter your password"
+                    className={`block w-full pl-12 pr-12 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-[#ec5b13]/50 transition-all placeholder:text-slate-400 outline-none ${errors.password ? 'ring-2 ring-red-500/50 bg-red-50' : ''}`}
                   />
-                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                    <span onClick={() => setShowPassword(!showPassword)} className="material-symbols-outlined">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">
                       {showPassword ? 'visibility_off' : 'visibility'}
                     </span>
-                  </div>
+                  </button>
                 </div>
+                {errors.password && <p className="text-red-500 text-sm pl-1">{errors.password.message}</p>}
               </div>
 
-              {/* Actions */}
               <div className="flex items-center justify-between py-2">
                 <label className="flex items-center gap-3 cursor-pointer group">
                   <div className="relative flex items-center">
@@ -118,14 +121,13 @@ export const LoginPage: React.FC = () => {
                   </div>
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Remember me</span>
                 </label>
-                <a href="#" className="text-sm font-semibold text-[#ec5b13] hover:underline decoration-2 underline-offset-4">Forgot password?</a>
+                <a href="#!" onClick={(e) => e.preventDefault()} className="text-sm font-semibold text-[#ec5b13] hover:underline decoration-2 underline-offset-4">Forgot password?</a>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-[#ec5b13] hover:bg-[#ec5b13]/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-[#ec5b13]/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                className="w-full bg-[#ec5b13] hover:bg-[#ec5b13]/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-[#ec5b13]/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-75 disabled:pointer-events-none"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -148,28 +150,8 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
           </div>
-
-          {/* Footer Link */}
-          <div className="mt-8 text-center">
-            <p className="text-slate-600 dark:text-slate-400 font-medium">
-              Don't have an account?
-              <Link to="/register" state={{ returnTo }} className="text-[#ec5b13] font-bold hover:underline decoration-2 underline-offset-4 ml-1">Create one</Link>
-            </p>
-          </div>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="w-full py-8 px-6 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500 dark:text-slate-500 text-sm font-medium">
-          <p>© {new Date().getFullYear()} Serene Customer Portal. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-[#ec5b13] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#ec5b13] transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-[#ec5b13] transition-colors">Support</a>
-          </div>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };
