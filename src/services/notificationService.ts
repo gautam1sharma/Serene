@@ -1,4 +1,4 @@
-import type { Notification, ApiResponse } from '@/types';
+﻿import type { Notification, ApiResponse } from '@/types';
 import { NotificationType } from '@/types';
 import { mockNotifications } from '@/data/mockData';
 

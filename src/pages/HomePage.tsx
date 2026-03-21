@@ -95,14 +95,14 @@ export const HomePage: React.FC = () => {
       case 'customer': return '/customer';
       case 'dealer':   return '/dealer';
       case 'manager':  return '/manager';
-      case 'ceo': case 'admin': return '/ceo';
+      case 'admin': return '/admin';
       default: return '/login';
     }
   };
 
   return (
     <div className="relative min-h-screen bg-black">
-      {/* ═══ NAVIGATION HEADER ════════════════════════════════════════════ */}
+      {/* â•â•â• NAVIGATION HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled || menuOpen ? 'bg-black/80 backdrop-blur-md' : 'bg-transparent'
@@ -134,6 +134,12 @@ export const HomePage: React.FC = () => {
                 </Link>
               ) : (
                 <>
+                  <Link
+                    to="/admin-login"
+                    className="text-white/70 hover:text-white text-xs tracking-[0.2em] uppercase transition-colors border-r border-white/30 pr-4 mr-2"
+                  >
+                    Staff Login
+                  </Link>
                   <Link
                     to="/login"
                     className="text-white/70 hover:text-white text-xs tracking-[0.2em] uppercase transition-colors"
@@ -176,7 +182,7 @@ export const HomePage: React.FC = () => {
         </nav>
       </header>
 
-      {/* ═══ MENU OVERLAY ═════════════════════════════════════════════════ */}
+      {/* â•â•â• MENU OVERLAY â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -217,6 +223,13 @@ export const HomePage: React.FC = () => {
                   ) : (
                     <>
                       <Link
+                        to="/admin-login"
+                        onClick={() => setMenuOpen(false)}
+                        className="text-white/70 hover:text-white text-lg tracking-wider transition-colors"
+                      >
+                        Staff Login
+                      </Link>
+                      <Link
                         to="/login"
                         onClick={() => setMenuOpen(false)}
                         className="text-white/70 hover:text-white text-lg tracking-wider transition-colors"
@@ -247,7 +260,7 @@ export const HomePage: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* ═══ HERO SECTION ═════════════════════════════════════════════════ */}
+      {/* â•â•â• HERO SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section className="relative h-screen overflow-hidden">
         {/* Video Background */}
         <div className="absolute inset-0">
@@ -276,7 +289,7 @@ export const HomePage: React.FC = () => {
             className="mb-4"
           >
             <span className="text-white/70 text-sm md:text-base tracking-[0.4em] uppercase">
-              Luxury Automotive Dealership
+              Luxury Automotive
             </span>
           </motion.div>
 
@@ -329,7 +342,7 @@ export const HomePage: React.FC = () => {
         </motion.div>
       </section>
 
-      {/* ═══ FEATURED VEHICLES SLIDER ═════════════════════════════════════ */}
+      {/* â•â•â• FEATURED VEHICLES SLIDER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section id="vehicles" className="relative bg-black py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
@@ -433,7 +446,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ BRAND VALUES SECTION ═════════════════════════════════════════ */}
+      {/* â•â•â• BRAND VALUES SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section id="about" className="relative bg-neutral-950 py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
@@ -477,7 +490,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ SERVICES SECTION ═════════════════════════════════════════════ */}
+      {/* â•â•â• SERVICES SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section id="services" className="relative bg-black py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
@@ -530,7 +543,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ CONTACT / CTA SECTION ════════════════════════════════════════ */}
+      {/* â•â•â• CONTACT / CTA SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section id="contact" className="relative bg-neutral-950 py-24 md:py-32">
         <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
           <motion.div
@@ -561,6 +574,12 @@ export const HomePage: React.FC = () => {
               ) : (
                 <>
                   <Link
+                    to="/admin-login"
+                    className="px-8 py-4 border border-neutral-700 text-white text-sm tracking-[0.2em] uppercase hover:border-white transition-colors duration-300"
+                  >
+                    Staff Login
+                  </Link>
+                  <Link
                     to="/login"
                     className="px-8 py-4 bg-white text-black text-sm tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors duration-300"
                   >
@@ -579,7 +598,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ═══ FOOTER ═══════════════════════════════════════════════════════ */}
+      {/* â•â•â• FOOTER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <footer className="bg-black border-t border-neutral-900 py-12">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">

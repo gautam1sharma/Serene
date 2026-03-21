@@ -1,305 +1,199 @@
-import React, { useState, useEffect } from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Package, 
-  MessageSquare, 
-  Calendar, 
-  ShoppingCart, 
-  Users,
-  AlertCircle,
-  TrendingUp
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { carService } from '@/services/carService';
-import { orderService } from '@/services/orderService';
-import { testDriveService } from '@/services/testDriveService';
-import { inquiryService } from '@/services/inquiryService';
-import { analyticsService } from '@/services/analyticsService';
-import type { Order, TestDrive, CarInquiry, DashboardMetrics } from '@/types';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  change?: number;
-  icon: React.ElementType;
-  color: string;
-  linkTo: string;
-}
-
-const StatCard: React.FC<StatCardProps> = ({ title, value, change, icon: Icon, color, linkTo }) => (
-  <Link to={linkTo} className="block">
-    <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-gray-500 text-sm">{title}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-          {change !== undefined && (
-            <p className={cn(
-              "text-sm mt-1 flex items-center gap-1",
-              change >= 0 ? "text-green-600" : "text-red-600"
-            )}>
-              <TrendingUp className="w-4 h-4" />
-              {change >= 0 ? '+' : ''}{change}% from last month
-            </p>
-          )}
-        </div>
-        <div className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-      </div>
-    </div>
-  </Link>
-);
 
 export const DealerDashboard: React.FC = () => {
-  const { user } = useAuth();
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [pendingInquiries, setPendingInquiries] = useState<CarInquiry[]>([]);
-  const [upcomingTestDrives, setUpcomingTestDrives] = useState<TestDrive[]>([]);
-  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
-  const [inventoryStats, setInventoryStats] = useState({ total: 0, available: 0 });
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      loadDashboardData();
-    }
-  }, [user]);
-
-  const loadDashboardData = async () => {
-    if (!user) return;
-    
-    setIsLoading(true);
-    
-    const dealershipId = user.dealershipId;
-    
-    const [metricsRes, inquiriesRes, testDrivesRes, ordersRes, inventoryRes] = await Promise.all([
-      analyticsService.getDashboardMetrics(dealershipId),
-      inquiryService.getPendingInquiries(dealershipId, 5),
-      testDriveService.getUpcomingTestDrives(dealershipId, 5),
-      orderService.getRecentOrders(5),
-      carService.getCarsByDealership(dealershipId || '')
-    ]);
-
-    if (metricsRes.success && metricsRes.data) {
-      setMetrics(metricsRes.data);
-    }
-    if (inquiriesRes.success && inquiriesRes.data) {
-      setPendingInquiries(inquiriesRes.data);
-    }
-    if (testDrivesRes.success && testDrivesRes.data) {
-      setUpcomingTestDrives(testDrivesRes.data);
-    }
-    if (ordersRes.success && ordersRes.data) {
-      setRecentOrders(ordersRes.data);
-    }
-    if (inventoryRes.success && inventoryRes.data) {
-      setInventoryStats({
-        total: inventoryRes.data.length,
-        available: inventoryRes.data.filter(c => c.status === 'available').length
-      });
-    }
-
-    setIsLoading(false);
-  };
-
-  if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
+        <div className="new-dealer-frontend font-sans">
+            
+{/*  TopNavBar  */}
+
+<div className="bg-slate-200/50 dark:bg-slate-800/50 h-[1px] w-full"></div>
+<main className="max-w-[1920px] mx-auto px-8 py-8">
+{/*  Header Greeting  */}
+
+{/*  Top Row: KPI Cards  */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+{/*  Total Inventory  */}
+<div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] flex flex-col justify-between h-40">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-xs font-semibold text-dealer-on-surface-variant tracking-wider uppercase">Total Inventory</p>
+<h2 className="text-3xl font-extrabold font-headline mt-1">5</h2>
+</div>
+<span className="material-symbols-outlined text-slate-600" data-icon="directions_car">directions_car</span>
+</div>
+<div className="flex items-center justify-between">
+<span className="text-xs font-bold text-dealer-tertiary-fixed-dim flex items-center gap-1">
+<span className="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                        +5%
+                    </span>
+<div className="h-8 w-24">
+<svg className="w-full h-full stroke-dealer-tertiary stroke-[2] fill-none" viewBox="0 0 100 30">
+<path d="M0,25 Q10,15 20,20 T40,10 T60,22 T80,5 T100,15"></path>
+</svg>
+</div>
+</div>
+</div>
+{/*  Pending Inquiries  */}
+<div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] flex flex-col justify-between h-40">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-xs font-semibold text-dealer-on-surface-variant tracking-wider uppercase">Pending Inquiries</p>
+<h2 className="text-3xl font-extrabold font-headline mt-1">2</h2>
+</div>
+<span className="material-symbols-outlined text-slate-600" data-icon="mail">mail</span>
+</div>
+<div className="flex items-center justify-between">
+<span className="text-xs font-medium text-dealer-on-surface-variant">Active this week</span>
+<div className="h-8 w-24">
+<svg className="w-full h-full stroke-dealer-primary stroke-[2] fill-none" viewBox="0 0 100 30">
+<path d="M0,15 Q20,15 40,25 T60,10 T100,20"></path>
+</svg>
+</div>
+</div>
+</div>
+{/*  Today's Test Drives  */}
+<div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] flex flex-col justify-between h-40">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-xs font-semibold text-dealer-on-surface-variant tracking-wider uppercase">Today's Test Drives</p>
+<h2 className="text-3xl font-extrabold font-headline mt-1">0</h2>
+</div>
+<span className="material-symbols-outlined text-slate-600" data-icon="event">event</span>
+</div>
+<div className="flex items-center justify-between">
+<span className="text-xs font-medium text-dealer-on-surface-variant">None scheduled</span>
+<div className="h-8 w-24 opacity-30">
+<svg className="w-full h-full stroke-slate-400 stroke-[2] fill-none" viewBox="0 0 100 30">
+<line x1="0" x2="100" y1="15" y2="15"></line>
+</svg>
+</div>
+</div>
+</div>
+{/*  Monthly Sales  */}
+<div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] flex flex-col justify-between h-40">
+<div className="flex justify-between items-start">
+<div>
+<p className="text-xs font-semibold text-dealer-on-surface-variant tracking-wider uppercase">Monthly Sales</p>
+<h2 className="text-3xl font-extrabold font-headline mt-1">1</h2>
+</div>
+<span className="material-symbols-outlined text-slate-600" data-icon="payments">payments</span>
+</div>
+<div className="flex items-center justify-between">
+<span className="text-xs font-bold text-dealer-tertiary-fixed-dim flex items-center gap-1">
+<span className="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                        +12%
+                    </span>
+<div className="h-8 w-24">
+<svg className="w-full h-full stroke-dealer-tertiary stroke-[2] fill-none" viewBox="0 0 100 30">
+<path d="M0,28 L20,20 L40,22 L60,10 L80,12 L100,2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+{/*  Middle Row: Inquiries & Test Drives  */}
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+{/*  Left: Pending Inquiries  */}
+<div className="lg:col-span-2 bg-dealer-surface-container-lowest rounded-3xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] overflow-hidden">
+<div className="p-6 border-b border-slate-100 flex justify-between items-center">
+<h3 className="text-lg font-bold font-headline text-dealer-on-surface">Pending Inquiries</h3>
+<button className="text-dealer-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<div className="p-2">
+{/*  Inquiry Item 1  */}
+<div className="group flex items-center justify-between p-4 mb-2 rounded-2xl border-l-[3px] border-dealer-tertiary-container bg-dealer-surface-container-lowest hover:bg-slate-50 transition-all cursor-pointer">
+<div className="flex items-center gap-4">
+<div className="h-10 w-10 rounded-full bg-dealer-surface-container flex items-center justify-center text-dealer-primary font-bold">JD</div>
+<div>
+<h4 className="font-bold text-dealer-on-surface text-sm">John Doe</h4>
+<p className="text-dealer-on-surface-variant text-xs mt-0.5">Interested in the 2023 Aero S-Class Sport. Can we discuss financing options?</p>
+</div>
+</div>
+<div className="text-right">
+<p className="text-xs font-medium text-dealer-on-surface-variant">2h ago</p>
+<span className="material-symbols-outlined text-slate-300 group-hover:text-dealer-primary transition-colors mt-1" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+{/*  Inquiry Item 2  */}
+<div className="group flex items-center justify-between p-4 rounded-2xl border-l-[3px] border-dealer-tertiary-container bg-dealer-surface-container-lowest hover:bg-slate-50 transition-all cursor-pointer">
+<div className="flex items-center gap-4">
+<div className="h-10 w-10 rounded-full bg-dealer-surface-container flex items-center justify-center text-dealer-primary font-bold">SM</div>
+<div>
+<h4 className="font-bold text-dealer-on-surface text-sm">Sarah Miller</h4>
+<p className="text-dealer-on-surface-variant text-xs mt-0.5">Availability check for the upcoming weekend for a walk-around.</p>
+</div>
+</div>
+<div className="text-right">
+<p className="text-xs font-medium text-dealer-on-surface-variant">5h ago</p>
+<span className="material-symbols-outlined text-slate-300 group-hover:text-dealer-primary transition-colors mt-1" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+{/*  Right: Upcoming Test Drives Empty State  */}
+<div className="bg-dealer-surface-container-lowest rounded-3xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] flex flex-col items-center justify-center p-8 text-center min-h-[300px]">
+<div className="mb-6 opacity-20">
+<span className="material-symbols-outlined text-8xl" data-icon="steering_wheel" style={{fontVariationSettings: '\'wght\' 100'}}>tire_repair</span>
+</div>
+<h3 className="text-lg font-bold font-headline text-dealer-on-surface">No upcoming test drives</h3>
+<p className="text-dealer-on-surface-variant text-sm mt-2 max-w-[200px] mx-auto">Your schedule is currently clear for today.</p>
+<button className="mt-8 px-6 py-2.5 rounded-xl border border-dealer-outline-variant text-dealer-on-surface-variant text-sm font-bold hover:bg-slate-50 transition-all">
+                    Schedule a Test Drive
+                </button>
+</div>
+</div>
+{/*  Bottom: Recent Orders  */}
+<div className="bg-dealer-surface-container-lowest rounded-3xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] overflow-hidden">
+<div className="p-6 border-b border-slate-100">
+<h3 className="text-lg font-bold font-headline text-dealer-on-surface">Recent Orders</h3>
+</div>
+<div className="overflow-x-auto">
+<table className="w-full text-left">
+<thead>
+<tr className="text-dealer-on-surface-variant text-[11px] uppercase tracking-widest font-bold">
+<th className="px-8 py-5">Inventory ID</th>
+<th className="px-8 py-5">Vehicle Name</th>
+<th className="px-8 py-5">Customer</th>
+<th className="px-8 py-5">Status</th>
+<th className="px-8 py-5 text-right">Amount</th>
+</tr>
+</thead>
+<tbody className="divide-y divide-slate-50">
+<tr className="hover:bg-slate-50/50 transition-colors">
+<td className="px-8 py-6 text-sm font-medium text-dealer-on-surface-variant">#INV-8821</td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface">Serene Stealth GT</td>
+<td className="px-8 py-6 text-sm text-dealer-on-surface-variant">Michael Chen</td>
+<td className="px-8 py-6"><div className="flex items-center gap-2 text-slate-700 font-bold text-[11px] uppercase tracking-wider"><div className="h-2 w-2 rounded-full bg-green-500"></div>Delivered</div></td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface text-right">$59,400</td>
+</tr>
+<tr className="hover:bg-slate-50/50 transition-colors">
+<td className="px-8 py-6 text-sm font-medium text-dealer-on-surface-variant">#INV-8754</td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface">Serene E-Series X</td>
+<td className="px-8 py-6 text-sm text-dealer-on-surface-variant">Emma Watson</td>
+<td className="px-8 py-6"><div className="flex items-center gap-2 text-slate-700 font-bold text-[11px] uppercase tracking-wider"><div className="h-2 w-2 rounded-full bg-blue-500"></div>Processing</div></td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface text-right">$49,680</td>
+</tr>
+<tr className="hover:bg-slate-50/50 transition-colors">
+<td className="px-8 py-6 text-sm font-medium text-dealer-on-surface-variant">#INV-8610</td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface">Serene Coupe R</td>
+<td className="px-8 py-6 text-sm text-dealer-on-surface-variant">Robert Davis</td>
+<td className="px-8 py-6"><div className="flex items-center gap-2 text-slate-700 font-bold text-[11px] uppercase tracking-wider"><div className="h-2 w-2 rounded-full bg-amber-500"></div>Hold</div></td>
+<td className="px-8 py-6 text-sm font-bold text-dealer-on-surface text-right">$29,160</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div className="p-4 bg-slate-50/50 flex justify-center">
+<button className="text-xs font-bold text-dealer-primary hover:text-dealer-primary-dim transition-colors uppercase tracking-widest">
+                    View Complete Transaction History
+                </button>
+</div>
+</div>
+</main>
+{/*  SideNav (Mobile Only Overlay Trigger)  */}
+
+
+        </div>
     );
-  }
-
-  return (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">
-              Welcome, {user?.firstName}!
-            </h1>
-            <p className="text-blue-100">
-              Here's what's happening at your dealership today.
-            </p>
-          </div>
-          <Link to="/dealer/inventory">
-            <Button className="bg-white text-blue-600 hover:bg-blue-50">
-              Manage Inventory
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Inventory"
-          value={inventoryStats.total}
-          change={5}
-          icon={Package}
-          color="bg-blue-500"
-          linkTo="/dealer/inventory"
-        />
-        <StatCard
-          title="Pending Inquiries"
-          value={pendingInquiries.length}
-          icon={MessageSquare}
-          color="bg-yellow-500"
-          linkTo="/dealer/inquiries"
-        />
-        <StatCard
-          title="Today's Test Drives"
-          value={upcomingTestDrives.length}
-          icon={Calendar}
-          color="bg-green-500"
-          linkTo="/dealer/test-drives"
-        />
-        <StatCard
-          title="Monthly Sales"
-          value={metrics?.totalSales || 0}
-          change={12}
-          icon={ShoppingCart}
-          color="bg-purple-500"
-          linkTo="/dealer/sales"
-        />
-      </div>
-
-      {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Pending Inquiries */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold text-gray-900">Pending Inquiries</h2>
-              {pendingInquiries.length > 0 && (
-                <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                  {pendingInquiries.length}
-                </span>
-              )}
-            </div>
-            <Link to="/dealer/inquiries" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              View all
-            </Link>
-          </div>
-
-          {pendingInquiries.length === 0 ? (
-            <div className="text-center py-8">
-              <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No pending inquiries</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {pendingInquiries.slice(0, 5).map((inquiry) => (
-                <div key={inquiry.id} className="flex items-start gap-4 p-4 bg-yellow-50 rounded-xl border border-yellow-100">
-                  <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <AlertCircle className="w-5 h-5 text-yellow-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{inquiry.customerName}</p>
-                    <p className="text-sm text-gray-600 line-clamp-1">{inquiry.message}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {inquiry.carModel} • {new Date(inquiry.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Upcoming Test Drives */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Upcoming Test Drives</h2>
-            <Link to="/dealer/test-drives" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-              View all
-            </Link>
-          </div>
-
-          {upcomingTestDrives.length === 0 ? (
-            <div className="text-center py-8">
-              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No upcoming test drives</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {upcomingTestDrives.map((td) => (
-                <div key={td.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">{td.customerName}</p>
-                    <p className="text-sm text-gray-500">{td.carModel}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-medium text-gray-900">
-                      {new Date(td.preferredDate).toLocaleDateString()}
-                    </p>
-                    <p className="text-sm text-gray-500">{td.preferredTime}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Recent Orders */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900">Recent Orders</h2>
-          <Link to="/dealer/sales" className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-            View all
-          </Link>
-        </div>
-
-        {recentOrders.length === 0 ? (
-          <div className="text-center py-8">
-            <ShoppingCart className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No recent orders</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Order #</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Customer</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Vehicle</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Amount</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-4 font-medium">{order.orderNumber}</td>
-                    <td className="py-3 px-4">{order.customerName}</td>
-                    <td className="py-3 px-4">{order.carModel}</td>
-                    <td className="py-3 px-4 font-medium">${order.finalAmount.toLocaleString()}</td>
-                    <td className="py-3 px-4">
-                      <span className={cn(
-                        "px-3 py-1 rounded-full text-xs font-medium capitalize",
-                        order.status === 'delivered' ? 'bg-green-100 text-green-700' :
-                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                        order.status === 'processing' ? 'bg-blue-100 text-blue-700' :
-                        'bg-gray-100 text-gray-700'
-                      )}>
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 };

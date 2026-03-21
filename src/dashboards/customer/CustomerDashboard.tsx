@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
@@ -76,7 +76,7 @@ const FeaturedCarCard: React.FC<{ car: CarType }> = ({ car }) => (
     <div className="flex justify-between items-start">
       <div>
         <h4 className="text-xl font-medium">{car.model}</h4>
-        <p className="text-xs text-gray-500 uppercase tracking-widest">{car.year} · {car.category}</p>
+        <p className="text-xs text-gray-500 uppercase tracking-widest">{car.year} Â· {car.category}</p>
       </div>
       <p className="text-lg font-semibold tracking-tight">${car.price.toLocaleString()}</p>
     </div>
@@ -201,7 +201,7 @@ export const CustomerDashboard: React.FC = () => {
   return (
     <main className="space-y-12 pb-12">
 
-      {/* ══ HERO WELCOME ══════════════════════════════════════════ */}
+      {/* â•â• HERO WELCOME â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section className="relative overflow-hidden rounded-3xl bg-serene-matte text-white p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between">
         <div className="z-10 relative">
           <h1 className="text-4xl md:text-5xl font-serif mb-4">
@@ -228,7 +228,7 @@ export const CustomerDashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* ══ SUMMARY STAT CARDS ════════════════════════════════════ */}
+      {/* â•â• SUMMARY STAT CARDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           label="My Orders"
@@ -274,7 +274,7 @@ export const CustomerDashboard: React.FC = () => {
         />
       </section>
 
-      {/* ══ FEATURED VEHICLES ═════════════════════════════════════ */}
+      {/* â•â• FEATURED VEHICLES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section>
         <div className="flex items-end justify-between mb-8">
           <div>
@@ -311,7 +311,7 @@ export const CustomerDashboard: React.FC = () => {
         )}
       </section>
 
-      {/* ══ ACTIVITY SECTION ══════════════════════════════════════ */}
+      {/* â•â• ACTIVITY SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* ── Upcoming Test Drives ─────────────────────────────── */}

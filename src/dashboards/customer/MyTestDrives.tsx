@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Car, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { testDriveService } from '@/services/testDriveService';
@@ -204,7 +204,7 @@ export const MyTestDrives: React.FC = () => {
                                         i < testDrive.rating! ? "text-yellow-400" : "text-gray-300"
                                       )}
                                     >
-                                      ★
+                                      â˜…
                                     </span>
                                   ))}
                                 </div>

@@ -43,14 +43,14 @@ function getNavItems(role: UserRole | undefined): NavItem[] {
         { label: 'Operations',  path: '/manager/operations' },
         { label: 'Reports',     path: '/manager/reports' },
       ];
-    case UserRole.CEO:
+    case UserRole.ADMIN:
     case UserRole.ADMIN:
       return [
-        { label: 'Dashboard',   path: '/ceo' },
-        { label: 'Dealerships', path: '/ceo/dealerships' },
-        { label: 'Financials',  path: '/ceo/financials' },
-        { label: 'Strategy',    path: '/ceo/strategy' },
-        { label: 'Users',       path: '/ceo/users' },
+        { label: 'Dashboard',   path: '/admin' },
+        { label: 'Dealerships', path: '/admin/dealerships' },
+        { label: 'Financials',  path: '/admin/financials' },
+        { label: 'Strategy',    path: '/admin/strategy' },
+        { label: 'Users',       path: '/admin/users' },
       ];
     default:
       return [
@@ -67,7 +67,7 @@ function getRoleLabel(role: UserRole | undefined): string {
     case UserRole.CUSTOMER: return 'Premium Member';
     case UserRole.DEALER:   return 'Sales Advisor';
     case UserRole.MANAGER:  return 'Manager';
-    case UserRole.CEO:      return 'Chief Executive';
+    case UserRole.ADMIN:      return 'Administrator';
     case UserRole.ADMIN:    return 'Administrator';
     default:                return '';
   }
@@ -104,7 +104,7 @@ export const TopNav: React.FC = () => {
 
   return (
     <>
-      {/* ═══ MAIN HEADER ═══════════════════════════════════════════════════ */}
+      {/* â•â•â• MAIN HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
 
@@ -119,7 +119,7 @@ export const TopNav: React.FC = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === '/customer' || item.path === '/dealer' || item.path === '/manager' || item.path === '/ceo'}
+                end={item.path === '/customer' || item.path === '/dealer' || item.path === '/manager' || item.path === '/admin'}
                 className={({ isActive }) =>
                   cn(
                     'transition-colors hover:text-serene-matte relative py-1',
@@ -257,6 +257,9 @@ export const TopNav: React.FC = () => {
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-3">
+                <Link to="/admin-login" className="pr-3 mr-1 text-[11px] uppercase tracking-widest font-medium text-serene-matte border-r border-gray-200 hover:text-gray-900 transition-colors hidden sm:block">
+                  Staff Login
+                </Link>
                 <Link to="/login" className="text-[11px] uppercase tracking-widest font-medium text-gray-500 hover:text-serene-matte transition-colors">
                   Sign In
                 </Link>
@@ -279,7 +282,7 @@ export const TopNav: React.FC = () => {
         </div>
       </header>
 
-      {/* ═══ MOBILE DRAWER ═════════════════════════════════════════════════ */}
+      {/* â•â•â• MOBILE DRAWER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <div
         className={cn(
           'md:hidden fixed inset-x-0 top-20 z-40 bg-white border-b border-gray-100 shadow-lg transition-all duration-300 overflow-hidden',
@@ -340,13 +343,18 @@ export const TopNav: React.FC = () => {
           )}
 
           {!user && (
-            <div className="pt-4 flex gap-3">
-              <Link to="/login" onClick={handleNavClick} className="flex-1 text-center py-3 border border-serene-matte text-serene-matte text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-                Sign In
+            <div className="pt-4 flex flex-col gap-3">
+              <Link to="/admin-login" onClick={handleNavClick} className="w-full text-center py-3 border border-gray-200 text-gray-600 text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                Staff Login
               </Link>
-              <Link to="/register" onClick={handleNavClick} className="flex-1 text-center py-3 bg-serene-matte text-white text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-800 transition-colors">
-                Register
-              </Link>
+              <div className="flex gap-3">
+                <Link to="/login" onClick={handleNavClick} className="flex-1 text-center py-3 border border-serene-matte text-serene-matte text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                  Sign In
+                </Link>
+                <Link to="/register" onClick={handleNavClick} className="flex-1 text-center py-3 bg-serene-matte text-white text-[10px] uppercase tracking-widest font-semibold rounded-lg hover:bg-gray-800 transition-colors">
+                  Register
+                </Link>
+              </div>
             </div>
           )}
         </nav>

@@ -1,4 +1,4 @@
-import type { 
+﻿import type { 
   User, Car, Dealership, Order, TestDrive, CarInquiry, Notification, SalesReport, DealershipPerformance
 } from '@/types';
 import { 
@@ -126,13 +126,13 @@ export const mockUsers: User[] = [
     permissions: []
   },
 
-  // CEO User
+  // Admin User
   {
-    id: 'ceo_001',
-    email: 'robert.ceo@serene.com',
+    id: 'Admin_001',
+    email: 'robert.Admin@serene.com',
     firstName: 'Robert',
     lastName: 'Chen',
-    role: UserRole.CEO,
+    role: UserRole.ADMIN,
     status: UserStatus.ACTIVE,
     phone: '+1 (555) 901-2345',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=robert',

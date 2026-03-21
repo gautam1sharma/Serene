@@ -1,4 +1,4 @@
-import type { Car, ApiResponse, PaginatedResponse } from '@/types';
+﻿import type { Car, ApiResponse, PaginatedResponse } from '@/types';
 import { CarCategory, CarStatus } from '@/types';
 import { mockCars } from '@/data/mockData';
 

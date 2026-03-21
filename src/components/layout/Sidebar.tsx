@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -119,31 +119,31 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
       ];
     }
 
-    // CEO/Admin items
-    if (user.role === UserRole.CEO || user.role === UserRole.ADMIN) {
+    // Admin/admin items
+    if (user.role === UserRole.ADMIN || user.role === UserRole.ADMIN) {
       return [
         ...baseItems,
         { 
           label: 'Dealerships', 
-          path: '/ceo/dealerships', 
+          path: '/admin/dealerships', 
           icon: Building2,
           permissions: [Permission.VIEW_ALL_DEALERSHIPS]
         },
         { 
           label: 'Financials', 
-          path: '/ceo/financials', 
+          path: '/admin/financials', 
           icon: TrendingUp,
           permissions: [Permission.VIEW_FINANCIALS]
         },
         { 
           label: 'Strategy', 
-          path: '/ceo/strategy', 
+          path: '/admin/strategy', 
           icon: Target,
           permissions: [Permission.STRATEGIC_DECISIONS]
         },
         { 
           label: 'Users', 
-          path: '/ceo/users', 
+          path: '/admin/users', 
           icon: Users,
           permissions: [Permission.USER_MANAGEMENT]
         }
@@ -161,9 +161,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
         return '/dealer';
       case UserRole.MANAGER:
         return '/manager';
-      case UserRole.CEO:
       case UserRole.ADMIN:
-        return '/ceo';
+      case UserRole.ADMIN:
+        return '/admin';
       default:
         return '/';
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import logoBlack from '@/assets/default-monochrome-black.svg';
 
@@ -38,9 +38,9 @@ export const CustomerAuthLayout: React.FC = () => {
         {/* Link to DMS */}
         <div className="mt-4 text-center">
           <p className="text-slate-400 text-sm">
-            Dealer, Manager, or CEO?{' '}
+            Dealer, Manager, or Admin?{' '}
             <Link to="/admin-login" className="text-[#1a2a44] font-semibold hover:underline">
-              Go to DMS Portal →
+              Go to DMS Portal â†’
             </Link>
           </p>
         </div>

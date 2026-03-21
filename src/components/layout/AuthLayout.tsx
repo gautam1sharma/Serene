@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 export const AuthLayout: React.FC = () => {
@@ -41,7 +41,7 @@ export const AuthLayout: React.FC = () => {
               <span className="font-semibold">Manager:</span> lisa.manager@serene.com
             </div>
             <div className="bg-slate-800/50 rounded px-2 py-1">
-              <span className="font-semibold">CEO:</span> robert.ceo@serene.com
+              <span className="font-semibold">Admin:</span> robert.Admin@serene.com
             </div>
           </div>
           <p className="text-slate-500 text-xs mt-2">Password for all: password123</p>

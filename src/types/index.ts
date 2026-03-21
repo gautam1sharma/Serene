@@ -8,7 +8,6 @@ export enum UserRole {
   CUSTOMER = 'customer',
   DEALER = 'dealer',
   MANAGER = 'manager',
-  CEO = 'ceo',
   ADMIN = 'admin'
 }
 
@@ -58,7 +57,7 @@ export enum Permission {
   APPROVE_DISCOUNTS = 'approve_discounts',
   VIEW_ANALYTICS = 'view_analytics',
   
-  // CEO Permissions
+  // Admin Permissions
   VIEW_ALL_DEALERSHIPS = 'view_all_dealerships',
   MANAGE_DEALERSHIPS = 'manage_dealerships',
   VIEW_FINANCIALS = 'view_financials',
@@ -95,16 +94,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.MANAGE_OPERATIONS,
     Permission.APPROVE_DISCOUNTS,
     Permission.VIEW_ANALYTICS
-  ],
-  [UserRole.CEO]: [
-    Permission.VIEW_ALL_DEALERSHIPS,
-    Permission.MANAGE_DEALERSHIPS,
-    Permission.VIEW_FINANCIALS,
-    Permission.STRATEGIC_DECISIONS,
-    Permission.USER_MANAGEMENT,
-    Permission.VIEW_REPORTS,
-    Permission.VIEW_ANALYTICS,
-    Permission.MANAGE_OPERATIONS
   ],
   [UserRole.ADMIN]: Object.values(Permission)
 };

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from '@tanstack/react-query';
@@ -30,13 +30,13 @@ const priceRanges = [
  * Replaces any existing `w=` parameter with 600px, or appends it.
  */
 function getThumbnailUrl(url: string): string {
-  if (!url) return url;
+  if (!url) return 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=600';
   if (url.includes('unsplash.com')) {
-    // Replace existing width parameter or append one
+    // If it already has complex parameters, just use it or append width
     if (url.includes('w=')) {
       return url.replace(/w=\d+/, 'w=600');
     }
-    return url + (url.includes('?') ? '&' : '?') + 'w=600';
+    return url + (url.includes('?') ? '&' : '?') + 'w=600&fit=crop&q=80';
   }
   return url;
 }
@@ -47,10 +47,8 @@ export const CarBrowser: React.FC = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(priceRanges[0]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Debounce search input by 300ms to avoid re-rendering the grid on every keystroke
-  const debouncedSearch = useDebounce(searchQuery, 300);
+  const debouncedSearch = useDebounce(searchQuery.trim(), 200);
 
-  // Use React Query to cache the data — navigating away and back renders instantly
   const { data: cars = [], isLoading } = useQuery({
     queryKey: ['cars', 'browse'],
     queryFn: async () => {
@@ -60,36 +58,31 @@ export const CarBrowser: React.FC = () => {
       }
       return [] as CarType[];
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 
-  // Derived filtered list — uses the DEBOUNCED search value
   const filteredCars = useMemo(() => {
-    let filtered = [...cars];
+    return cars.filter(car => {
+      // 1. Search Filter
+      if (debouncedSearch) {
+        const query = debouncedSearch.toLowerCase();
+        const matchesModel = car.model?.toLowerCase().includes(query);
+        const matchesDesc = car.description?.toLowerCase().includes(query);
+        const matchesFeatures = car.features?.some(f => f.toLowerCase().includes(query));
+        
+        if (!matchesModel && !matchesDesc && !matchesFeatures) return false;
+      }
 
-    // Search filter (debounced)
-    if (debouncedSearch) {
-      const query = debouncedSearch.toLowerCase();
-      filtered = filtered.filter(car =>
-        car.model.toLowerCase().includes(query) ||
-        car.description.toLowerCase().includes(query) ||
-        car.features.some(f => f.toLowerCase().includes(query))
-      );
-    }
+      // 2. Category Filter
+      if (selectedCategory !== 'All') {
+        if (car.category?.toLowerCase() !== selectedCategory.toLowerCase()) return false;
+      }
 
-    // Category filter
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(car => 
-        car.category.toLowerCase() === selectedCategory.toLowerCase()
-      );
-    }
+      // 3. Price Filter
+      if (car.price < selectedPriceRange.min || car.price > selectedPriceRange.max) return false;
 
-    // Price filter
-    filtered = filtered.filter(car =>
-      car.price >= selectedPriceRange.min && car.price <= selectedPriceRange.max
-    );
-
-    return filtered;
+      return true;
+    });
   }, [cars, debouncedSearch, selectedCategory, selectedPriceRange]);
 
   const getStatusBadge = (status: CarStatus) => {

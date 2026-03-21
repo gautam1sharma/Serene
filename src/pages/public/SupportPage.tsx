@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Search, MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 export const SupportPage: React.FC = () => {
@@ -8,7 +8,7 @@ export const SupportPage: React.FC = () => {
         { q: "How do I activate the Genesis Home Charger?", a: "To set up your home charging hub, ensure it is installed by a certified electrician, then scan the QR code located under the main panel using the Serene Customer App." },
         { q: "Can I transfer the warranty after purchase?", a: "Yes, our luxury comprehensive 8-year powertrain guarantee is fully transferable to the second owner provided all scheduled maintenance logs are present." },
         { q: "What should I do if the OTA update fails?", a: "If an over-the-air update aborts mid-way, lock the vehicle, wait ten minutes for the systems to sleep, then wake it by unlocking the car. Navigate to Settings > Software and tap 'Retry'." },
-        { q: "How is the Serene Aura’s range affected by winter?", a: "Like all electric vehicles, extreme cold affects battery efficiency. Rely on the pre-conditioning feature via the app while your vehicle is still plugged in to maximize cold-weather range." }
+        { q: "How is the Serene Aura's range affected by winter?", a: "Like all electric vehicles, extreme cold affects battery efficiency. Rely on the pre-conditioning feature via the app while your vehicle is still plugged in to maximize cold-weather range." }
     ];
 
   return (

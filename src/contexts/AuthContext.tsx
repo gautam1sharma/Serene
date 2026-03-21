@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+﻿import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { User, LoginCredentials, Permission } from '@/types';
 import { UserRole } from '@/types';
 import { authService } from '@/services/authService';
@@ -165,11 +165,6 @@ export const useIsDealer = () => {
 export const useIsManager = () => {
   const { user } = useAuth();
   return user?.role === UserRole.MANAGER;
-};
-
-export const useIsCEO = () => {
-  const { user } = useAuth();
-  return user?.role === UserRole.CEO;
 };
 
 export const useIsAdmin = () => {

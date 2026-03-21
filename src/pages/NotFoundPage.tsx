@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import logoBlack from '@/assets/default-monochrome-black.svg';
 import logoWhite from '@/assets/default-monochrome-white.svg';

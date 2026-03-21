@@ -1,0 +1,78 @@
+﻿node : C:\Users\Gautam\Desk
+top\My\Fun\Hyundai Website\
+Hyundai.in\apply_manager_ad
+min.cjs:5
+At line:1 char:1
++ node 
+apply_manager_admin.cjs 2> 
+error_admin.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (C:\  
+  Users\Gautam...ger_adm   
+ in.cjs:5:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+    { html: 'premium_dealer
+ship_dashboard/code.html', 
+tsx: 
+'ManagerDashboard.tsx', 
+name: 'ManagerDashboard', 
+replaces: [{f: 'Total 
+Inventory', t: 'Total 
+Vehicles'}, {f: 'Pending 
+Inquiries', t: 'Pending 
+Tasks'}, {f: 'Today\\'s 
+Test Drives', t: 'Daily 
+Operations'}, {f: 'Monthly 
+Sales', t: 'Revenue 
+Targets'}, {f: "Here's 
+what's happening at Serene 
+Premium today.", t: 
+"Here's what's happening 
+across operations."}] },
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+        ^
+
+SyntaxError: Unexpected 
+identifier 's'
+    at wrapSafe (node:inter
+nal/modules/cjs/loader:1669
+:18)
+    at Module._compile (nod
+e:internal/modules/cjs/load
+er:1712:20)
+    at Object..js (node:int
+ernal/modules/cjs/loader:18
+71:10)
+    at Module.load (node:in
+ternal/modules/cjs/loader:1
+470:32)
+    at Module._load (node:i
+nternal/modules/cjs/loader:
+1290:12)
+    at 
+TracingChannel.traceSync (n
+ode:diagnostics_channel:322
+:14)
+    at wrapModuleLoad (node
+:internal/modules/cjs/loade
+r:238:24)
+    at Module.executeUserEn
+tryPoint [as runMain] (node
+:internal/modules/run_main:
+154:5)
+    at node:internal/main/r
+un_main_module:33:47
+
+Node.js v24.7.0

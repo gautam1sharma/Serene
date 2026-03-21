@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import logoWhite from '@/assets/default-monochrome-white.svg';
 
@@ -40,8 +40,8 @@ export const AdminAuthLayout: React.FC = () => {
               <span className="text-slate-400">lisa.manager@serene.com</span>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 px-4 py-2.5 flex items-center justify-between">
-              <span className="text-amber-300 font-semibold uppercase tracking-wide">CEO</span>
-              <span className="text-slate-400">robert.ceo@serene.com</span>
+              <span className="text-amber-300 font-semibold uppercase tracking-wide">Admin</span>
+              <span className="text-slate-400">robert.Admin@serene.com</span>
             </div>
           </div>
           <p className="text-slate-600 text-xs mt-2">Password for all: password123</p>
@@ -52,7 +52,7 @@ export const AdminAuthLayout: React.FC = () => {
           <p className="text-slate-500 text-sm">
             Customer?{' '}
             <Link to="/login" className="text-blue-400 font-semibold hover:underline">
-              ← Sign in here
+              â† Sign in here
             </Link>
           </p>
         </div>

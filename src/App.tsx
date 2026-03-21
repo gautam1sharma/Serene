@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
@@ -43,12 +43,12 @@ const TeamManagement = React.lazy(() => import('@/dashboards/manager/TeamManagem
 const DealershipOperations = React.lazy(() => import('@/dashboards/manager/DealershipOperations').then(m => ({ default: m.DealershipOperations })));
 const SalesReports = React.lazy(() => import('@/dashboards/manager/SalesReports').then(m => ({ default: m.SalesReports })));
 
-// CEO dashboard + pages
-const CEODashboard = React.lazy(() => import('@/dashboards/ceo/CEODashboard').then(m => ({ default: m.CEODashboard })));
-const MultiDealershipView = React.lazy(() => import('@/dashboards/ceo/MultiDealershipView').then(m => ({ default: m.MultiDealershipView })));
-const FinancialAnalytics = React.lazy(() => import('@/dashboards/ceo/FinancialAnalytics').then(m => ({ default: m.FinancialAnalytics })));
-const StrategicPlanning = React.lazy(() => import('@/dashboards/ceo/StrategicPlanning').then(m => ({ default: m.StrategicPlanning })));
-const UserManagement = React.lazy(() => import('@/dashboards/ceo/UserManagement').then(m => ({ default: m.UserManagement })));
+// Admin dashboard + pages
+const AdminDashboard = React.lazy(() => import('@/dashboards/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const MultiDealershipView = React.lazy(() => import('@/dashboards/admin/MultiDealershipView').then(m => ({ default: m.MultiDealershipView })));
+const FinancialAnalytics = React.lazy(() => import('@/dashboards/admin/FinancialAnalytics').then(m => ({ default: m.FinancialAnalytics })));
+const StrategicPlanning = React.lazy(() => import('@/dashboards/admin/StrategicPlanning').then(m => ({ default: m.StrategicPlanning })));
+const UserManagement = React.lazy(() => import('@/dashboards/admin/UserManagement').then(m => ({ default: m.UserManagement })));
 
 // Shared pages
 const NotificationsPage = React.lazy(() => import('@/pages/shared/NotificationsPage').then(m => ({ default: m.NotificationsPage })));
@@ -73,9 +73,11 @@ interface RoleGuardProps {
 
 const RoleGuard: React.FC<RoleGuardProps> = ({ children, allowedRoles }) => {
   const { user, isAuthenticated } = useAuth();
+  const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    const isStaffRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dealer') || location.pathname.startsWith('/manager');
+    return <Navigate to={isStaffRoute ? "/admin-login" : "/login"} replace />;
   }
 
   if (!user || !allowedRoles.includes(user.role)) {
@@ -88,9 +90,9 @@ const RoleGuard: React.FC<RoleGuardProps> = ({ children, allowedRoles }) => {
           return <Navigate to="/dealer" replace />;
         case UserRole.MANAGER:
           return <Navigate to="/manager" replace />;
-        case UserRole.CEO:
         case UserRole.ADMIN:
-          return <Navigate to="/ceo" replace />;
+        case UserRole.ADMIN:
+          return <Navigate to="/admin" replace />;
         default:
           return <Navigate to="/login" replace />;
       }
@@ -117,9 +119,9 @@ const AutoRedirect: React.FC = () => {
         return <Navigate to="/dealer" replace />;
       case UserRole.MANAGER:
         return <Navigate to="/manager" replace />;
-      case UserRole.CEO:
       case UserRole.ADMIN:
-        return <Navigate to="/ceo" replace />;
+      case UserRole.ADMIN:
+        return <Navigate to="/admin" replace />;
       default:
         return <Navigate to="/login" replace />;
     }
@@ -202,13 +204,13 @@ function AppRoutes() {
             }
           />
 
-          {/* CEO/Admin Routes */}
+          {/* Admin/admin Routes */}
           <Route
-            path="/ceo/*"
+            path="/admin/*"
             element={
-              <RoleGuard allowedRoles={[UserRole.CEO, UserRole.ADMIN]}>
+              <RoleGuard allowedRoles={[UserRole.ADMIN, UserRole.ADMIN]}>
                 <Routes>
-                  <Route index element={<CEODashboard />} />
+                  <Route index element={<AdminDashboard />} />
                   <Route path="dealerships" element={<MultiDealershipView />} />
                   <Route path="financials" element={<FinancialAnalytics />} />
                   <Route path="strategy" element={<StrategicPlanning />} />

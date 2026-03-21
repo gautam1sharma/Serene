@@ -1,4 +1,4 @@
-import type { CarInquiry, ApiResponse, PaginatedResponse } from '@/types';
+﻿import type { CarInquiry, ApiResponse, PaginatedResponse } from '@/types';
 import { mockInquiries } from '@/data/mockData';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -29,7 +29,7 @@ export const AdminLoginPage: React.FC = () => {
     const credentials: Record<string, string> = {
       dealer: 'alex.dealer@serene.com',
       manager: 'lisa.manager@serene.com',
-      ceo: 'robert.ceo@serene.com'
+      Admin: 'robert.Admin@serene.com'
     };
     setEmail(credentials[role] || '');
     setPassword('password123');
@@ -174,10 +174,10 @@ export const AdminLoginPage: React.FC = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => fillDemoCredentials('ceo')}
+                    onClick={() => fillDemoCredentials('Admin')}
                     className="px-3 py-2 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-300 rounded-lg transition-colors border border-amber-200 dark:border-amber-800 uppercase tracking-wide"
                   >
-                    CEO
+                    Admin
                   </button>
                 </div>
               </div>

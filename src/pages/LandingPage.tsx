@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import logoBlack from '@/assets/default-monochrome-black.svg';
 import { useAuth } from '@/contexts/AuthContext';
@@ -36,7 +36,7 @@ export const LandingPage: React.FC = () => {
       case 'customer': return '/customer';
       case 'dealer': return '/dealer';
       case 'manager': return '/manager';
-      case 'ceo': case 'admin': return '/ceo';
+      case 'Admin': case 'admin': return '/admin';
       default: return '/dashboard';
     }
   };
