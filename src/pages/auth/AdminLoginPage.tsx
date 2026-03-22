@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -27,6 +27,7 @@ export const AdminLoginPage: React.FC = () => {
 
   const fillDemoCredentials = (role: string) => {
     const credentials: Record<string, string> = {
+      employee: 'tom.employee@serene.com',
       dealer: 'alex.dealer@serene.com',
       manager: 'lisa.manager@serene.com',
       Admin: 'robert.Admin@serene.com'
@@ -157,25 +158,32 @@ export const AdminLoginPage: React.FC = () => {
               {/* Quick Login Buttons Custom Hook For Original Functionality */}
               <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
                 <p className="text-sm text-slate-500 font-medium mb-3 text-center lg:text-left">Quick demo login:</p>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fillDemoCredentials('employee')}
+                    className="px-2 py-2 text-[10px] font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 dark:bg-teal-900/30 dark:text-teal-300 rounded-lg transition-colors border border-teal-200 dark:border-teal-800 uppercase tracking-widest"
+                  >
+                    Employee
+                  </button>
                   <button
                     type="button"
                     onClick={() => fillDemoCredentials('dealer')}
-                    className="px-3 py-2 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 rounded-lg transition-colors border border-blue-200 dark:border-blue-800 uppercase tracking-wide"
+                    className="px-2 py-2 text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 rounded-lg transition-colors border border-blue-200 dark:border-blue-800 uppercase tracking-widest"
                   >
                     Dealer
                   </button>
                   <button
                     type="button"
                     onClick={() => fillDemoCredentials('manager')}
-                    className="px-3 py-2 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 rounded-lg transition-colors border border-purple-200 dark:border-purple-800 uppercase tracking-wide"
+                    className="px-2 py-2 text-[10px] font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/30 dark:text-purple-300 rounded-lg transition-colors border border-purple-200 dark:border-purple-800 uppercase tracking-widest"
                   >
                     Manager
                   </button>
                   <button
                     type="button"
                     onClick={() => fillDemoCredentials('Admin')}
-                    className="px-3 py-2 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-300 rounded-lg transition-colors border border-amber-200 dark:border-amber-800 uppercase tracking-wide"
+                    className="px-2 py-2 text-[10px] font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/30 dark:text-amber-300 rounded-lg transition-colors border border-amber-200 dark:border-amber-800 uppercase tracking-widest"
                   >
                     Admin
                   </button>

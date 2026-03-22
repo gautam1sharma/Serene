@@ -36,6 +36,12 @@ const InventoryManagement = React.lazy(() => import('@/dashboards/dealer/Invento
 const CustomerInquiries = React.lazy(() => import('@/dashboards/dealer/CustomerInquiries').then(m => ({ default: m.CustomerInquiries })));
 const TestDriveSchedule = React.lazy(() => import('@/dashboards/dealer/TestDriveSchedule').then(m => ({ default: m.TestDriveSchedule })));
 const SalesProcessing = React.lazy(() => import('@/dashboards/dealer/SalesProcessing').then(m => ({ default: m.SalesProcessing })));
+const EmployeeAssignment = React.lazy(() => import('@/dashboards/dealer/EmployeeAssignment').then(m => ({ default: m.EmployeeAssignment })));
+const EmployeePerformance = React.lazy(() => import('@/dashboards/dealer/EmployeePerformance').then(m => ({ default: m.EmployeePerformance })));
+
+// Employee dashboard + pages
+const EmployeeDashboard = React.lazy(() => import('@/dashboards/employee/EmployeeDashboard').then(m => ({ default: m.EmployeeDashboard })));
+const EmployeeInquiries = React.lazy(() => import('@/dashboards/employee/EmployeeInquiries').then(m => ({ default: m.EmployeeInquiries })));
 
 // Manager dashboard + pages
 const ManagerDashboard = React.lazy(() => import('@/dashboards/manager/ManagerDashboard').then(m => ({ default: m.ManagerDashboard })));
@@ -76,7 +82,7 @@ const RoleGuard: React.FC<RoleGuardProps> = ({ children, allowedRoles }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    const isStaffRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dealer') || location.pathname.startsWith('/manager');
+    const isStaffRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/dealer') || location.pathname.startsWith('/manager') || location.pathname.startsWith('/employee');
     return <Navigate to={isStaffRoute ? "/admin-login" : "/login"} replace />;
   }
 
@@ -86,6 +92,8 @@ const RoleGuard: React.FC<RoleGuardProps> = ({ children, allowedRoles }) => {
       switch (user.role) {
         case UserRole.CUSTOMER:
           return <Navigate to="/customer" replace />;
+        case UserRole.EMPLOYEE:
+          return <Navigate to="/employee" replace />;
         case UserRole.DEALER:
           return <Navigate to="/dealer" replace />;
         case UserRole.MANAGER:
@@ -115,6 +123,8 @@ const AutoRedirect: React.FC = () => {
     switch (user.role) {
       case UserRole.CUSTOMER:
         return <Navigate to="/customer" replace />;
+      case UserRole.EMPLOYEE:
+        return <Navigate to="/employee" replace />;
       case UserRole.DEALER:
         return <Navigate to="/dealer" replace />;
       case UserRole.MANAGER:
@@ -173,7 +183,7 @@ function AppRoutes() {
             }
           />
 
-          {/* Dealer Routes */}
+          {/* Dealer Routes - core pages inside MainLayout */}
           <Route
             path="/dealer/*"
             element={
@@ -220,11 +230,43 @@ function AppRoutes() {
             }
           />
 
+          {/* Employee Routes */}
+          <Route
+            path="/employee/*"
+            element={
+              <RoleGuard allowedRoles={[UserRole.EMPLOYEE]}>
+                <Routes>
+                  <Route index element={<EmployeeDashboard />} />
+                  <Route path="inquiries" element={<EmployeeInquiries />} />
+                </Routes>
+              </RoleGuard>
+            }
+          />
+
           {/* Shared Routes */}
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
+
+
+        {/* Dealer standalone pages — full-screen (no MainLayout) */}
+        <Route
+          path="/dealer/assignments"
+          element={
+            <RoleGuard allowedRoles={[UserRole.DEALER]}>
+              <EmployeeAssignment />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/dealer/performance"
+          element={
+            <RoleGuard allowedRoles={[UserRole.DEALER]}>
+              <EmployeePerformance />
+            </RoleGuard>
+          }
+        />
 
         {/* Catch all — send unknown routes to 404 */}
         <Route path="*" element={<NotFoundPage />} />

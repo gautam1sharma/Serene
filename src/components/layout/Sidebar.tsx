@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -120,7 +120,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
     }
 
     // Admin/admin items
-    if (user.role === UserRole.ADMIN || user.role === UserRole.ADMIN) {
+    if (user.role === UserRole.ADMIN) {
       return [
         ...baseItems,
         { 
@@ -157,11 +157,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
     switch (user.role) {
       case UserRole.CUSTOMER:
         return '/customer';
+      case UserRole.EMPLOYEE:
+        return '/employee';
       case UserRole.DEALER:
         return '/dealer';
       case UserRole.MANAGER:
         return '/manager';
-      case UserRole.ADMIN:
       case UserRole.ADMIN:
         return '/admin';
       default:

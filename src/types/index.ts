@@ -6,6 +6,7 @@
 // User Roles Enum
 export enum UserRole {
   CUSTOMER = 'customer',
+  EMPLOYEE = 'employee',
   DEALER = 'dealer',
   MANAGER = 'manager',
   ADMIN = 'admin'
@@ -43,12 +44,18 @@ export enum Permission {
   SUBMIT_INQUIRY = 'submit_inquiry',
   VIEW_ORDERS = 'view_orders',
   
+  // Employee Permissions
+  HANDLE_LEADS = 'handle_leads',
+  LOG_INTERACTIONS = 'log_interactions',
+  
   // Dealer Permissions
   MANAGE_INVENTORY = 'manage_inventory',
   HANDLE_INQUIRIES = 'handle_inquiries',
   PROCESS_SALES = 'process_sales',
   VIEW_CUSTOMERS = 'view_customers',
   SCHEDULE_TEST_DRIVES = 'schedule_test_drives',
+  ASSIGN_EMPLOYEES = 'assign_employees',
+  SET_HEADROOM = 'set_headroom',
   
   // Manager Permissions
   MANAGE_DEALERS = 'manage_dealers',
@@ -73,6 +80,13 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.SUBMIT_INQUIRY,
     Permission.VIEW_ORDERS
   ],
+  [UserRole.EMPLOYEE]: [
+    Permission.VIEW_CARS,
+    Permission.HANDLE_LEADS,
+    Permission.LOG_INTERACTIONS,
+    Permission.VIEW_CUSTOMERS,
+    Permission.SCHEDULE_TEST_DRIVES
+  ],
   [UserRole.DEALER]: [
     Permission.VIEW_CARS,
     Permission.MANAGE_INVENTORY,
@@ -80,7 +94,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.PROCESS_SALES,
     Permission.VIEW_CUSTOMERS,
     Permission.SCHEDULE_TEST_DRIVES,
-    Permission.VIEW_REPORTS
+    Permission.VIEW_REPORTS,
+    Permission.ASSIGN_EMPLOYEES,
+    Permission.SET_HEADROOM
   ],
   [UserRole.MANAGER]: [
     Permission.VIEW_CARS,

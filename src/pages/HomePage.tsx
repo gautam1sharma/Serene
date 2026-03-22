@@ -93,6 +93,7 @@ export const HomePage: React.FC = () => {
     if (!user) return '/login';
     switch (user.role) {
       case 'customer': return '/customer';
+      case 'employee': return '/employee';
       case 'dealer':   return '/dealer';
       case 'manager':  return '/manager';
       case 'admin': return '/admin';

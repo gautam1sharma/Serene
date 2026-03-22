@@ -1,4 +1,4 @@
-﻿import type { 
+import type { 
   User, Car, Dealership, Order, TestDrive, CarInquiry, Notification, SalesReport, DealershipPerformance
 } from '@/types';
 import { 
@@ -50,6 +50,27 @@ export const mockUsers: User[] = [
     createdAt: new Date('2024-03-10'),
     lastLogin: new Date(),
     permissions: []
+  },
+
+  // Employee User
+  {
+    id: 'emp_001',
+    email: 'tom.employee@serene.com',
+    firstName: 'Tom',
+    lastName: 'Harris',
+    role: UserRole.EMPLOYEE,
+    status: UserStatus.ACTIVE,
+    phone: '+1 (555) 456-7890',
+    dealershipId: 'd_001',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=tom',
+    createdAt: new Date('2024-03-15'),
+    lastLogin: new Date(),
+    permissions: [
+      Permission.VIEW_CARS,
+      Permission.HANDLE_LEADS,
+      Permission.LOG_INTERACTIONS,
+      Permission.VIEW_CUSTOMERS
+    ]
   },
 
   // Dealer Users

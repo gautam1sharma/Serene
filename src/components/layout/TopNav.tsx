@@ -44,13 +44,20 @@ function getNavItems(role: UserRole | undefined): NavItem[] {
         { label: 'Reports',     path: '/manager/reports' },
       ];
     case UserRole.ADMIN:
-    case UserRole.ADMIN:
       return [
         { label: 'Dashboard',   path: '/admin' },
         { label: 'Dealerships', path: '/admin/dealerships' },
         { label: 'Financials',  path: '/admin/financials' },
         { label: 'Strategy',    path: '/admin/strategy' },
         { label: 'Users',       path: '/admin/users' },
+      ];
+    case UserRole.EMPLOYEE:
+      return [
+        { label: 'Dashboard',   path: '/employee' },
+        { label: 'Inquiries',   path: '/employee/inquiries' },
+        { label: 'Performance', path: '/employee/performance' },
+        { label: 'Schedule',    path: '/employee/schedule' },
+        { label: 'Inventory',   path: '/employee/inventory' },
       ];
     default:
       return [
@@ -67,8 +74,8 @@ function getRoleLabel(role: UserRole | undefined): string {
     case UserRole.CUSTOMER: return 'Premium Member';
     case UserRole.DEALER:   return 'Sales Advisor';
     case UserRole.MANAGER:  return 'Manager';
-    case UserRole.ADMIN:      return 'Administrator';
     case UserRole.ADMIN:    return 'Administrator';
+    case UserRole.EMPLOYEE: return 'Employee Portal';
     default:                return '';
   }
 }
@@ -119,7 +126,7 @@ export const TopNav: React.FC = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === '/customer' || item.path === '/dealer' || item.path === '/manager' || item.path === '/admin'}
+                end={['/customer', '/dealer', '/manager', '/admin', '/employee'].includes(item.path)}
                 className={({ isActive }) =>
                   cn(
                     'transition-colors hover:text-serene-matte relative py-1',
