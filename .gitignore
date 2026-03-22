@@ -1,2 +1,38 @@
-node_modules
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Frontend (Node/React/Vite)
+node_modules/
+/Frontend/dist/
+/Frontend/build/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
 "new frontend"
+/Frontend/new frontend/
+
+# Backend (Java/Maven/Spring Boot)
+/Backend/target/
+*.class
+*.log
+*.jar
+*.war
+hs_err_pid*
+
+# Python
+__pycache__/
+*.pyc
+
