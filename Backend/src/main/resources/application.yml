@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/serene_dms?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8mb4
     username: root
-    password: root
+    password: 1234
     driver-class-name: org.mariadb.jdbc.Driver
     hikari:
       maximum-pool-size: 20

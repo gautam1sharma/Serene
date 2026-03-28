@@ -1,422 +1,261 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { apiRequest } from '@/lib/api';
+import { inquiryService } from '@/services/inquiryService';
+import { testDriveService } from '@/services/testDriveService';
+import type { CarInquiry } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
+
+interface Employee {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  status: string;
+}
+
+interface LeaderboardEntry {
+  id: number;
+  name: string;
+  email: string;
+  totalInquiries: number;
+  closedInquiries: number;
+  conversionRate: string;
+}
+
+const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
+  <div className={`animate-pulse bg-slate-200 rounded-lg ${className}`} />
+);
+
+const initials = (name: string) =>
+  name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
 export const EmployeePerformance: React.FC = () => {
-    return (
-        <div className="bg-white dark:bg-slate-900 min-h-screen">
-            
-{/*  SideNavBar Shell  */}
-<aside className="h-screen w-64 fixed left-0 top-0 z-40 bg-slate-50 flex flex-col h-full p-4 border-r border-slate-200/15">
-<div className="mb-8 px-4 py-2">
-<h1 className="text-xl font-bold tracking-tight text-slate-800 font-headline">Precision Motors</h1>
-<p className="text-slate-500 text-[10px] uppercase tracking-widest font-bold mt-1">Admin Console</p>
-</div>
-<nav className="flex-1 space-y-1">
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-                Dashboard
-            </Link>
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
-                Inquiries
-            </Link>
-{/*  Active Tab: Performance  */}
-<Link className="flex items-center gap-3 px-4 py-3 bg-white text-slate-900 rounded-xl shadow-[0px_4px_12px_rgba(30,41,59,0.03)] font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="trending_up">trending_up</span>
-                Performance
-            </Link>
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
-                Schedule
-            </Link>
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="directions_car">directions_car</span>
-                Inventory
-            </Link>
-</nav>
-<div className="mt-auto space-y-1 pt-4 border-t border-slate-200/15">
-<button className="w-full flex items-center justify-center gap-2 bg-eperf-primary text-eperf-on-primary py-3 rounded-xl font-headline font-bold text-sm shadow-sm active:scale-95 duration-150 mb-4">
-<span className="material-symbols-outlined" data-icon="add">add</span>
-                New Inquiry
-            </button>
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="contact_support">contact_support</span>
-                Support
-            </Link>
-<Link className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200/30 rounded-xl transition-all duration-200 ease-in-out font-inter text-xs tracking-wide uppercase font-semibold" to="#">
-<span className="material-symbols-outlined" data-icon="logout">logout</span>
-                Logout
-            </Link>
-</div>
-</aside>
-{/*  Main Canvas  */}
-<main className="ml-64 min-h-screen">
-{/*  TopNavBar Shell  */}
-<header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/15 shadow-sm sticky top-0 z-50 flex justify-between items-center w-full px-8 py-3">
-<div className="flex items-center gap-8">
-<span className="text-xl font-bold tracking-tight text-slate-800 font-headline">DrivePrecision</span>
-<nav className="hidden md:flex items-center gap-6">
-<Link className="text-slate-500 hover:text-slate-800 transition-colors font-plus-jakarta-sans text-sm font-medium" to="#">Inventory</Link>
-<Link className="text-slate-900 font-bold border-b-2 border-slate-700 pb-1 font-plus-jakarta-sans text-sm font-medium" to="#">Reports</Link>
-<Link className="text-slate-500 hover:text-slate-800 transition-colors font-plus-jakarta-sans text-sm font-medium" to="#">Settings</Link>
-</nav>
-</div>
-<div className="flex items-center gap-4">
-<div className="relative">
-<span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-<span className="material-symbols-outlined text-lg" data-icon="search">search</span>
-</span>
-<input className="bg-eperf-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-eperf-primary/20 w-64 transition-all" placeholder="Search performance..." type="text"/>
-</div>
-<button className="p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-all active:scale-95">
-<span className="material-symbols-outlined" data-icon="notifications">notifications</span>
-</button>
-<button className="p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-all active:scale-95">
-<span className="material-symbols-outlined" data-icon="help_outline">help_outline</span>
-</button>
-<div className="w-8 h-8 rounded-full overflow-hidden bg-slate-200 border border-slate-200">
-<img alt="User profile avatar" className="w-full h-full object-cover" data-alt="Professional male user profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqOrsF-xnLZMDl2B7Ae41fYZYHCur1ENIfiReMeKutgUyXh2-c6lWW5YsYyUVxZ33a8Rt-7yrufxcPMNFAgeRSsiMyEGb9Xv0EoVvcoHCfOrgegojJip7rUgqGbv9baCW56ar41GFjG8h5epFiq_n1V8r8HaYT5KdjSrjtZavf_KOFfwAhF97NxN93XpNCIOaTmG8UU3rlOWKDy9NlObMvwnnERq4v1talqTMeDVdf_H2BuueHrYczGeZApZD7H88vrNeONAKUoJ_S"/>
-</div>
-</div>
-</header>
-<div className="p-8 max-w-7xl mx-auto space-y-8">
-{/*  Header Section  */}
-<section className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-<div>
-<h2 className="text-3xl font-extrabold text-eperf-on-surface font-headline tracking-tight">Employee Performance</h2>
-<p className="text-eperf-on-surface-variant mt-1">Real-time precision metrics for sales and service advisors.</p>
-</div>
-<div className="flex gap-3">
-<div className="flex bg-eperf-surface-container-low p-1 rounded-xl">
-<button className="px-4 py-1.5 rounded-lg text-sm font-semibold bg-eperf-surface-container-lowest shadow-sm text-eperf-primary">Monthly</button>
-<button className="px-4 py-1.5 rounded-lg text-sm font-medium text-eperf-on-surface-variant hover:text-eperf-on-surface">Quarterly</button>
-<button className="px-4 py-1.5 rounded-lg text-sm font-medium text-eperf-on-surface-variant hover:text-eperf-on-surface">Yearly</button>
-</div>
-<button className="flex items-center gap-2 bg-eperf-surface-container-lowest px-4 py-2 rounded-xl text-sm font-semibold text-eperf-on-surface shadow-sm hover:bg-eperf-surface-container-low transition-all">
-<span className="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
-                        Filter
-                    </button>
-<button className="flex items-center gap-2 bg-eperf-primary text-eperf-on-primary px-4 py-2 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-all">
-<span className="material-symbols-outlined text-lg" data-icon="file_download">file_download</span>
-                        Export PDF
-                    </button>
-</div>
-</section>
-{/*  Key Metric Tickers (Bento Style)  */}
-<section className="grid grid-cols-1 md:grid-cols-4 gap-6">
-<div className="bg-eperf-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<div className="flex items-center justify-between mb-2">
-<span className="text-xs font-bold text-eperf-on-surface-variant uppercase tracking-widest">Active Advisors</span>
-<span className="w-2 h-2 rounded-full bg-eperf-tertiary-fixed shadow-[0_0_8px_rgba(52,181,250,0.5)]"></span>
-</div>
-<div className="text-3xl font-extrabold font-headline text-eperf-on-surface">24</div>
-<div className="mt-2 text-xs flex items-center text-eperf-tertiary font-bold">
-<span className="material-symbols-outlined text-sm mr-1" data-icon="arrow_upward">arrow_upward</span>
-                        +2 since last month
-                    </div>
-</div>
-<div className="bg-eperf-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<div className="flex items-center justify-between mb-2">
-<span className="text-xs font-bold text-eperf-on-surface-variant uppercase tracking-widest">Avg. Conversion</span>
-<span className="material-symbols-outlined text-eperf-on-surface-variant" data-icon="analytics">analytics</span>
-</div>
-<div className="text-3xl font-extrabold font-headline text-eperf-on-surface">18.4%</div>
-<div className="mt-2 text-xs flex items-center text-eperf-tertiary font-bold">
-<span className="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
-                        1.2% efficiency gain
-                    </div>
-</div>
-<div className="bg-eperf-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<div className="flex items-center justify-between mb-2">
-<span className="text-xs font-bold text-eperf-on-surface-variant uppercase tracking-widest">Total Rev.</span>
-<span className="material-symbols-outlined text-eperf-on-surface-variant" data-icon="payments">payments</span>
-</div>
-<div className="text-3xl font-extrabold font-headline text-eperf-on-surface">$1.2M</div>
-<div className="mt-2 text-xs flex items-center text-eperf-tertiary font-bold">
-<span className="material-symbols-outlined text-sm mr-1" data-icon="arrow_upward">arrow_upward</span>
-                        8% increase
-                    </div>
-</div>
-<div className="bg-eperf-surface-container-lowest p-6 rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<div className="flex items-center justify-between mb-2">
-<span className="text-xs font-bold text-eperf-on-surface-variant uppercase tracking-widest">CSAT Score</span>
-<span className="material-symbols-outlined text-eperf-on-surface-variant" data-icon="star">star</span>
-</div>
-<div className="text-3xl font-extrabold font-headline text-eperf-on-surface">4.8</div>
-<div className="mt-2 text-xs flex items-center text-eperf-error font-bold">
-<span className="material-symbols-outlined text-sm mr-1" data-icon="arrow_downward">arrow_downward</span>
-                        -0.1 variance
-                    </div>
-</div>
-</section>
-{/*  High Density Data Table  */}
-<section className="bg-eperf-surface-container-lowest rounded-2xl shadow-[0px_12px_32px_rgba(30,41,59,0.05)] overflow-hidden">
-<div className="px-6 py-5 flex items-center justify-between border-b border-eperf-outline-variant/10">
-<h3 className="text-lg font-bold font-headline text-eperf-on-surface">Detailed Performance Matrix</h3>
-<div className="flex items-center gap-4">
-<div className="flex items-center gap-2 text-xs text-eperf-on-surface-variant font-medium">
-<span className="w-3 h-3 rounded-sm bg-eperf-tertiary-container/20 border border-eperf-tertiary-container/30"></span>
-                            Top 10%
-                        </div>
-<div className="flex items-center gap-2 text-xs text-eperf-on-surface-variant font-medium">
-<span className="w-3 h-3 rounded-sm bg-eperf-error-container/20 border border-eperf-error-container/30"></span>
-                            Underperforming
-                        </div>
-</div>
-</div>
-<div className="overflow-x-auto">
-<table className="w-full text-left border-collapse">
-<thead>
-<tr className="bg-eperf-surface-container-low/50">
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant">Advisor</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant">Role</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant text-right">Closed Deals</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant text-right">Rev. Generated</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant text-center">Conversion</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant text-center">CSAT</th>
-<th className="px-6 py-4 text-[10px] uppercase tracking-widest font-extrabold text-eperf-on-surface-variant text-right">Status</th>
-</tr>
-</thead>
-<tbody className="divide-y divide-outline-variant/10">
-{/*  Row 1  */}
-<tr className="hover:bg-eperf-surface-container-low/30 transition-colors">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-xl bg-eperf-primary-container text-eperf-on-primary-container flex items-center justify-center font-bold text-xs">AM</div>
-<div>
-<div className="font-bold text-eperf-on-surface text-sm">Alexander Miller</div>
-<div className="text-xs text-eperf-on-surface-variant">Emp #0421</div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="text-xs font-semibold text-eperf-on-surface-variant bg-eperf-surface-container px-2.5 py-1 rounded-lg">Senior Sales</span>
-</td>
-<td className="px-6 py-4 text-right font-medium text-sm text-eperf-on-surface">42</td>
-<td className="px-6 py-4 text-right font-bold text-sm text-eperf-on-surface">$284,500</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1.5 font-bold text-sm text-eperf-tertiary">
-                                        24.2%
-                                        <span className="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1">
-<span className="text-sm font-bold">4.9</span>
-<div className="flex gap-0.5">
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4 text-right">
-<span className="bg-eperf-tertiary-container/10 text-eperf-on-tertiary-container text-[10px] font-extrabold px-3 py-1 rounded-full uppercase border border-eperf-tertiary-container/20">Elite</span>
-</td>
-</tr>
-{/*  Row 2  */}
-<tr className="hover:bg-eperf-surface-container-low/30 transition-colors">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-xl bg-eperf-secondary-container text-eperf-on-secondary-container flex items-center justify-center font-bold text-xs">SC</div>
-<div>
-<div className="font-bold text-eperf-on-surface text-sm">Sarah Chen</div>
-<div className="text-xs text-eperf-on-surface-variant">Emp #0512</div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="text-xs font-semibold text-eperf-on-surface-variant bg-eperf-surface-container px-2.5 py-1 rounded-lg">Sales Assoc.</span>
-</td>
-<td className="px-6 py-4 text-right font-medium text-sm text-eperf-on-surface">31</td>
-<td className="px-6 py-4 text-right font-bold text-sm text-eperf-on-surface">$192,200</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1.5 font-bold text-sm text-eperf-on-surface">
-                                        18.5%
-                                        <span className="material-symbols-outlined text-[16px] text-eperf-outline" data-icon="horizontal_rule">horizontal_rule</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1">
-<span className="text-sm font-bold">4.6</span>
-<div className="flex gap-0.5">
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-outline-variant/30"></div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4 text-right">
-<span className="bg-eperf-surface-container/50 text-eperf-on-surface-variant text-[10px] font-extrabold px-3 py-1 rounded-full uppercase border border-eperf-outline-variant/10">Stable</span>
-</td>
-</tr>
-{/*  Row 3  */}
-<tr className="hover:bg-eperf-surface-container-low/30 transition-colors">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-xl bg-eperf-error-container/20 text-eperf-on-error-container flex items-center justify-center font-bold text-xs">JB</div>
-<div>
-<div className="font-bold text-eperf-on-surface text-sm">James Blackwood</div>
-<div className="text-xs text-eperf-on-surface-variant">Emp #0388</div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="text-xs font-semibold text-eperf-on-surface-variant bg-eperf-surface-container px-2.5 py-1 rounded-lg">Junior Sales</span>
-</td>
-<td className="px-6 py-4 text-right font-medium text-sm text-eperf-on-surface">12</td>
-<td className="px-6 py-4 text-right font-bold text-sm text-eperf-on-surface">$88,400</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1.5 font-bold text-sm text-eperf-error">
-                                        9.1%
-                                        <span className="material-symbols-outlined text-[16px]" data-icon="trending_down">trending_down</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1">
-<span className="text-sm font-bold">3.2</span>
-<div className="flex gap-0.5">
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-outline-variant/30"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-outline-variant/30"></div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4 text-right">
-<span className="bg-eperf-error-container/10 text-eperf-on-error-container text-[10px] font-extrabold px-3 py-1 rounded-full uppercase border border-eperf-error-container/20">Review</span>
-</td>
-</tr>
-{/*  Row 4  */}
-<tr className="hover:bg-eperf-surface-container-low/30 transition-colors">
-<td className="px-6 py-4">
-<div className="flex items-center gap-3">
-<div className="w-10 h-10 rounded-xl bg-eperf-primary-container text-eperf-on-primary-container flex items-center justify-center font-bold text-xs">EL</div>
-<div>
-<div className="font-bold text-eperf-on-surface text-sm">Elena Lopez</div>
-<div className="text-xs text-eperf-on-surface-variant">Emp #0412</div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4">
-<span className="text-xs font-semibold text-eperf-on-surface-variant bg-eperf-surface-container px-2.5 py-1 rounded-lg">Senior Sales</span>
-</td>
-<td className="px-6 py-4 text-right font-medium text-sm text-eperf-on-surface">38</td>
-<td className="px-6 py-4 text-right font-bold text-sm text-eperf-on-surface">$245,000</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1.5 font-bold text-sm text-eperf-tertiary">
-                                        21.8%
-                                        <span className="material-symbols-outlined text-[16px]" data-icon="trending_up">trending_up</span>
-</div>
-</td>
-<td className="px-6 py-4">
-<div className="flex items-center justify-center gap-1">
-<span className="text-sm font-bold">4.8</span>
-<div className="flex gap-0.5">
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-<div className="w-1 h-3 rounded-full bg-eperf-tertiary-fixed"></div>
-</div>
-</div>
-</td>
-<td className="px-6 py-4 text-right">
-<span className="bg-eperf-tertiary-container/10 text-eperf-on-tertiary-container text-[10px] font-extrabold px-3 py-1 rounded-full uppercase border border-eperf-tertiary-container/20">Elite</span>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div className="px-6 py-4 flex items-center justify-between bg-eperf-surface-container-low/20">
-<span className="text-xs font-medium text-eperf-on-surface-variant">Showing 1-10 of 24 Advisors</span>
-<div className="flex gap-2">
-<button className="p-1.5 rounded-lg border border-eperf-outline-variant/20 hover:bg-white text-eperf-on-surface-variant transition-all">
-<span className="material-symbols-outlined text-lg" data-icon="chevron_left">chevron_left</span>
-</button>
-<button className="px-3 py-1.5 rounded-lg bg-eperf-primary text-eperf-on-primary text-xs font-bold">1</button>
-<button className="px-3 py-1.5 rounded-lg border border-eperf-outline-variant/20 hover:bg-white text-eperf-on-surface-variant text-xs font-bold">2</button>
-<button className="px-3 py-1.5 rounded-lg border border-eperf-outline-variant/20 hover:bg-white text-eperf-on-surface-variant text-xs font-bold">3</button>
-<button className="p-1.5 rounded-lg border border-eperf-outline-variant/20 hover:bg-white text-eperf-on-surface-variant transition-all">
-<span className="material-symbols-outlined text-lg" data-icon="chevron_right">chevron_right</span>
-</button>
-</div>
-</div>
-</section>
-{/*  Bottom Insight Grid  */}
-<section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-{/*  Achievement Distribution  */}
-<div className="bg-eperf-surface-container-lowest p-8 rounded-3xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<h4 className="text-lg font-bold font-headline mb-6 flex items-center gap-2">
-<span className="material-symbols-outlined text-eperf-tertiary" data-icon="bar_chart">bar_chart</span>
-                        Conversion Distribution
-                    </h4>
-<div className="space-y-6">
-<div>
-<div className="flex justify-between text-xs font-bold mb-2">
-<span className="text-eperf-on-surface">Top Performance (&gt;20%)</span>
-<span className="text-eperf-tertiary">8 Advisors</span>
-</div>
-<div className="h-2 w-full bg-eperf-surface-container rounded-full overflow-hidden">
-<div className="h-full bg-eperf-tertiary rounded-full" style={{ width: '33%' }}></div>
-</div>
-</div>
-<div>
-<div className="flex justify-between text-xs font-bold mb-2">
-<span className="text-eperf-on-surface">Standard Performance (12-20%)</span>
-<span className="text-eperf-secondary">12 Advisors</span>
-</div>
-<div className="h-2 w-full bg-eperf-surface-container rounded-full overflow-hidden">
-<div className="h-full bg-eperf-secondary rounded-full" style={{ width: '50%' }}></div>
-</div>
-</div>
-<div>
-<div className="flex justify-between text-xs font-bold mb-2">
-<span className="text-eperf-on-surface">Below Threshold (&lt;12%)</span>
-<span className="text-eperf-error">4 Advisors</span>
-</div>
-<div className="h-2 w-full bg-eperf-surface-container rounded-full overflow-hidden">
-<div className="h-full bg-eperf-error rounded-full" style={{ width: '17%' }}></div>
-</div>
-</div>
-</div>
-</div>
-{/*  Recent Coaching Alerts  */}
-<div className="bg-eperf-surface-container-lowest p-8 rounded-3xl shadow-[0px_12px_32px_rgba(30,41,59,0.03)] border border-white/50">
-<h4 className="text-lg font-bold font-headline mb-6 flex items-center gap-2">
-<span className="material-symbols-outlined text-eperf-error" data-icon="campaign">campaign</span>
-                        Performance Alerts
-                    </h4>
-<div className="space-y-4">
-<div className="flex gap-4 p-4 rounded-2xl bg-eperf-surface-container-low/50">
-<div className="w-10 h-10 rounded-full bg-eperf-error-container/20 flex items-center justify-center shrink-0">
-<span className="material-symbols-outlined text-eperf-on-error-container" data-icon="trending_down">trending_down</span>
-</div>
-<div>
-<div className="text-sm font-bold text-eperf-on-surface">James Blackwood</div>
-<p className="text-xs text-eperf-on-surface-variant leading-relaxed">Conversion dropped below 10% for the second week. Needs proactive coaching session.</p>
-</div>
-</div>
-<div className="flex gap-4 p-4 rounded-2xl bg-eperf-surface-container-low/50">
-<div className="w-10 h-10 rounded-full bg-eperf-tertiary-container/20 flex items-center justify-center shrink-0">
-<span className="material-symbols-outlined text-eperf-on-tertiary-container" data-icon="auto_awesome">auto_awesome</span>
-</div>
-<div>
-<div className="text-sm font-bold text-eperf-on-surface">Alexander Miller</div>
-<p className="text-xs text-eperf-on-surface-variant leading-relaxed">Achieved "Elite" status for the third consecutive month. Eligible for performance bonus.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</div>
-</main>
+  const { user } = useAuth();
+  const [myInquiries, setMyInquiries] = useState<CarInquiry[]>([]);
+  const [upcomingDrives, setUpcomingDrives] = useState(0);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [myInqRes, drivesRes, empRes] = await Promise.all([
+        inquiryService.getInquiries(1, 200, {
+          assignedDealerId: user?.id ? String(user.id) : undefined,
+        }),
+        testDriveService.getTestDrives(1, 50, {
+          dealerId: user?.id ? String(user.id) : undefined,
+        }),
+        apiRequest<{ data: Employee[] }>('/users', { params: { role: 'EMPLOYEE', limit: 50 } }),
+      ]);
+
+      if (myInqRes.success && myInqRes.data) {
+        setMyInquiries(myInqRes.data.data);
+      }
+
+      if (drivesRes.success && drivesRes.data) {
+        const upcoming = drivesRes.data.data.filter(
+          d => d.status === 'scheduled' || d.status === 'pending'
+        ).length;
+        setUpcomingDrives(upcoming);
+      }
+
+      if (empRes.success && empRes.data) {
+        const list: Employee[] = (empRes.data as any).data ?? [];
+        setEmployees(list);
+
+        // Build leaderboard: fetch each employee's inquiries and count closed
+        const leaderEntries: LeaderboardEntry[] = await Promise.all(
+          list.slice(0, 10).map(async (emp) => {
+            const res = await inquiryService.getInquiries(1, 200, {
+              assignedDealerId: String(emp.id),
+            });
+            const inqs = res.success && res.data ? res.data.data : [];
+            const closed = inqs.filter(i => i.status === 'closed').length;
+            const rate = inqs.length ? ((closed / inqs.length) * 100).toFixed(1) : '0';
+            return {
+              id: emp.id,
+              name: `${emp.firstName} ${emp.lastName}`,
+              email: emp.email,
+              totalInquiries: inqs.length,
+              closedInquiries: closed,
+              conversionRate: rate,
+            };
+          })
+        );
+        leaderEntries.sort((a, b) => b.closedInquiries - a.closedInquiries);
+        setLeaderboard(leaderEntries);
+      }
+    } catch {
+      toast.error('Failed to load performance data');
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.id]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const totalInquiries = myInquiries.length;
+  const closedInquiries = myInquiries.filter(i => i.status === 'closed').length;
+  const conversionRate = totalInquiries
+    ? ((closedInquiries / totalInquiries) * 100).toFixed(1)
+    : '0';
+
+  const kpis = [
+    { label: 'Total Inquiries',    value: loading ? null : totalInquiries,     icon: 'chat_bubble',    color: 'text-dealer-primary',   bg: 'bg-dealer-primary/10' },
+    { label: 'Closed Deals',       value: loading ? null : closedInquiries,    icon: 'check_circle',   color: 'text-emerald-600',       bg: 'bg-emerald-50' },
+    { label: 'Conversion Rate',    value: loading ? null : `${conversionRate}%`, icon: 'conversion_path', color: 'text-blue-600',       bg: 'bg-blue-50' },
+    { label: 'Upcoming Test Drives', value: loading ? null : upcomingDrives,   icon: 'directions_car', color: 'text-amber-600',         bg: 'bg-amber-50' },
+  ];
+
+  return (
+    <div className="font-sans bg-dealer-background min-h-screen p-6 lg:p-10">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-extrabold text-dealer-on-surface tracking-tight font-headline">Performance Overview</h1>
+          <p className="text-dealer-on-surface-variant text-sm mt-1">Your personal metrics and staff leaderboard.</p>
         </div>
-    );
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          {kpis.map(kpi => (
+            <div key={kpi.label} className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-sm border border-transparent hover:border-dealer-outline-variant/20 transition-all">
+              <div className={`w-10 h-10 rounded-xl ${kpi.bg} flex items-center justify-center mb-4`}>
+                <span className={`material-symbols-outlined ${kpi.color}`} data-icon={kpi.icon}>{kpi.icon}</span>
+              </div>
+              <p className="text-xs font-bold uppercase tracking-wider text-dealer-on-surface-variant mb-1">{kpi.label}</p>
+              {kpi.value === null
+                ? <Skeleton className="h-8 w-16" />
+                : <h3 className={`text-2xl font-extrabold font-headline ${kpi.color}`}>{kpi.value}</h3>
+              }
+            </div>
+          ))}
+        </div>
+
+        {/* Conversion Distribution — calculated from live leaderboard */}
+        {!loading && leaderboard.length > 0 && (
+          <div className="bg-dealer-surface-container-lowest rounded-2xl shadow-sm overflow-hidden mb-8">
+            <div className="px-6 py-5 border-b border-dealer-outline-variant/10 bg-dealer-surface-container-low">
+              <h2 className="text-lg font-bold text-dealer-on-surface font-headline">Conversion Distribution</h2>
+              <p className="text-xs text-dealer-on-surface-variant mt-0.5">Share of closed deals per staff member</p>
+            </div>
+            <div className="p-6 space-y-4">
+              {(() => {
+                const totalClosed = leaderboard.reduce((s, e) => s + e.closedInquiries, 0);
+                const colors = [
+                  'bg-dealer-primary', 'bg-emerald-500', 'bg-blue-500',
+                  'bg-amber-500', 'bg-purple-500', 'bg-rose-500',
+                  'bg-teal-500', 'bg-orange-500', 'bg-indigo-500', 'bg-cyan-500',
+                ];
+                const textColors = [
+                  'text-dealer-primary', 'text-emerald-600', 'text-blue-600',
+                  'text-amber-600', 'text-purple-600', 'text-rose-600',
+                  'text-teal-600', 'text-orange-600', 'text-indigo-600', 'text-cyan-600',
+                ];
+                return leaderboard.slice(0, 8).map((entry, idx) => {
+                  const pct = totalClosed > 0
+                    ? Math.round((entry.closedInquiries / totalClosed) * 100)
+                    : 0;
+                  return (
+                    <div key={entry.id} className="flex items-center gap-4">
+                      <div className="w-28 shrink-0 text-xs font-semibold text-dealer-on-surface truncate">
+                        {entry.name.split(' ')[0]}
+                      </div>
+                      <div className="flex-1 bg-dealer-surface-container-low rounded-full h-2.5 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${colors[idx % colors.length]}`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <div className={`w-12 text-right text-xs font-bold shrink-0 ${textColors[idx % textColors.length]}`}>
+                        {pct}%
+                      </div>
+                      <div className="w-10 text-right text-xs text-dealer-on-surface-variant shrink-0">
+                        {entry.closedInquiries}
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+              {leaderboard.reduce((s, e) => s + e.closedInquiries, 0) === 0 && (
+                <p className="text-center text-dealer-on-surface-variant text-sm py-4">No closed deals yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Leaderboard */}
+        <div className="bg-dealer-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-5 border-b border-dealer-outline-variant/10 bg-dealer-surface-container-low">
+            <h2 className="text-lg font-bold text-dealer-on-surface font-headline">Staff Leaderboard</h2>
+            <p className="text-xs text-dealer-on-surface-variant mt-0.5">Ranked by closed deals across all employees</p>
+          </div>
+
+          {loading ? (
+            <div className="p-6 space-y-3">
+              {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-14" />)}
+            </div>
+          ) : leaderboard.length === 0 ? (
+            <div className="py-16 text-center text-dealer-on-surface-variant">No employee data available.</div>
+          ) : (
+            <table className="w-full">
+              <thead>
+                <tr className="text-left border-b border-dealer-outline-variant/10">
+                  <th className="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-dealer-on-surface-variant">Rank</th>
+                  <th className="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-dealer-on-surface-variant">Employee</th>
+                  <th className="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-dealer-on-surface-variant text-right">Total Leads</th>
+                  <th className="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-dealer-on-surface-variant text-right">Closed Deals</th>
+                  <th className="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-dealer-on-surface-variant text-right">Conversion</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dealer-outline-variant/5">
+                {leaderboard.map((entry, idx) => (
+                  <tr
+                    key={entry.id}
+                    className={`hover:bg-dealer-surface-container-low transition-colors ${String(entry.id) === String(user?.id) ? 'bg-dealer-primary/5' : ''}`}
+                  >
+                    <td className="px-6 py-4">
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                        idx === 0 ? 'bg-amber-100 text-amber-700' :
+                        idx === 1 ? 'bg-slate-100 text-slate-600' :
+                        idx === 2 ? 'bg-orange-50 text-orange-600' :
+                        'bg-dealer-surface-container-low text-dealer-on-surface-variant'
+                      }`}>
+                        {idx + 1}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-dealer-primary/10 flex items-center justify-center text-[11px] font-bold text-dealer-primary shrink-0">
+                          {initials(entry.name)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-sm text-dealer-on-surface">
+                            {entry.name}
+                            {String(entry.id) === String(user?.id) && (
+                              <span className="ml-1.5 text-[9px] font-bold text-dealer-primary bg-dealer-primary/10 px-1.5 py-0.5 rounded-full">You</span>
+                            )}
+                          </p>
+                          <p className="text-xs text-dealer-on-surface-variant truncate max-w-[180px]">{entry.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm font-semibold text-dealer-on-surface text-right">{entry.totalInquiries}</td>
+                    <td className="px-6 py-4 text-right">
+                      <span className="inline-block text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{entry.closedInquiries}</span>
+                    </td>
+                    <td className="px-6 py-4 text-sm font-semibold text-dealer-on-surface text-right">{entry.conversionRate}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };

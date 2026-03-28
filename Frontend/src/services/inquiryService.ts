@@ -1,7 +1,6 @@
-﻿import type { CarInquiry, ApiResponse, PaginatedResponse } from '@/types';
-import { mockInquiries } from '@/data/mockData';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import type { CarInquiry, ApiResponse, PaginatedResponse } from '@/types';
+import { apiRequest } from '@/lib/api';
+import { normalizeInquiry } from '@/lib/normalize';
 
 class InquiryService {
   async getInquiries(
@@ -15,185 +14,104 @@ class InquiryService {
       assignedDealerId?: string;
     }
   ): Promise<ApiResponse<PaginatedResponse<CarInquiry>>> {
-    await delay(600);
-
-    let filteredInquiries = [...mockInquiries];
-
-    if (filters) {
-      if (filters.status) {
-        filteredInquiries = filteredInquiries.filter(i => i.status === filters.status);
-      }
-      if (filters.customerId) {
-        filteredInquiries = filteredInquiries.filter(i => i.customerId === filters.customerId);
-      }
-      if (filters.carId) {
-        filteredInquiries = filteredInquiries.filter(i => i.carId === filters.carId);
-      }
-      if (filters.dealershipId) {
-        filteredInquiries = filteredInquiries.filter(i => {
-          const car = mockInquiries.find(mi => mi.carId === i.carId);
-          return car;
-        });
-      }
-      if (filters.assignedDealerId) {
-        filteredInquiries = filteredInquiries.filter(i => i.assignedDealerId === filters.assignedDealerId);
-      }
+    const res = await apiRequest<PaginatedResponse<Record<string, unknown>>>('/inquiries', {
+      params: { page, limit, status: filters?.status },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch inquiries' };
     }
 
-    // Sort by created date (newest first)
-    filteredInquiries.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    let items = (res.data.data || []).map(normalizeInquiry);
 
-    const total = filteredInquiries.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedInquiries = filteredInquiries.slice(start, end);
+    if (filters?.customerId) items = items.filter(i => i.customerId === filters.customerId);
+    if (filters?.carId) items = items.filter(i => i.carId === filters.carId);
+    if (filters?.assignedDealerId) items = items.filter(i => i.assignedDealerId === filters.assignedDealerId);
 
     return {
       success: true,
-      data: {
-        data: paginatedInquiries,
-        total,
-        page,
-        limit,
-        totalPages
-      }
+      data: { ...res.data, data: items, total: items.length },
     };
   }
 
   async getInquiryById(id: string): Promise<ApiResponse<CarInquiry>> {
-    await delay(400);
-
-    const inquiry = mockInquiries.find(i => i.id === id);
-    if (!inquiry) {
-      return {
-        success: false,
-        message: 'Inquiry not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/inquiries/${id}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Inquiry not found' };
     }
-
-    return {
-      success: true,
-      data: inquiry
-    };
+    return { success: true, data: normalizeInquiry(res.data) };
   }
 
   async createInquiry(
     inquiryData: Omit<CarInquiry, 'id' | 'status' | 'createdAt' | 'updatedAt'>
   ): Promise<ApiResponse<CarInquiry>> {
-    await delay(800);
-
-    const newInquiry: CarInquiry = {
-      ...inquiryData,
-      id: `inq_${Date.now()}`,
-      status: 'pending',
-      createdAt: new Date(),
-      updatedAt: new Date()
+    const body = {
+      customerId: Number(inquiryData.customerId),
+      carId: Number(inquiryData.carId),
+      customerName: inquiryData.customerName,
+      customerEmail: inquiryData.customerEmail,
+      customerPhone: inquiryData.customerPhone,
+      message: inquiryData.message,
     };
 
-    mockInquiries.push(newInquiry);
-
-    return {
-      success: true,
-      data: newInquiry,
-      message: 'Inquiry submitted successfully'
-    };
+    const res = await apiRequest<Record<string, unknown>>('/inquiries', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to submit inquiry' };
+    }
+    return { success: true, data: normalizeInquiry(res.data), message: 'Inquiry submitted successfully' };
   }
 
-  async respondToInquiry(
-    id: string,
-    dealerId: string
-  ): Promise<ApiResponse<CarInquiry>> {
-    await delay(500);
-
-    const index = mockInquiries.findIndex(i => i.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Inquiry not found'
-      };
+  async respondToInquiry(id: string, dealerId: string): Promise<ApiResponse<CarInquiry>> {
+    const res = await apiRequest<Record<string, unknown>>(`/inquiries/${id}/respond`, {
+      method: 'PATCH',
+      body: JSON.stringify({ dealerId: Number(dealerId) }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to respond' };
     }
-
-    mockInquiries[index].status = 'responded';
-    mockInquiries[index].assignedDealerId = dealerId;
-    mockInquiries[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockInquiries[index],
-      message: 'Inquiry marked as responded'
-    };
+    return { success: true, data: normalizeInquiry(res.data), message: 'Inquiry marked as responded' };
   }
 
   async closeInquiry(id: string): Promise<ApiResponse<CarInquiry>> {
-    await delay(500);
-
-    const index = mockInquiries.findIndex(i => i.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Inquiry not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/inquiries/${id}/close`, {
+      method: 'PATCH',
+      body: JSON.stringify({}),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to close inquiry' };
     }
-
-    mockInquiries[index].status = 'closed';
-    mockInquiries[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockInquiries[index],
-      message: 'Inquiry closed successfully'
-    };
+    return { success: true, data: normalizeInquiry(res.data), message: 'Inquiry closed successfully' };
   }
 
   async assignInquiry(id: string, dealerId: string): Promise<ApiResponse<CarInquiry>> {
-    await delay(500);
-
-    const index = mockInquiries.findIndex(i => i.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Inquiry not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/inquiries/${id}/assign`, {
+      method: 'PATCH',
+      body: JSON.stringify({ dealerId: Number(dealerId) }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to assign inquiry' };
     }
-
-    mockInquiries[index].assignedDealerId = dealerId;
-    mockInquiries[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockInquiries[index],
-      message: 'Inquiry assigned successfully'
-    };
+    return { success: true, data: normalizeInquiry(res.data), message: 'Inquiry assigned successfully' };
   }
 
   async getCustomerInquiries(customerId: string): Promise<ApiResponse<CarInquiry[]>> {
-    await delay(500);
-
-    const inquiries = mockInquiries
-      .filter(i => i.customerId === customerId)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-    return {
-      success: true,
-      data: inquiries
-    };
+    const res = await apiRequest<Record<string, unknown>[]>(`/inquiries/customer/${customerId}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch inquiries' };
+    }
+    return { success: true, data: res.data.map(normalizeInquiry) };
   }
 
   async getPendingInquiries(dealershipId?: string, limit: number = 5): Promise<ApiResponse<CarInquiry[]>> {
-    await delay(400);
-
-    let pendingInquiries = mockInquiries.filter(i => i.status === 'pending');
-
-    // In a real app, we would filter by dealership based on car association
-    // For now, we'll return all pending inquiries
-
-    pendingInquiries.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-    return {
-      success: true,
-      data: pendingInquiries.slice(0, limit)
-    };
+    const res = await apiRequest<Record<string, unknown>[]>('/inquiries/pending', {
+      params: { limit },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch pending inquiries' };
+    }
+    return { success: true, data: res.data.map(normalizeInquiry) };
   }
 
   async getInquiryStatistics(): Promise<ApiResponse<{
@@ -202,21 +120,19 @@ class InquiryService {
     respondedInquiries: number;
     closedInquiries: number;
   }>> {
-    await delay(400);
-
-    const totalInquiries = mockInquiries.length;
-    const pendingInquiries = mockInquiries.filter(i => i.status === 'pending').length;
-    const respondedInquiries = mockInquiries.filter(i => i.status === 'responded').length;
-    const closedInquiries = mockInquiries.filter(i => i.status === 'closed').length;
-
+    const res = await apiRequest<Record<string, unknown>>('/inquiries/statistics');
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch statistics' };
+    }
+    const d = res.data;
     return {
       success: true,
       data: {
-        totalInquiries,
-        pendingInquiries,
-        respondedInquiries,
-        closedInquiries
-      }
+        totalInquiries: Number(d.totalInquiries ?? 0),
+        pendingInquiries: Number(d.pendingInquiries ?? 0),
+        respondedInquiries: Number(d.respondedInquiries ?? 0),
+        closedInquiries: Number(d.closedInquiries ?? 0),
+      },
     };
   }
 }

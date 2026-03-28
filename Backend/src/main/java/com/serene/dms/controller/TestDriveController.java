@@ -1,19 +1,31 @@
 package com.serene.dms.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.serene.dms.dto.request.CreateTestDriveRequest;
 import com.serene.dms.dto.response.ApiResponse;
 import com.serene.dms.dto.response.PaginatedResponse;
 import com.serene.dms.entity.TestDrive;
 import com.serene.dms.enums.TestDriveStatus;
+import com.serene.dms.exception.BadRequestException;
 import com.serene.dms.service.TestDriveService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/test-drives")
@@ -41,15 +53,21 @@ public class TestDriveController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public ResponseEntity<ApiResponse<TestDrive>> schedule(@RequestBody TestDrive td) {
-        return ResponseEntity.ok(ApiResponse.ok(testDriveService.schedule(td), "Test drive scheduled successfully"));
+    public ResponseEntity<ApiResponse<TestDrive>> schedule(@Valid @RequestBody CreateTestDriveRequest request) {
+        return ResponseEntity.ok(ApiResponse.ok(testDriveService.schedule(request), "Test drive scheduled successfully"));
     }
 
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
     public ResponseEntity<ApiResponse<TestDrive>> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        TestDriveStatus s = TestDriveStatus.valueOf(body.get("status").toUpperCase());
+        String raw = body.get("status");
+        if (raw == null || raw.isBlank()) {
+            throw new BadRequestException("status is required");
+        }
+        TestDriveStatus s = TestDriveStatus.fromApi(raw);
+        if (s == null) {
+            throw new BadRequestException("Invalid status");
+        }
         return ResponseEntity.ok(ApiResponse.ok(testDriveService.updateStatus(id, s)));
     }
 
@@ -63,7 +81,8 @@ public class TestDriveController {
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<TestDrive>> feedback(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         String fb = (String) body.get("feedback");
-        Integer rating = (Integer) body.get("rating");
+        Object ratingRaw = body.get("rating");
+        Integer rating = ratingRaw instanceof Number ? ((Number) ratingRaw).intValue() : null;
         return ResponseEntity.ok(ApiResponse.ok(testDriveService.addFeedback(id, fb, rating), "Feedback added successfully"));
     }
 

@@ -2,6 +2,8 @@ package com.serene.dms.entity;
 
 import com.serene.dms.enums.UserRole;
 import com.serene.dms.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,6 +27,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
@@ -49,9 +52,15 @@ public class User {
     @Column(length = 20)
     private String phone;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dealership_id")
     private Dealership dealership;
+
+    @JsonProperty("dealershipId")
+    public Long getDealershipId() {
+        return dealership != null ? dealership.getId() : null;
+    }
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

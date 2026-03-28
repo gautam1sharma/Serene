@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { inquiryService } from '@/services/inquiryService';
+import { testDriveService } from '@/services/testDriveService';
 import { 
   LayoutDashboard, MessageSquare, TrendingUp, Calendar, Car, 
   HelpCircle, LogOut, FileDown, Plus, ChevronLeft, ChevronRight, 
@@ -8,6 +10,41 @@ import {
 } from 'lucide-react';
 
 export const EmployeeDashboard: React.FC = () => {
+    const { user } = useAuth();
+    const [totalInquiries, setTotalInquiries] = useState(0);
+    const [closedInquiries, setClosedInquiries] = useState(0);
+    const [upcomingDrives, setUpcomingDrives] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const [inqRes, driveRes] = await Promise.all([
+                inquiryService.getInquiries(1, 200, {
+                    assignedDealerId: user?.id ? String(user.id) : undefined,
+                }),
+                testDriveService.getTestDrives(1, 50, {
+                    dealerId: user?.id ? String(user.id) : undefined,
+                }),
+            ]);
+            if (inqRes.success && inqRes.data) {
+                const inqs = inqRes.data.data;
+                setTotalInquiries(inqs.length);
+                setClosedInquiries(inqs.filter(i => i.status === 'closed').length);
+            }
+            if (driveRes.success && driveRes.data) {
+                setUpcomingDrives(
+                    driveRes.data.data.filter(d => d.status === 'scheduled' || d.status === 'pending').length
+                );
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [user?.id]);
+
+    const conversionRate = totalInquiries ? Math.round((closedInquiries / totalInquiries) * 100) : 0;
+    const progressOffset = Math.round(477 - (477 * conversionRate) / 100);
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
     return (
         <div className="space-y-8">
 
@@ -15,7 +52,7 @@ export const EmployeeDashboard: React.FC = () => {
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl font-extrabold font-jakarta tracking-tight text-edash-on-surface">Serene Dashboard</h1>
-                            <p className="text-edash-on-surface-variant font-medium mt-1">Sales Overview • Tuesday, Oct 24th</p>
+                            <p className="text-edash-on-surface-variant font-medium mt-1">Sales Overview • {today}</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <button className="px-5 py-2.5 bg-white text-edash-on-surface-variant font-semibold rounded-xl text-sm shadow-sm border border-slate-200/60 hover:bg-slate-50 transition-all flex items-center gap-2">
@@ -43,21 +80,24 @@ export const EmployeeDashboard: React.FC = () => {
                                     <div className="relative w-44 h-44 flex items-center justify-center">
                                         <svg className="w-full h-full transform -rotate-90">
                                             <circle className="text-slate-100" cx="88" cy="88" fill="transparent" r="76" stroke="currentColor" strokeWidth="12"></circle>
-                                            <circle className="text-[#1a2a44]" cx="88" cy="88" fill="transparent" r="76" stroke="currentColor" strokeDasharray="477" strokeDashoffset="119" strokeLinecap="round" strokeWidth="12" style={{ transition: 'stroke-dashoffset 1s ease-out' }}></circle>
+                                            <circle className="text-[#1a2a44]" cx="88" cy="88" fill="transparent" r="76" stroke="currentColor" strokeDasharray="477" strokeDashoffset={loading ? 477 : progressOffset} strokeLinecap="round" strokeWidth="12" style={{ transition: 'stroke-dashoffset 1s ease-out' }}></circle>
                                         </svg>
                                         <div className="absolute flex flex-col items-center">
-                                            <span className="text-3xl font-jakarta font-extrabold text-edash-on-surface">75%</span>
-                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Units Sold</span>
+                                            <span className="text-3xl font-jakarta font-extrabold text-edash-on-surface">{loading ? '…' : `${conversionRate}%`}</span>
+                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Conversion</span>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4 w-full pt-4 border-t border-slate-100">
                                         <div className="text-center">
-                                            <p className="text-2xl font-jakarta font-bold text-slate-800">18<span className="text-sm text-slate-400 font-medium">/24</span></p>
-                                            <p className="text-[11px] text-slate-500 font-medium mt-1">Monthly Vehicles</p>
+                                            <p className="text-2xl font-jakarta font-bold text-slate-800">
+                                                {loading ? '…' : closedInquiries}
+                                                <span className="text-sm text-slate-400 font-medium">/{totalInquiries}</span>
+                                            </p>
+                                            <p className="text-[11px] text-slate-500 font-medium mt-1">Deals Closed</p>
                                         </div>
                                         <div className="text-center relative before:absolute before:left-0 before:top-1 before:bottom-1 before:w-px before:bg-slate-100">
-                                            <p className="text-2xl font-jakarta font-bold text-emerald-600">$1.2M</p>
-                                            <p className="text-[11px] text-slate-500 font-medium mt-1">Revenue Earned</p>
+                                            <p className="text-2xl font-jakarta font-bold text-blue-600">{loading ? '…' : upcomingDrives}</p>
+                                            <p className="text-[11px] text-slate-500 font-medium mt-1">Test Drives</p>
                                         </div>
                                     </div>
                                 </div>

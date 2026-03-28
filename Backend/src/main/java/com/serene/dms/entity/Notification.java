@@ -1,6 +1,8 @@
 package com.serene.dms.entity;
 
 import com.serene.dms.enums.NotificationType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,9 +21,15 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @JsonProperty("userId")
+    public Long getUserIdValue() {
+        return user != null ? user.getId() : null;
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

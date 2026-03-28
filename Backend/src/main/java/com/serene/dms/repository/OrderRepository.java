@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,4 +26,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT COALESCE(SUM(o.finalAmount), 0) FROM Order o")
     BigDecimal sumTotalRevenue();
+
+    List<Order> findByCreatedAtGreaterThanEqual(java.time.LocalDateTime since);
+
+    List<Order> findByOrderByCreatedAtDesc(org.springframework.data.domain.Pageable pageable);
 }

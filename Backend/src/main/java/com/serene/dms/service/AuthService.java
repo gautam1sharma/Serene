@@ -86,7 +86,7 @@ public class AuthService {
 
     @Transactional
     public void logout(Long userId) {
-        refreshTokenRepository.deleteByUserId(userId);
+        refreshTokenRepository.deleteByUser_Id(userId);
     }
 
     public AuthResponse.UserDto getCurrentUser(Long userId) {

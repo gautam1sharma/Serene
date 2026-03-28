@@ -1,8 +1,7 @@
-﻿import type { Car, ApiResponse, PaginatedResponse } from '@/types';
+import type { Car, ApiResponse, PaginatedResponse } from '@/types';
 import { CarCategory, CarStatus } from '@/types';
-import { mockCars } from '@/data/mockData';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { apiRequest } from '@/lib/api';
+import { normalizeCar } from '@/lib/normalize';
 
 class CarService {
   async getCars(
@@ -17,202 +16,122 @@ class CarService {
       search?: string;
     }
   ): Promise<ApiResponse<PaginatedResponse<Car>>> {
-    await delay(600);
+    const params: Record<string, string | number | boolean | undefined | null> = {
+      page,
+      limit,
+      category: filters?.category,
+      status: filters?.status,
+      minPrice: filters?.minPrice,
+      maxPrice: filters?.maxPrice,
+      dealershipId: filters?.dealershipId,
+      search: filters?.search,
+    };
 
-    let filteredCars = [...mockCars];
-
-    // Apply filters
-    if (filters) {
-      if (filters.category) {
-        filteredCars = filteredCars.filter(car => car.category === filters.category);
-      }
-      if (filters.status) {
-        filteredCars = filteredCars.filter(car => car.status === filters.status);
-      }
-      if (filters.minPrice !== undefined) {
-        filteredCars = filteredCars.filter(car => car.price >= filters.minPrice!);
-      }
-      if (filters.maxPrice !== undefined) {
-        filteredCars = filteredCars.filter(car => car.price <= filters.maxPrice!);
-      }
-      if (filters.dealershipId) {
-        filteredCars = filteredCars.filter(car => car.dealershipId === filters.dealershipId);
-      }
-      if (filters.search) {
-        const searchLower = filters.search.toLowerCase();
-        filteredCars = filteredCars.filter(car =>
-          car.model.toLowerCase().includes(searchLower) ||
-          car.description.toLowerCase().includes(searchLower)
-        );
-      }
+    const res = await apiRequest<PaginatedResponse<Record<string, unknown>>>('/cars', { params });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch cars' };
     }
-
-    // Pagination
-    const total = filteredCars.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedCars = filteredCars.slice(start, end);
 
     return {
       success: true,
       data: {
-        data: paginatedCars,
-        total,
-        page,
-        limit,
-        totalPages
-      }
+        ...res.data,
+        data: (res.data.data || []).map(normalizeCar),
+      },
     };
   }
 
   async getCarById(id: string): Promise<ApiResponse<Car>> {
-    await delay(400);
-
-    const car = mockCars.find(c => c.id === id);
-    if (!car) {
-      return {
-        success: false,
-        message: 'Car not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/cars/${id}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Car not found' };
     }
-
-    return {
-      success: true,
-      data: car
-    };
+    return { success: true, data: normalizeCar(res.data) };
   }
 
   async getCarsByDealership(dealershipId: string): Promise<ApiResponse<Car[]>> {
-    await delay(500);
-
-    const cars = mockCars.filter(car => car.dealershipId === dealershipId);
-    return {
-      success: true,
-      data: cars
-    };
+    const res = await apiRequest<Record<string, unknown>[]>(`/cars/dealership/${dealershipId}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch cars' };
+    }
+    return { success: true, data: res.data.map(normalizeCar) };
   }
 
   async createCar(carData: Omit<Car, 'id' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Car>> {
-    await delay(800);
-
-    const newCar: Car = {
+    const body = {
       ...carData,
-      id: `car_${Date.now()}`,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      features: JSON.stringify(carData.features || []),
+      images: JSON.stringify(carData.images || []),
+      dealership: carData.dealershipId ? { id: Number(carData.dealershipId) } : undefined,
+      dealershipId: undefined,
     };
 
-    mockCars.push(newCar);
-
-    return {
-      success: true,
-      data: newCar,
-      message: 'Car added to inventory successfully'
-    };
+    const res = await apiRequest<Record<string, unknown>>('/cars', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to create car' };
+    }
+    return { success: true, data: normalizeCar(res.data), message: 'Car added to inventory successfully' };
   }
 
   async updateCar(id: string, carData: Partial<Car>): Promise<ApiResponse<Car>> {
-    await delay(600);
-
-    const index = mockCars.findIndex(c => c.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Car not found'
-      };
+    const body: Record<string, unknown> = { ...carData };
+    if (carData.features) body.features = JSON.stringify(carData.features);
+    if (carData.images) body.images = JSON.stringify(carData.images);
+    if (carData.dealershipId) {
+      body.dealership = { id: Number(carData.dealershipId) };
+      delete body.dealershipId;
     }
 
-    mockCars[index] = {
-      ...mockCars[index],
-      ...carData,
-      updatedAt: new Date()
-    };
-
-    return {
-      success: true,
-      data: mockCars[index],
-      message: 'Car updated successfully'
-    };
+    const res = await apiRequest<Record<string, unknown>>(`/cars/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to update car' };
+    }
+    return { success: true, data: normalizeCar(res.data), message: 'Car updated successfully' };
   }
 
   async deleteCar(id: string): Promise<ApiResponse<void>> {
-    await delay(500);
-
-    const index = mockCars.findIndex(c => c.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Car not found'
-      };
-    }
-
-    mockCars.splice(index, 1);
-
-    return {
-      success: true,
-      message: 'Car removed from inventory'
-    };
+    return apiRequest<void>(`/cars/${id}`, { method: 'DELETE' });
   }
 
   async updateCarStatus(id: string, status: CarStatus): Promise<ApiResponse<Car>> {
-    await delay(400);
-
-    const index = mockCars.findIndex(c => c.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Car not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/cars/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to update status' };
     }
-
-    mockCars[index].status = status;
-    mockCars[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockCars[index],
-      message: `Car status updated to ${status}`
-    };
+    return { success: true, data: normalizeCar(res.data), message: `Car status updated to ${status}` };
   }
 
   async getCarCategories(): Promise<ApiResponse<CarCategory[]>> {
-    await delay(300);
-
-    const categories = Object.values(CarCategory);
-    return {
-      success: true,
-      data: categories
-    };
+    return apiRequest<CarCategory[]>('/cars/categories');
   }
 
   async getFeaturedCars(limit: number = 5): Promise<ApiResponse<Car[]>> {
-    await delay(500);
-
-    const featuredCars = mockCars
-      .filter(car => car.status === CarStatus.AVAILABLE)
-      .slice(0, limit);
-
-    return {
-      success: true,
-      data: featuredCars
-    };
+    const res = await apiRequest<Record<string, unknown>[]>('/cars/featured', {
+      params: { limit },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch featured cars' };
+    }
+    return { success: true, data: res.data.map(normalizeCar) };
   }
 
   async searchCars(query: string): Promise<ApiResponse<Car[]>> {
-    await delay(500);
-
-    const searchLower = query.toLowerCase();
-    const results = mockCars.filter(car =>
-      car.model.toLowerCase().includes(searchLower) ||
-      car.description.toLowerCase().includes(searchLower) ||
-      car.features.some(f => f.toLowerCase().includes(searchLower))
-    );
-
-    return {
-      success: true,
-      data: results
-    };
+    const res = await apiRequest<Record<string, unknown>[]>('/cars/search', {
+      params: { q: query },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Search failed' };
+    }
+    return { success: true, data: res.data.map(normalizeCar) };
   }
 }
 

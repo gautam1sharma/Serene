@@ -1,8 +1,7 @@
-﻿import type { TestDrive, ApiResponse, PaginatedResponse } from '@/types';
+import type { TestDrive, ApiResponse, PaginatedResponse } from '@/types';
 import { TestDriveStatus } from '@/types';
-import { mockTestDrives } from '@/data/mockData';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { apiRequest } from '@/lib/api';
+import { normalizeTestDrive } from '@/lib/normalize';
 
 class TestDriveService {
   async getTestDrives(
@@ -16,219 +15,130 @@ class TestDriveService {
       upcoming?: boolean;
     }
   ): Promise<ApiResponse<PaginatedResponse<TestDrive>>> {
-    await delay(600);
-
-    let filteredTestDrives = [...mockTestDrives];
-
-    if (filters) {
-      if (filters.status) {
-        filteredTestDrives = filteredTestDrives.filter(td => td.status === filters.status);
-      }
-      if (filters.customerId) {
-        filteredTestDrives = filteredTestDrives.filter(td => td.customerId === filters.customerId);
-      }
-      if (filters.dealershipId) {
-        filteredTestDrives = filteredTestDrives.filter(td => td.dealershipId === filters.dealershipId);
-      }
-      if (filters.dealerId) {
-        filteredTestDrives = filteredTestDrives.filter(td => td.assignedDealerId === filters.dealerId);
-      }
-      if (filters.upcoming) {
-        const today = new Date();
-        filteredTestDrives = filteredTestDrives.filter(
-          td => td.preferredDate >= today && 
-          (td.status === TestDriveStatus.PENDING || td.status === TestDriveStatus.CONFIRMED)
-        );
-      }
+    const res = await apiRequest<PaginatedResponse<Record<string, unknown>>>('/test-drives', {
+      params: { page, limit, status: filters?.status },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch test drives' };
     }
 
-    // Sort by date (nearest first)
-    filteredTestDrives.sort((a, b) => a.preferredDate.getTime() - b.preferredDate.getTime());
+    let items = (res.data.data || []).map(normalizeTestDrive);
 
-    const total = filteredTestDrives.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedTestDrives = filteredTestDrives.slice(start, end);
+    if (filters?.customerId) items = items.filter(td => td.customerId === filters.customerId);
+    if (filters?.dealershipId) items = items.filter(td => td.dealershipId === filters.dealershipId);
+    if (filters?.dealerId) items = items.filter(td => td.assignedDealerId === filters.dealerId);
+    if (filters?.upcoming) {
+      const now = new Date();
+      items = items.filter(td =>
+        td.preferredDate >= now &&
+        (td.status === TestDriveStatus.PENDING || td.status === TestDriveStatus.CONFIRMED)
+      );
+    }
 
     return {
       success: true,
-      data: {
-        data: paginatedTestDrives,
-        total,
-        page,
-        limit,
-        totalPages
-      }
+      data: { ...res.data, data: items, total: items.length },
     };
   }
 
   async getTestDriveById(id: string): Promise<ApiResponse<TestDrive>> {
-    await delay(400);
-
-    const testDrive = mockTestDrives.find(td => td.id === id);
-    if (!testDrive) {
-      return {
-        success: false,
-        message: 'Test drive not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/test-drives/${id}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Test drive not found' };
     }
-
-    return {
-      success: true,
-      data: testDrive
-    };
+    return { success: true, data: normalizeTestDrive(res.data) };
   }
 
   async scheduleTestDrive(
     testDriveData: Omit<TestDrive, 'id' | 'status' | 'createdAt' | 'updatedAt'>
   ): Promise<ApiResponse<TestDrive>> {
-    await delay(800);
+    const date = testDriveData.preferredDate instanceof Date
+      ? testDriveData.preferredDate.toISOString().split('T')[0]
+      : String(testDriveData.preferredDate);
 
-    const newTestDrive: TestDrive = {
-      ...testDriveData,
-      id: `td_${Date.now()}`,
-      status: TestDriveStatus.PENDING,
-      createdAt: new Date(),
-      updatedAt: new Date()
+    const body = {
+      customerId: Number(testDriveData.customerId),
+      carId: Number(testDriveData.carId),
+      dealershipId: Number(testDriveData.dealershipId),
+      customerName: testDriveData.customerName,
+      customerEmail: testDriveData.customerEmail,
+      customerPhone: testDriveData.customerPhone,
+      carModel: testDriveData.carModel,
+      preferredDate: date,
+      preferredTime: testDriveData.preferredTime,
+      notes: testDriveData.notes,
     };
 
-    mockTestDrives.push(newTestDrive);
-
-    return {
-      success: true,
-      data: newTestDrive,
-      message: 'Test drive scheduled successfully'
-    };
+    const res = await apiRequest<Record<string, unknown>>('/test-drives', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to schedule test drive' };
+    }
+    return { success: true, data: normalizeTestDrive(res.data), message: 'Test drive scheduled successfully' };
   }
 
-  async updateTestDriveStatus(
-    id: string,
-    status: TestDriveStatus
-  ): Promise<ApiResponse<TestDrive>> {
-    await delay(500);
-
-    const index = mockTestDrives.findIndex(td => td.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Test drive not found'
-      };
+  async updateTestDriveStatus(id: string, status: TestDriveStatus): Promise<ApiResponse<TestDrive>> {
+    const res = await apiRequest<Record<string, unknown>>(`/test-drives/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to update status' };
     }
-
-    mockTestDrives[index].status = status;
-    mockTestDrives[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockTestDrives[index],
-      message: `Test drive status updated to ${status}`
-    };
+    return { success: true, data: normalizeTestDrive(res.data), message: `Test drive status updated to ${status}` };
   }
 
   async assignDealer(id: string, dealerId: string): Promise<ApiResponse<TestDrive>> {
-    await delay(500);
-
-    const index = mockTestDrives.findIndex(td => td.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Test drive not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/test-drives/${id}/assign`, {
+      method: 'PATCH',
+      body: JSON.stringify({ dealerId: Number(dealerId) }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to assign dealer' };
     }
-
-    mockTestDrives[index].assignedDealerId = dealerId;
-    mockTestDrives[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockTestDrives[index],
-      message: 'Dealer assigned successfully'
-    };
+    return { success: true, data: normalizeTestDrive(res.data), message: 'Dealer assigned successfully' };
   }
 
-  async addFeedback(
-    id: string,
-    feedback: string,
-    rating: number
-  ): Promise<ApiResponse<TestDrive>> {
-    await delay(500);
-
-    const index = mockTestDrives.findIndex(td => td.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Test drive not found'
-      };
+  async addFeedback(id: string, feedback: string, rating: number): Promise<ApiResponse<TestDrive>> {
+    const res = await apiRequest<Record<string, unknown>>(`/test-drives/${id}/feedback`, {
+      method: 'PATCH',
+      body: JSON.stringify({ feedback, rating }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to add feedback' };
     }
-
-    mockTestDrives[index].feedback = feedback;
-    mockTestDrives[index].rating = rating;
-    mockTestDrives[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockTestDrives[index],
-      message: 'Feedback added successfully'
-    };
+    return { success: true, data: normalizeTestDrive(res.data), message: 'Feedback added successfully' };
   }
 
   async getCustomerTestDrives(customerId: string): Promise<ApiResponse<TestDrive[]>> {
-    await delay(500);
-
-    const testDrives = mockTestDrives
-      .filter(td => td.customerId === customerId)
-      .sort((a, b) => b.preferredDate.getTime() - a.preferredDate.getTime());
-
-    return {
-      success: true,
-      data: testDrives
-    };
+    const res = await apiRequest<Record<string, unknown>[]>(`/test-drives/customer/${customerId}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch test drives' };
+    }
+    return { success: true, data: res.data.map(normalizeTestDrive) };
   }
 
   async getUpcomingTestDrives(dealershipId?: string, limit: number = 5): Promise<ApiResponse<TestDrive[]>> {
-    await delay(400);
-
-    const today = new Date();
-    let upcomingTestDrives = mockTestDrives.filter(
-      td => td.preferredDate >= today && 
-      (td.status === TestDriveStatus.PENDING || td.status === TestDriveStatus.CONFIRMED)
-    );
-
-    if (dealershipId) {
-      upcomingTestDrives = upcomingTestDrives.filter(td => td.dealershipId === dealershipId);
+    const res = await apiRequest<Record<string, unknown>[]>('/test-drives/upcoming', {
+      params: { limit },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch upcoming test drives' };
     }
-
-    upcomingTestDrives.sort((a, b) => a.preferredDate.getTime() - b.preferredDate.getTime());
-
-    return {
-      success: true,
-      data: upcomingTestDrives.slice(0, limit)
-    };
+    return { success: true, data: res.data.map(normalizeTestDrive) };
   }
 
   async cancelTestDrive(id: string, reason?: string): Promise<ApiResponse<TestDrive>> {
-    await delay(500);
-
-    const index = mockTestDrives.findIndex(td => td.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Test drive not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/test-drives/${id}/cancel`, {
+      method: 'PATCH',
+      body: JSON.stringify({ reason: reason || '' }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to cancel test drive' };
     }
-
-    mockTestDrives[index].status = TestDriveStatus.CANCELLED;
-    if (reason) {
-      mockTestDrives[index].notes = reason;
-    }
-    mockTestDrives[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockTestDrives[index],
-      message: 'Test drive cancelled successfully'
-    };
+    return { success: true, data: normalizeTestDrive(res.data), message: 'Test drive cancelled successfully' };
   }
 }
 

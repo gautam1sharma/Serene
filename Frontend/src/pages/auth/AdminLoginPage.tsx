@@ -25,15 +25,28 @@ export const AdminLoginPage: React.FC = () => {
     setIsLoading(false);
   };
 
-  const fillDemoCredentials = (role: string) => {
+  const fillDemoCredentials = async (role: string) => {
     const credentials: Record<string, string> = {
-      employee: 'tom.employee@serene.com',
-      dealer: 'alex.dealer@serene.com',
-      manager: 'lisa.manager@serene.com',
-      Admin: 'robert.Admin@serene.com'
+      employee: 'employee@serene.com',
+      dealer: 'dealer@serene.com',
+      manager: 'manager@serene.com',
+      Admin: 'admin@serene.com'
     };
-    setEmail(credentials[role] || '');
-    setPassword('password123');
+    
+    const demoEmail = credentials[role] || '';
+    const demoPassword = 'password123';
+    
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    
+    if (demoEmail) {
+      setIsLoading(true);
+      const success = await login({ email: demoEmail, password: demoPassword });
+      if (success) {
+        navigate('/dashboard');
+      }
+      setIsLoading(false);
+    }
   };
 
   return (

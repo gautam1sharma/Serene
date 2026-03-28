@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,10 +34,35 @@ public class AnalyticsController {
     }
 
     @GetMapping("/sales-report")
-    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
     public ResponseEntity<ApiResponse<Map<String, Object>>> salesReport(
             @RequestParam(required = false) String period,
             @RequestParam(required = false) Long dealershipId) {
         return ResponseEntity.ok(ApiResponse.ok(analyticsService.getSalesReport(period, dealershipId)));
+    }
+
+    @GetMapping("/revenue-trends")
+    @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> revenueTrends(
+            @RequestParam(defaultValue = "30") int days) {
+        return ResponseEntity.ok(ApiResponse.ok(analyticsService.getRevenueTrends(days)));
+    }
+
+    @GetMapping("/inventory-aging")
+    @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> inventoryAging() {
+        return ResponseEntity.ok(ApiResponse.ok(analyticsService.getInventoryAging()));
+    }
+
+    @GetMapping("/recent-orders")
+    @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> recentOrders(
+            @RequestParam(defaultValue = "10") int limit) {
+        return ResponseEntity.ok(ApiResponse.ok(analyticsService.getRecentOrders(limit)));
+    }
+    @GetMapping("/marketing-roi")
+    @PreAuthorize("hasAnyRole('DEALER','EMPLOYEE','MANAGER','ADMIN')")
+    public ResponseEntity<ApiResponse<Map<String, Long>>> marketingRoi() {
+        return ResponseEntity.ok(ApiResponse.ok(analyticsService.getMarketingROI()));
     }
 }

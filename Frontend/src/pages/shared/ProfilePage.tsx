@@ -29,10 +29,7 @@ export const ProfilePage: React.FC = () => {
   const handleSave = async () => {
     setIsLoading(true);
     
-    const response = await authService.updateProfile(user.id, {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phone: formData.phone
+    const response = await authService.updateProfile({
     });
 
     if (response.success) {

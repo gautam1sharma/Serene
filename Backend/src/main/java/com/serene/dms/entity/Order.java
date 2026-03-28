@@ -2,6 +2,8 @@ package com.serene.dms.entity;
 
 import com.serene.dms.enums.OrderStatus;
 import com.serene.dms.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,9 +32,15 @@ public class Order {
     @Column(name = "order_number", nullable = false, unique = true, length = 20)
     private String orderNumber;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private User customer;
+
+    @JsonProperty("customerId")
+    public Long extractCustomerId() {
+        return customer != null ? customer.getId() : null;
+    }
 
     @Column(name = "customer_name", nullable = false, length = 200)
     private String customerName;
@@ -43,9 +51,15 @@ public class Order {
     @Column(name = "customer_phone", length = 20)
     private String customerPhone;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
+
+    @JsonProperty("carId")
+    public Long getCarIdValue() {
+        return car != null ? car.getId() : null;
+    }
 
     @Column(name = "car_model", nullable = false)
     private String carModel;
@@ -53,13 +67,25 @@ public class Order {
     @Column(name = "car_price", nullable = false, precision = 12, scale = 2)
     private BigDecimal carPrice;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dealership_id", nullable = false)
     private Dealership dealership;
 
+    @JsonProperty("dealershipId")
+    public Long getDealershipIdValue() {
+        return dealership != null ? dealership.getId() : null;
+    }
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dealer_id")
     private User dealer;
+
+    @JsonProperty("dealerId")
+    public Long getDealerIdValue() {
+        return dealer != null ? dealer.getId() : null;
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -95,9 +121,11 @@ public class Order {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private FinancingOption financingOption;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Document> documents = new ArrayList<>();

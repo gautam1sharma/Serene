@@ -1,5 +1,6 @@
 package com.serene.dms.entity;
 
+import com.serene.dms.enums.InquiryChannel;
 import com.serene.dms.enums.InquiryStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,6 +50,11 @@ public class Inquiry {
     @Column(nullable = false)
     @Builder.Default
     private InquiryStatus status = InquiryStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 50)
+    @Builder.Default
+    private InquiryChannel channel = InquiryChannel.OTHER;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_dealer_id")

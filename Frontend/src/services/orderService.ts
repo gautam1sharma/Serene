@@ -1,8 +1,7 @@
-﻿import type { Order, ApiResponse, PaginatedResponse } from '@/types';
+import type { Order, ApiResponse, PaginatedResponse } from '@/types';
 import { OrderStatus, PaymentStatus } from '@/types';
-import { mockOrders } from '@/data/mockData';
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { apiRequest } from '@/lib/api';
+import { normalizeOrder } from '@/lib/normalize';
 
 class OrderService {
   async getOrders(
@@ -16,160 +15,104 @@ class OrderService {
       dealerId?: string;
     }
   ): Promise<ApiResponse<PaginatedResponse<Order>>> {
-    await delay(600);
-
-    let filteredOrders = [...mockOrders];
-
-    if (filters) {
-      if (filters.status) {
-        filteredOrders = filteredOrders.filter(o => o.status === filters.status);
-      }
-      if (filters.paymentStatus) {
-        filteredOrders = filteredOrders.filter(o => o.paymentStatus === filters.paymentStatus);
-      }
-      if (filters.customerId) {
-        filteredOrders = filteredOrders.filter(o => o.customerId === filters.customerId);
-      }
-      if (filters.dealershipId) {
-        filteredOrders = filteredOrders.filter(o => o.dealershipId === filters.dealershipId);
-      }
-      if (filters.dealerId) {
-        filteredOrders = filteredOrders.filter(o => o.dealerId === filters.dealerId);
-      }
+    const res = await apiRequest<PaginatedResponse<Record<string, unknown>>>('/orders', {
+      params: { page, limit, status: filters?.status },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch orders' };
     }
 
-    // Sort by created date (newest first)
-    filteredOrders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    let items = (res.data.data || []).map(normalizeOrder);
 
-    const total = filteredOrders.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginatedOrders = filteredOrders.slice(start, end);
+    if (filters?.paymentStatus) items = items.filter(o => o.paymentStatus === filters.paymentStatus);
+    if (filters?.customerId) items = items.filter(o => o.customerId === filters.customerId);
+    if (filters?.dealershipId) items = items.filter(o => o.dealershipId === filters.dealershipId);
+    if (filters?.dealerId) items = items.filter(o => o.dealerId === filters.dealerId);
 
     return {
       success: true,
-      data: {
-        data: paginatedOrders,
-        total,
-        page,
-        limit,
-        totalPages
-      }
+      data: { ...res.data, data: items, total: items.length },
     };
   }
 
   async getOrderById(id: string): Promise<ApiResponse<Order>> {
-    await delay(400);
-
-    const order = mockOrders.find(o => o.id === id);
-    if (!order) {
-      return {
-        success: false,
-        message: 'Order not found'
-      };
+    const res = await apiRequest<Record<string, unknown>>(`/orders/${id}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Order not found' };
     }
-
-    return {
-      success: true,
-      data: order
-    };
+    return { success: true, data: normalizeOrder(res.data) };
   }
 
   async createOrder(orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt'>): Promise<ApiResponse<Order>> {
-    await delay(800);
-
-    const orderNumber = `HYD-${new Date().getFullYear()}-${String(mockOrders.length + 1).padStart(3, '0')}`;
-
-    const newOrder: Order = {
-      ...orderData,
-      id: `order_${Date.now()}`,
-      orderNumber,
-      createdAt: new Date(),
-      updatedAt: new Date()
+    const body = {
+      customer: { id: Number(orderData.customerId) },
+      customerName: orderData.customerName,
+      customerEmail: orderData.customerEmail,
+      customerPhone: orderData.customerPhone,
+      car: { id: Number(orderData.carId) },
+      carModel: orderData.carModel,
+      carPrice: orderData.carPrice,
+      dealership: { id: Number(orderData.dealershipId) },
+      dealer: orderData.dealerId ? { id: Number(orderData.dealerId) } : null,
+      status: orderData.status,
+      paymentStatus: orderData.paymentStatus,
+      totalAmount: orderData.totalAmount,
+      discountAmount: orderData.discountAmount,
+      taxAmount: orderData.taxAmount,
+      finalAmount: orderData.finalAmount,
+      downPayment: orderData.downPayment,
+      tradeInValue: orderData.tradeInValue,
+      notes: orderData.notes,
     };
 
-    mockOrders.push(newOrder);
-
-    return {
-      success: true,
-      data: newOrder,
-      message: 'Order created successfully'
-    };
+    const res = await apiRequest<Record<string, unknown>>('/orders', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to create order' };
+    }
+    return { success: true, data: normalizeOrder(res.data), message: 'Order created successfully' };
   }
 
-  async updateOrderStatus(
-    id: string,
-    status: OrderStatus
-  ): Promise<ApiResponse<Order>> {
-    await delay(500);
-
-    const index = mockOrders.findIndex(o => o.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Order not found'
-      };
+  async updateOrderStatus(id: string, status: OrderStatus): Promise<ApiResponse<Order>> {
+    const res = await apiRequest<Record<string, unknown>>(`/orders/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to update status' };
     }
-
-    mockOrders[index].status = status;
-    mockOrders[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockOrders[index],
-      message: `Order status updated to ${status}`
-    };
+    return { success: true, data: normalizeOrder(res.data), message: `Order status updated to ${status}` };
   }
 
-  async updatePaymentStatus(
-    id: string,
-    paymentStatus: PaymentStatus
-  ): Promise<ApiResponse<Order>> {
-    await delay(500);
-
-    const index = mockOrders.findIndex(o => o.id === id);
-    if (index === -1) {
-      return {
-        success: false,
-        message: 'Order not found'
-      };
+  async updatePaymentStatus(id: string, paymentStatus: PaymentStatus): Promise<ApiResponse<Order>> {
+    const res = await apiRequest<Record<string, unknown>>(`/orders/${id}/payment`, {
+      method: 'PATCH',
+      body: JSON.stringify({ paymentStatus }),
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to update payment status' };
     }
-
-    mockOrders[index].paymentStatus = paymentStatus;
-    mockOrders[index].updatedAt = new Date();
-
-    return {
-      success: true,
-      data: mockOrders[index],
-      message: `Payment status updated to ${paymentStatus}`
-    };
+    return { success: true, data: normalizeOrder(res.data), message: `Payment status updated to ${paymentStatus}` };
   }
 
   async getCustomerOrders(customerId: string): Promise<ApiResponse<Order[]>> {
-    await delay(500);
-
-    const orders = mockOrders
-      .filter(o => o.customerId === customerId)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-    return {
-      success: true,
-      data: orders
-    };
+    const res = await apiRequest<Record<string, unknown>[]>(`/orders/customer/${customerId}`);
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch orders' };
+    }
+    return { success: true, data: res.data.map(normalizeOrder) };
   }
 
   async getRecentOrders(limit: number = 5): Promise<ApiResponse<Order[]>> {
-    await delay(400);
-
-    const recentOrders = mockOrders
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(0, limit);
-
-    return {
-      success: true,
-      data: recentOrders
-    };
+    const res = await apiRequest<Record<string, unknown>[]>('/orders/recent', {
+      params: { limit },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch recent orders' };
+    }
+    return { success: true, data: res.data.map(normalizeOrder) };
   }
 
   async getOrderStatistics(dealershipId?: string): Promise<ApiResponse<{
@@ -178,26 +121,21 @@ class OrderService {
     completedOrders: number;
     totalRevenue: number;
   }>> {
-    await delay(600);
-
-    let orders = mockOrders;
-    if (dealershipId) {
-      orders = orders.filter(o => o.dealershipId === dealershipId);
+    const res = await apiRequest<Record<string, unknown>>('/orders/statistics', {
+      params: { dealershipId },
+    });
+    if (!res.success || !res.data) {
+      return { success: false, message: res.message || 'Failed to fetch statistics' };
     }
-
-    const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => o.status === OrderStatus.PENDING || o.status === OrderStatus.PROCESSING).length;
-    const completedOrders = orders.filter(o => o.status === OrderStatus.DELIVERED).length;
-    const totalRevenue = orders.reduce((sum, o) => sum + o.finalAmount, 0);
-
+    const d = res.data;
     return {
       success: true,
       data: {
-        totalOrders,
-        pendingOrders,
-        completedOrders,
-        totalRevenue
-      }
+        totalOrders: Number(d.totalOrders ?? 0),
+        pendingOrders: Number(d.pendingOrders ?? 0),
+        completedOrders: Number(d.completedOrders ?? 0),
+        totalRevenue: Number(d.totalRevenue ?? 0),
+      },
     };
   }
 }

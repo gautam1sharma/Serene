@@ -21,7 +21,7 @@
         <java.version>21</java.version>
         <lombok.version>1.18.38</lombok.version>
         <jjwt.version>0.12.6</jjwt.version>
-        <springdoc.version>2.7.0</springdoc.version>
+        <springdoc.version>2.5.0</springdoc.version>
     </properties>
 
     <dependencies>
@@ -103,11 +103,17 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Explicitly configure Lombok as annotation processor -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

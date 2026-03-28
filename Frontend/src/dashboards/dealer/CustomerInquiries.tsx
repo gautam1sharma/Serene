@@ -1,202 +1,398 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { inquiryService } from '@/services/inquiryService';
+import { apiRequest } from '@/lib/api';
+import type { CarInquiry } from '@/types';
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+
+interface Employee {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: string;
+}
 
 export const CustomerInquiries: React.FC = () => {
-    return (
-        <div className="new-dealer-frontend font-sans">
-            
-{/*  SideNavBar Component  */}
+  const { user } = useAuth();
+  const [inquiries, setInquiries] = useState<CarInquiry[]>([]);
+  const [selected, setSelected] = useState<CarInquiry | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [acting, setActing] = useState(false);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('');
 
-{/*  Main Content Canvas  */}
-<main className="flex-1 flex flex-col  overflow-hidden">
-{/*  TopAppBar Component  */}
+  const load = useCallback(async () => {
+    setLoading(true);
+    const res = await inquiryService.getInquiries(1, 100, {
+      assignedDealerId: user?.id ? String(user.id) : undefined,
+    });
+    if (res.success && res.data) {
+      setInquiries(res.data.data);
+    } else {
+      toast.error('Failed to load inquiries');
+    }
+    setLoading(false);
+  }, [user?.id]);
 
-{/*  Content Split View  */}
-<section className="flex-1 flex overflow-hidden pt-16 md:pt-0">
-{/*  Left Pane: Inquiry List  */}
-<div className="w-full md:w-[380px] lg:w-[440px] flex-shrink-0 flex flex-col border-r border-slate-100 bg-dealer-surface">
-<div className="p-6 pb-2">
-<div className="flex items-center justify-between mb-4">
-<h3 className="text-sm font-bold text-dealer-on-surface-variant uppercase tracking-widest">Recent Activity</h3>
-<button className="text-dealer-primary text-xs font-semibold hover:underline">Filter</button>
-</div>
-</div>
-<div className="flex-1 overflow-y-auto space-y-1 p-4 pt-0">
-{/*  Urgent Lead  */}
-<div className="group p-5 bg-dealer-surface-container-lowest rounded-xl shadow-sm border-l-4 border-dealer-error hover:bg-dealer-surface-container-low transition-all cursor-pointer">
-<div className="flex justify-between items-start mb-1">
-<span className="font-bold text-dealer-on-surface text-base">Julianne Moore</span>
-<span className="text-[10px] font-bold text-dealer-error uppercase">Urgent</span>
-</div>
-<div className="flex items-center gap-2 mb-2">
-<span className="material-symbols-outlined text-dealer-outline text-xs" data-icon="language">language</span>
-<span className="text-xs font-medium text-dealer-on-surface-variant">Website Inquiry</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container line-clamp-2 leading-relaxed">Interested in the 2024 RS E-Tron. Would like to schedule a test drive for tomorrow afternoon if possible...</p>
-<div className="mt-3 flex items-center justify-between">
-<span className="text-[10px] text-dealer-outline font-medium">2 hours ago</span>
-<div className="flex -space-x-1">
-<div className="w-5 h-5 rounded-full border-2 border-white bg-dealer-tertiary-container flex items-center justify-center text-[8px] text-white font-bold">JM</div>
-</div>
-</div>
-</div>
-{/*  New Lead  */}
-<div className="group p-5 bg-dealer-surface-container-low/50 rounded-xl border-l-4 border-dealer-tertiary-fixed hover:bg-dealer-surface-container-low transition-all cursor-pointer">
-<div className="flex justify-between items-start mb-1">
-<span className="font-bold text-dealer-on-surface text-base">Marcus Thorne</span>
-<span className="text-[10px] font-bold text-dealer-tertiary uppercase">New</span>
-</div>
-<div className="flex items-center gap-2 mb-2">
-<span className="material-symbols-outlined text-dealer-outline text-xs" data-icon="store">store</span>
-<span className="text-xs font-medium text-dealer-on-surface-variant">Walk-in</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container line-clamp-2 leading-relaxed">Looking for trade-in value on a 2021 Q5. Visited showroom this morning.</p>
-<div className="mt-3 flex items-center justify-between">
-<span className="text-[10px] text-dealer-outline font-medium">4 hours ago</span>
-<span className="material-symbols-outlined text-dealer-outline-variant text-sm" data-icon="more_horiz">more_horiz</span>
-</div>
-</div>
-{/*  Active Lead  */}
-<div className="group p-5 bg-dealer-surface-container-low/50 rounded-xl border-l-4 border-dealer-outline-variant hover:bg-dealer-surface-container-low transition-all cursor-pointer">
-<div className="flex justify-between items-start mb-1">
-<span className="font-bold text-dealer-on-surface text-base">Sarah Jenkins</span>
-<span className="text-[10px] font-bold text-dealer-outline uppercase">Pending</span>
-</div>
-<div className="flex items-center gap-2 mb-2">
-<span className="material-symbols-outlined text-dealer-outline text-xs" data-icon="phone_iphone">phone_iphone</span>
-<span className="text-xs font-medium text-dealer-on-surface-variant">Mobile App</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container line-clamp-2 leading-relaxed">Is the inventory list for the G-Wagon current? I see two listed online.</p>
-<div className="mt-3 flex items-center justify-between">
-<span className="text-[10px] text-dealer-outline font-medium">Yesterday</span>
-<span className="material-symbols-outlined text-dealer-outline-variant text-sm" data-icon="done">done</span>
-</div>
-</div>
-{/*  Follow Up Lead  */}
-<div className="group p-5 bg-dealer-surface-container-low/50 rounded-xl border-l-4 border-dealer-outline-variant hover:bg-dealer-surface-container-low transition-all cursor-pointer">
-<div className="flex justify-between items-start mb-1">
-<span className="font-bold text-dealer-on-surface text-base">Robert Chen</span>
-<span className="text-[10px] font-bold text-dealer-outline uppercase">Follow-up</span>
-</div>
-<div className="flex items-center gap-2 mb-2">
-<span className="material-symbols-outlined text-dealer-outline text-xs" data-icon="mail">mail</span>
-<span className="text-xs font-medium text-dealer-on-surface-variant">Direct Email</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container line-clamp-2 leading-relaxed">Requesting finance options for the 718 Cayman. Need 60-month term details.</p>
-<div className="mt-3 flex items-center justify-between">
-<span className="text-[10px] text-dealer-outline font-medium">2 days ago</span>
-</div>
-</div>
-</div>
-</div>
-{/*  Right Pane: Inquiry Detail  */}
-<div className="hidden md:flex flex-1 flex-col bg-dealer-background overflow-y-auto">
-{/*  Detail Header  */}
-<div className="p-8 pb-4">
-<div className="flex justify-between items-start mb-8">
-<div className="flex items-center gap-6">
-<div className="w-20 h-20 rounded-2xl bg-slate-100 overflow-hidden border border-slate-200">
-<img alt="Customer Profile" className="w-full h-full object-cover" data-alt="Close up portrait of a customer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVU0MWGWLs_DdouxlfK5JWVIXjatZrVjmVScetZN-g0D4IlR7pVnhH5nlAM3x23wEe2uNztAyrDSy69OoUacWowjW5NNMFLpykY4PE9hMm8cpdzf_EFeY8A6ILWT1Y_rBMcpMpcRqXtw_NN-mjVzMlUtbqtZAS2BhVRdB5yQzOOsclYx8MJNVpyATDNL8eBDbY2JbL3gtLpsWs5CPmsLIKr4ggTnhO86PC14TA2sLl5Sz4izSIJKEcCer8HW8pRSHvjBoO0SEbHZJE"/>
-</div>
-<div>
-<h2 className="text-3xl font-extrabold text-dealer-on-surface mb-1">Julianne Moore</h2>
-<div className="flex items-center gap-4 text-sm font-medium text-dealer-on-surface-variant">
-<span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-base" data-icon="alternate_email">alternate_email</span> j.moore@designstudio.com</span>
-<span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-base" data-icon="call">call</span> +1 (555) 012-3456</span>
-</div>
-</div>
-</div>
-<div className="flex items-center gap-3">
-<button className="px-5 py-2.5 bg-dealer-surface-container-highest text-dealer-on-surface font-semibold rounded-xl text-sm transition-all hover:bg-dealer-surface-variant active:scale-95">Archive</button>
-<button className="px-5 py-2.5 bg-dealer-primary text-dealer-on-primary font-semibold rounded-xl text-sm shadow-lg shadow-dealer-primary/20 transition-all active:scale-95">Send Reply</button>
-</div>
-</div>
-{/*  Interest Bento Card  */}
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-<div className="col-span-2 p-6 bg-dealer-surface-container-lowest rounded-2xl shadow-sm border border-slate-50">
-<div className="flex items-center justify-between mb-4">
-<h4 className="text-xs font-bold text-dealer-outline uppercase tracking-widest">Vehicle of Interest</h4>
-<span className="px-2 py-0.5 rounded bg-dealer-tertiary-container/10 text-dealer-tertiary text-[10px] font-bold">IN STOCK</span>
-</div>
-<div className="flex items-center gap-6">
-<img alt="Audi RS E-Tron" className="w-32 h-20 object-cover rounded-xl" data-alt="High-end sleek dark sports sedan car" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH7XDAK0PW88LJ_-dGY3enyebzIGyH2C35VPpUqVuy-3Si6DyC07s2v6XZPOzJ5zlUQapYEhilFuZr7jQw524ZYhTdb6aRPFNt3rm-Pvn8erBqyT9ZAF77QjILlzNfZAPHoCmmKyE43_6rJAzFmCvk_1mvjjGBe8G7ckNyqGKwgxs2j2bWUP5ocL2xTWluNLZtnzaRyljQ_XvRFSisfyinnJvNY-B9ZiAAoqEG6BY94JZnAhGk0r9rPXJqKxPIPcL0hG5Nf4iDUbUn"/>
-<div>
-<h5 className="text-lg font-bold text-dealer-on-surface">2024 Audi RS e-tron GT</h5>
-<p className="text-sm text-dealer-on-surface-variant">Mythos Black Metallic • Premium Plus Trim</p>
-<p className="text-dealer-primary font-bold mt-1">$147,500 MSRP</p>
-</div>
-</div>
-</div>
-<div className="p-6 bg-dealer-primary text-dealer-on-primary rounded-2xl shadow-xl shadow-dealer-primary/10 flex flex-col justify-center">
-<p className="text-[10px] font-bold opacity-80 uppercase tracking-widest mb-1">Lead Probability</p>
-<h5 className="text-3xl font-extrabold mb-1">84%</h5>
-<div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
-<div className="bg-white h-full w-[84%]"></div>
-</div>
-<p className="text-[10px] mt-3 opacity-80 italic">Highly likely to convert this week</p>
-</div>
-</div>
-{/*  Message Timeline  */}
-<div className="space-y-6 relative before:absolute before:left-3 before:top-4 before:bottom-4 before:w-[2px] before:bg-slate-100">
-<h4 className="text-xs font-bold text-dealer-outline uppercase tracking-widest mb-6 ml-10">Message History</h4>
-{/*  Timeline Item 1  */}
-<div className="relative pl-10">
-<div className="absolute left-1.5 top-1 w-3 h-3 rounded-full bg-dealer-primary border-4 border-white shadow-sm ring-1 ring-slate-100"></div>
-<div className="bg-dealer-surface-container-low p-5 rounded-2xl">
-<div className="flex justify-between mb-2">
-<span className="text-xs font-bold text-dealer-on-surface">Inquiry Received</span>
-<span className="text-[10px] text-dealer-outline">Today, 10:42 AM</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container leading-relaxed">
-                                    "Hello, I am interested in the RS e-tron GT you have in inventory. I have a 2021 Model S that I'm looking to trade in. Can we arrange a time for a valuation and a test drive of the Audi tomorrow?"
-                                </p>
-</div>
-</div>
-{/*  Timeline Item 2  */}
-<div className="relative pl-10">
-<div className="absolute left-1.5 top-1 w-3 h-3 rounded-full bg-dealer-tertiary border-4 border-white shadow-sm ring-1 ring-slate-100"></div>
-<div className="bg-dealer-surface-container-lowest p-5 rounded-2xl border border-slate-100">
-<div className="flex justify-between mb-2">
-<span className="text-xs font-bold text-dealer-on-surface">Auto-Response Sent</span>
-<span className="text-[10px] text-dealer-outline">Today, 10:43 AM</span>
-</div>
-<p className="text-sm text-dealer-on-secondary-container leading-relaxed">
-                                    "Thank you for contacting Serene! Our luxury concierge will be in touch shortly to confirm your test drive request."
-                                </p>
-</div>
-</div>
-</div>
-{/*  Interaction Area  */}
-<div className="mt-8 pt-8 border-t border-slate-100">
-<div className="bg-dealer-surface-container-low rounded-2xl p-4">
-<textarea className="w-full bg-transparent border-none focus:ring-0 text-sm placeholder:text-dealer-outline-variant resize-none h-24" placeholder="Write a message to Julianne..."></textarea>
-<div className="flex justify-between items-center mt-2 px-2">
-<div className="flex gap-2">
-<button className="p-2 hover:bg-white rounded-lg text-dealer-outline transition-colors"><span className="material-symbols-outlined text-lg" data-icon="attach_file">attach_file</span></button>
-<button className="p-2 hover:bg-white rounded-lg text-dealer-outline transition-colors"><span className="material-symbols-outlined text-lg" data-icon="image">image</span></button>
-<button className="p-2 hover:bg-white rounded-lg text-dealer-outline transition-colors"><span className="material-symbols-outlined text-lg" data-icon="insert_emoticon">insert_emoticon</span></button>
-</div>
-<button className="bg-dealer-primary text-dealer-on-primary px-6 py-2 rounded-xl text-sm font-bold active:scale-95 transition-all">Reply</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-{/*  Empty State / Detail Placeholder (Only visible if nothing selected, shown on mobile logic)  */}
-<div className="hidden flex-1 flex-col items-center justify-center p-12 text-center bg-dealer-background opacity-50">
-<div className="w-24 h-24 bg-dealer-surface-container-low rounded-full flex items-center justify-center mb-6">
-<span className="material-symbols-outlined text-4xl text-dealer-outline-variant" data-icon="chat_bubble">chat_bubble</span>
-</div>
-<h3 className="text-lg font-bold text-dealer-on-surface mb-2">Select an Inquiry</h3>
-<p className="text-sm text-dealer-on-surface-variant max-w-xs">Pick a lead from the list to view their history and start communicating.</p>
-</div>
-</section>
-</main>
-{/*  FAB (Suppressed on Details according to rules, but kept for main context if needed - Here we follow specific page logic)  */}
-<button className="fixed bottom-8 right-8 w-14 h-14 bg-dealer-primary text-dealer-on-primary rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-all md:hidden z-[60]">
-<span className="material-symbols-outlined" data-icon="add">add</span>
-</button>
+  useEffect(() => { load(); }, [load]);
 
+  const handleManage = async (inq: CarInquiry) => {
+    setSelected(inq);
+    setSelectedEmployeeId('');
+    setIsModalOpen(true);
+    if (employees.length === 0) {
+      const res = await apiRequest<{ data: Employee[] }>('/users', { params: { role: 'EMPLOYEE', limit: 50 } });
+      if (res.success && res.data) {
+        const list: Employee[] = (res.data as any).data ?? [];
+        setEmployees(list.filter(e => e.status?.toLowerCase() === 'active'));
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelected(null), 300);
+  };
+
+  const handleAssignEmployee = async () => {
+    if (!selected || !selectedEmployeeId) return;
+    setActing(true);
+    const res = await inquiryService.assignInquiry(selected.id, selectedEmployeeId);
+    if (res.success && res.data) {
+      toast.success('Employee assigned successfully');
+      setInquiries(prev => prev.map(i => i.id === selected.id ? res.data! : i));
+      setSelected(res.data);
+    } else {
+      toast.error(res.message || 'Failed to assign employee');
+    }
+    setActing(false);
+  };
+
+  const handleUpdateStatus = async (status: 'pending' | 'responded' | 'closed') => {
+    if (!selected) return;
+    setActing(true);
+    try {
+      let res;
+      if (status === 'closed') {
+        res = await inquiryService.closeInquiry(selected.id);
+      } else {
+        res = await inquiryService.respondToInquiry(selected.id, user?.id ? String(user.id) : '');
+      }
+      
+      if (res.success && res.data) {
+        toast.success(`Inquiry marked as ${status}`);
+        setInquiries(prev => prev.map(i => i.id === selected.id ? res.data! : i));
+        setSelected(res.data);
+      } else {
+        toast.error(res.message || 'Failed to update status');
+      }
+    } catch (e) {
+      toast.error('Error updating status');
+    } finally {
+      setActing(false);
+    }
+  };
+
+  const activeCount = inquiries.filter(i => i.status === 'pending').length;
+  const closedCount = inquiries.filter(i => i.status === 'closed').length;
+  const rate = inquiries.length ? ((closedCount / inquiries.length) * 100).toFixed(1) : '0';
+
+  const initials = (name: string) => name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+  return (
+    <div className="w-full font-sans bg-dealer-background min-h-[calc(100vh-64px)] p-6 lg:p-10">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+          <div>
+            <h1 className="text-3xl font-extrabold text-dealer-on-surface tracking-tight mb-1 font-headline">Customer Inquiries</h1>
+            <p className="text-dealer-on-surface-variant text-sm font-medium">Manage and monitor high-intent lead interactions.</p>
+          </div>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-dealer-surface-container-highest text-dealer-on-surface-variant text-sm font-semibold rounded-xl hover:bg-dealer-surface-container-high transition-colors">
+              <span className="material-symbols-outlined text-lg">filter_list</span>
+              Filter
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-dealer-primary text-dealer-on-primary text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-sm">
+              <span className="material-symbols-outlined text-lg">download</span>
+              Export Leads
+            </button>
+          </div>
         </div>
-    );
+
+        {/* Stats Overview (Bento Style) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+          <div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-sm border border-transparent hover:border-dealer-outline-variant/10 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-dealer-primary/10 rounded-lg">
+                <span className="material-symbols-outlined text-dealer-primary">group</span>
+              </div>
+              <span className="text-xs font-bold text-dealer-tertiary px-2 py-1 bg-dealer-tertiary-container/10 rounded-full">All</span>
+            </div>
+            <p className="text-dealer-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Total Leads</p>
+            <h3 className="text-2xl font-extrabold text-dealer-on-surface font-headline">{inquiries.length}</h3>
+          </div>
+          <div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-sm border border-transparent hover:border-dealer-outline-variant/10 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-dealer-error-container/10 rounded-lg">
+                <span className="material-symbols-outlined text-dealer-error">pending_actions</span>
+              </div>
+              <span className="text-xs font-bold text-dealer-error px-2 py-1 bg-dealer-error-container/10 rounded-full">High</span>
+            </div>
+            <p className="text-dealer-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Urgent Pending</p>
+            <h3 className="text-2xl font-extrabold text-dealer-on-surface font-headline">{activeCount}</h3>
+          </div>
+          <div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-sm border border-transparent hover:border-dealer-outline-variant/10 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-dealer-tertiary-container/10 rounded-lg">
+                <span className="material-symbols-outlined text-dealer-tertiary">conversion_path</span>
+              </div>
+              <span className="text-xs font-bold text-dealer-on-surface-variant px-2 py-1 bg-dealer-surface-container-high rounded-full">Target 15%</span>
+            </div>
+            <p className="text-dealer-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Conversion Rate</p>
+            <h3 className="text-2xl font-extrabold text-dealer-on-surface font-headline">{rate}%</h3>
+          </div>
+          <div className="bg-dealer-surface-container-lowest p-6 rounded-2xl shadow-sm border border-transparent hover:border-dealer-outline-variant/10 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-dealer-secondary-container/10 rounded-lg">
+                <span className="material-symbols-outlined text-dealer-secondary">schedule</span>
+              </div>
+              <span className="text-xs font-bold text-dealer-tertiary px-2 py-1 bg-dealer-tertiary-container/10 rounded-full">Tracking</span>
+            </div>
+            <p className="text-dealer-on-surface-variant text-xs font-bold uppercase tracking-wider mb-1">Closed Leads</p>
+            <h3 className="text-2xl font-extrabold text-dealer-on-surface font-headline">{closedCount}</h3>
+          </div>
+        </div>
+
+        {/* Inquiries Table Section */}
+        <div className="bg-dealer-surface-container-lowest rounded-2xl shadow-sm overflow-hidden border border-dealer-outline-variant/5">
+          <div className="px-6 py-4 border-b border-dealer-outline-variant/10 bg-dealer-surface-container-low flex items-center justify-between">
+            <h2 className="text-lg font-bold text-dealer-on-surface font-headline">Recent Inquiries</h2>
+            <div className="flex items-center gap-2">
+              <button onClick={load} className="p-1.5 hover:bg-dealer-surface-container-high rounded-lg text-dealer-on-surface-variant transition-colors">
+                <span className="material-symbols-outlined">refresh</span>
+              </button>
+              <button className="p-1.5 hover:bg-dealer-surface-container-high rounded-lg text-dealer-on-surface-variant transition-colors">
+                <span className="material-symbols-outlined">more_vert</span>
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="text-left bg-dealer-surface-container-low/50">
+                  <th className="px-6 py-4 text-xs font-bold text-dealer-on-surface-variant uppercase tracking-widest">Customer Name</th>
+                  <th className="px-6 py-4 text-xs font-bold text-dealer-on-surface-variant uppercase tracking-widest">Vehicle of Interest</th>
+                  <th className="px-6 py-4 text-xs font-bold text-dealer-on-surface-variant uppercase tracking-widest">Date</th>
+                  <th className="px-6 py-4 text-xs font-bold text-dealer-on-surface-variant uppercase tracking-widest">Status</th>
+                  <th className="px-6 py-4 text-xs font-bold text-dealer-on-surface-variant uppercase tracking-widest text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dealer-outline-variant/10">
+                {inquiries.map((inq) => (
+                  <tr key={inq.id} className="hover:bg-dealer-surface-container-low transition-colors group">
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-dealer-primary/10 flex items-center justify-center text-dealer-primary font-bold text-xs">
+                          {initials(inq.customerName)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-dealer-on-surface">{inq.customerName}</p>
+                          <p className="text-xs text-dealer-on-surface-variant">{inq.customerEmail}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-5">
+                      <p className="text-sm font-medium text-dealer-on-surface">{inq.carModel || 'Vehicle Interest'}</p>
+                      <p className="text-xs text-dealer-on-surface-variant">ID: #{inq.carId.substring(0, 8)}</p>
+                    </td>
+                    <td className="px-6 py-5">
+                      <p className="text-sm text-dealer-on-surface">{new Date(inq.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                      <p className="text-xs text-dealer-on-surface-variant">{new Date(inq.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    </td>
+                    <td className="px-6 py-5">
+                      {inq.status === 'pending' && (
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-dealer-tertiary-container/10 text-dealer-tertiary rounded-full w-fit">
+                          <span className="w-2 h-2 rounded-full bg-dealer-tertiary animate-pulse"></span>
+                          <span className="text-xs font-bold uppercase tracking-tighter">Active</span>
+                        </div>
+                      )}
+                      {inq.status === 'responded' && (
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-dealer-surface-container-high text-dealer-on-surface-variant rounded-full w-fit">
+                          <span className="w-2 h-2 rounded-full bg-dealer-outline"></span>
+                          <span className="text-xs font-bold uppercase tracking-tighter">Pending</span>
+                        </div>
+                      )}
+                      {inq.status === 'closed' && (
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-dealer-error-container/10 text-dealer-error rounded-full w-fit">
+                          <span className="w-2 h-2 rounded-full bg-dealer-error"></span>
+                          <span className="text-xs font-bold uppercase tracking-tighter">Closed</span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-5 text-right">
+                      <button 
+                        onClick={() => handleManage(inq)}
+                        className="px-4 py-2 bg-dealer-surface-container-highest text-dealer-on-primary-fixed font-bold text-xs rounded-lg hover:bg-dealer-primary hover:text-dealer-on-primary transition-all active:scale-95"
+                      >
+                        Manage
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {!loading && inquiries.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="py-12 text-center text-dealer-on-surface-variant">No inquiries found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          <div className="px-6 py-4 bg-dealer-surface-container-low flex items-center justify-between border-t border-dealer-outline-variant/10">
+            <p className="text-xs font-medium text-dealer-on-surface-variant">Showing {Math.min(inquiries.length, 50)} of {inquiries.length} entries</p>
+            <div className="flex items-center gap-1">
+              <button disabled className="p-2 hover:bg-dealer-surface-container-high rounded-lg text-dealer-on-surface-variant disabled:opacity-30">
+                <span className="material-symbols-outlined text-sm">chevron_left</span>
+              </button>
+              <button className="w-8 h-8 rounded-lg bg-dealer-primary text-dealer-on-primary text-xs font-bold">1</button>
+              <button className="p-2 hover:bg-dealer-surface-container-high rounded-lg text-dealer-on-surface-variant">
+                <span className="material-symbols-outlined text-sm">chevron_right</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && selected && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-dealer-on-tertiary-fixed/40 backdrop-blur-md">
+          <div className="bg-dealer-surface-container-lowest w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 relative">
+            {/* Modal Header */}
+            <div className="px-8 py-6 border-b border-dealer-outline-variant/10 flex items-center justify-between bg-white">
+              <div>
+                <h3 className="text-xl font-extrabold text-dealer-on-surface tracking-tight font-headline">Inquiry Details</h3>
+                <p className="text-xs font-medium text-dealer-on-surface-variant mt-0.5">Reference ID: #INQ-{selected.id.substring(0, 5).toUpperCase()}</p>
+              </div>
+              <button onClick={handleCloseModal} className="p-2 hover:bg-dealer-surface-container-low rounded-full transition-colors">
+                <span className="material-symbols-outlined text-dealer-on-surface-variant">close</span>
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+              {/* Customer Info */}
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Full Name</label>
+                  <p className="text-sm font-semibold text-dealer-on-surface">{selected.customerName}</p>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Contact Information</label>
+                  <p className="text-sm font-semibold text-dealer-on-surface">{selected.customerEmail}</p>
+                  <p className="text-sm text-dealer-on-surface">{selected.customerPhone || 'N/A'}</p>
+                </div>
+              </div>
+
+              {/* Inquiry specifics */}
+              <div className="bg-dealer-surface-container-low p-5 rounded-xl border border-dealer-outline-variant/5">
+                <div className="flex gap-4 items-start">
+                  <div className="w-32 h-20 bg-dealer-surface-container-highest rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      alt="Vehicle" 
+                      src={'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400'} // 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=400'} 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Interest Vehicle</label>
+                    <h4 className="text-md font-bold text-dealer-on-surface leading-tight mt-1 font-headline">
+                      {selected.carModel || 'Generic Inquiry'}
+                    </h4>
+                    <div className="flex gap-4 mt-2">
+                       <div>
+                        <p className="text-[10px] text-dealer-on-surface-variant font-medium">Trim / Info</p>
+                        <p className="text-xs font-semibold">{'Standard'}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-dealer-on-surface-variant font-medium">Price</p>
+                        <p className="text-xs font-semibold">{'Contact Dealer'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Read Only Message */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Customer Message</label>
+                <div className="bg-dealer-surface-container-low/40 p-4 rounded-xl text-sm text-dealer-on-surface-variant italic leading-relaxed">
+                  "{selected.message}"
+                </div>
+              </div>
+
+              {/* Interactive Actions */}
+              <div className="grid grid-cols-2 gap-8 pt-4">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Assign Employee</label>
+                  <select
+                    value={selectedEmployeeId}
+                    onChange={e => setSelectedEmployeeId(e.target.value)}
+                    className="w-full bg-dealer-surface-container-low border-none rounded-xl text-sm font-medium py-3 px-4 focus:ring-2 focus:ring-dealer-primary/20 transition-all cursor-pointer outline-none"
+                  >
+                    <option value="">— Select employee —</option>
+                    {employees.map(emp => (
+                      <option key={emp.id} value={String(emp.id)}>
+                        {emp.firstName} {emp.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold text-dealer-on-surface-variant uppercase tracking-widest">Update Status</label>
+                  <div className="flex p-1 bg-dealer-surface-container-low rounded-xl">
+                    <button 
+                      onClick={() => handleUpdateStatus('pending')}
+                      disabled={acting || selected.status === 'pending'}
+                      className={`flex-1 py-2 text-xs font-bold uppercase tracking-tighter rounded-lg transition-all ${selected.status === 'pending' ? 'bg-dealer-surface-container-lowest shadow-sm text-dealer-on-surface' : 'text-dealer-on-surface-variant hover:text-dealer-on-surface'}`}
+                    >
+                      Active
+                    </button>
+                    <button 
+                      onClick={() => handleUpdateStatus('responded')}
+                      disabled={acting}
+                      className={`flex-1 py-2 text-xs font-bold uppercase tracking-tighter transition-all ${selected.status === 'responded' ? 'bg-dealer-surface-container-lowest shadow-sm text-dealer-on-surface rounded-lg' : 'text-dealer-on-surface-variant hover:text-dealer-on-surface'}`}
+                    >
+                      Pending
+                    </button>
+                    <button 
+                      onClick={() => handleUpdateStatus('closed')}
+                      disabled={acting}
+                      className={`flex-1 py-2 text-xs font-bold uppercase tracking-tighter transition-all ${selected.status === 'closed' ? 'bg-dealer-surface-container-lowest shadow-sm text-dealer-on-surface rounded-lg' : 'text-dealer-on-surface-variant hover:text-dealer-on-surface'}`}
+                    >
+                      Closed
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-8 py-6 bg-dealer-surface-container-low border-t border-dealer-outline-variant/10 flex justify-end gap-3 sticky bottom-0">
+              <button onClick={handleCloseModal} className="px-6 py-2.5 text-sm font-bold text-dealer-on-surface-variant hover:text-dealer-on-surface transition-colors">Discard</button>
+              <button
+                onClick={handleAssignEmployee}
+                disabled={acting || !selectedEmployeeId}
+                className="px-8 py-2.5 bg-dealer-primary text-dealer-on-primary text-sm font-bold rounded-xl shadow-lg shadow-dealer-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:scale-100"
+              >
+                {acting ? 'Saving…' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

@@ -1,5 +1,7 @@
 package com.serene.dms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,9 +44,15 @@ public class Dealership {
 
     private String email;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private User manager;
+
+    @JsonProperty("managerId")
+    public Long getManagerId() {
+        return manager != null ? manager.getId() : null;
+    }
 
     @Column(nullable = false)
     @Builder.Default

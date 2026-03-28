@@ -20,4 +20,7 @@ public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificatio
 
     @Query("SELECT c FROM Car c WHERE LOWER(c.model) LIKE LOWER(CONCAT('%',:query,'%')) OR LOWER(c.description) LIKE LOWER(CONCAT('%',:query,'%'))")
     List<Car> searchCars(String query);
+
+    @Query("SELECT COUNT(c) FROM Car c WHERE c.createdAt <= :cutoff AND c.status <> :excludedStatus")
+    long countByCreatedAtBefore(java.time.LocalDateTime cutoff, @org.springframework.data.repository.query.Param("excludedStatus") com.serene.dms.enums.CarStatus excludedStatus);
 }

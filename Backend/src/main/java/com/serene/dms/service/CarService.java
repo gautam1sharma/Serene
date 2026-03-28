@@ -1,5 +1,8 @@
 package com.serene.dms.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.serene.dms.dto.response.CarResponse;
 import com.serene.dms.entity.Car;
 import com.serene.dms.enums.CarCategory;
 import com.serene.dms.enums.CarStatus;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -21,6 +25,7 @@ import java.util.List;
 public class CarService {
 
     private final CarRepository carRepository;
+    private final ObjectMapper objectMapper;
 
     public Page<Car> getCars(int page, int limit, CarCategory category, CarStatus status,
                              BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId, String search) {
@@ -95,5 +100,66 @@ public class CarService {
     public void deleteCar(Long id) {
         Car car = getCarById(id);
         carRepository.delete(car);
+    }
+
+    public CarResponse toCarResponse(Car car) {
+        return CarResponse.builder()
+                .id(String.valueOf(car.getId()))
+                .model(car.getModel())
+                .year(car.getYear())
+                .category(car.getCategory())
+                .price(car.getPrice())
+                .status(car.getStatus())
+                .color(car.getColor())
+                .vin(car.getVin())
+                .engine(car.getEngine())
+                .transmission(car.getTransmission())
+                .fuelType(car.getFuelType())
+                .mileage(car.getMileage())
+                .features(readStringList(car.getFeatures()))
+                .images(readStringList(car.getImages()))
+                .description(car.getDescription())
+                .dealershipId(car.getDealership() != null ? String.valueOf(car.getDealership().getId()) : null)
+                .createdAt(car.getCreatedAt())
+                .updatedAt(car.getUpdatedAt())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CarResponse> getCarsResponse(int page, int limit, CarCategory category, CarStatus status,
+                                             BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId, String search) {
+        return getCars(page, limit, category, status, minPrice, maxPrice, dealershipId, search)
+                .map(this::toCarResponse);
+    }
+
+    @Transactional(readOnly = true)
+    public CarResponse getCarResponseById(Long id) {
+        return toCarResponse(getCarById(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CarResponse> getCarsByDealershipResponse(Long dealershipId) {
+        return getCarsByDealership(dealershipId).stream().map(this::toCarResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CarResponse> getFeaturedCarsResponse(int limit) {
+        return getFeaturedCars(limit).stream().map(this::toCarResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CarResponse> searchCarsResponse(String query) {
+        return searchCars(query).stream().map(this::toCarResponse).toList();
+    }
+
+    private List<String> readStringList(String json) {
+        if (json == null || json.isBlank()) {
+            return Collections.emptyList();
+        }
+        try {
+            return objectMapper.readValue(json, new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 }

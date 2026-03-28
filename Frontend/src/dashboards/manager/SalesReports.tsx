@@ -1,7 +1,34 @@
-﻿import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { apiRequest } from '@/lib/api';
 
 export const SalesReports: React.FC = () => {
+    const [loading, setLoading] = useState(true);
+    const [aging, setAging] = useState<any>({ total: 142, fresh: 64, over30: 48, over60: 30 });
+    const [revenueTrends, setRevenueTrends] = useState<any[]>([]);
+    const [roi, setRoi] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+        const fetchReports = async () => {
+            setLoading(true);
+            try {
+                const [agingRes, trendsRes, roiRes] = await Promise.all([
+                    apiRequest<any>('/analytics/inventory-aging'),
+                    apiRequest<any[]>('/analytics/revenue-trends?days=7'),
+                    apiRequest<Record<string, number>>('/analytics/marketing-roi')
+                ]);
+                if (agingRes.success && agingRes.data) setAging(agingRes.data);
+                if (trendsRes.success && trendsRes.data) setRevenueTrends(trendsRes.data);
+                if (roiRes.success && roiRes.data) setRoi(roiRes.data);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchReports();
+    }, []);
+
     return (
         <div className="new-dealer-frontend font-sans">
             
@@ -37,40 +64,46 @@ export const SalesReports: React.FC = () => {
 <h3 className="font-headline font-bold text-lg">Inventory Aging</h3>
 <span className="material-symbols-outlined text-dealer-outline-variant">more_vert</span>
 </div>
-<div className="relative w-48 h-48 mx-auto mb-8">
-<svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#F0F4F7" strokeWidth="3"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#545F73" strokeDasharray="75, 100" strokeWidth="3"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#006592" strokeDasharray="45, 100" strokeWidth="3"></circle>
-<circle cx="18" cy="18" fill="transparent" r="16" stroke="#34B5FA" strokeDasharray="15, 100" strokeWidth="3"></circle>
-</svg>
-<div className="absolute inset-0 flex flex-col items-center justify-center">
-<span className="text-2xl font-bold font-headline">142</span>
-<span className="text-[10px] uppercase font-bold text-slate-400">Total Units</span>
-</div>
+<div className="w-full h-full flex items-center justify-center">
+    <div className="relative w-48 h-48 mx-auto mb-8">
+        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" fill="transparent" r="16" stroke="#F0F4F7" strokeWidth="3"></circle>
+            {aging.total > 0 && (
+                <>
+                    <circle cx="18" cy="18" fill="transparent" r="16" stroke="#545F73" strokeDasharray={`${((aging.fresh / aging.total) * 100) || 0}, 100`} strokeWidth="3"></circle>
+                    <circle cx="18" cy="18" fill="transparent" r="16" stroke="#006592" strokeDasharray={`${((aging.over30 / aging.total) * 100) || 0}, 100`} strokeDashoffset={`-${((aging.fresh / aging.total) * 100) || 0}`} strokeWidth="3"></circle>
+                    <circle cx="18" cy="18" fill="transparent" r="16" stroke="#34B5FA" strokeDasharray={`${(((aging.over60 + (aging.over90 || 0)) / aging.total) * 100) || 0}, 100`} strokeDashoffset={`-${(((aging.fresh + aging.over30) / aging.total) * 100) || 0}`} strokeWidth="3"></circle>
+                </>
+            )}
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-2xl font-bold font-headline">{aging.total}</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400">Total Units</span>
+        </div>
+    </div>
 </div>
 <div className="space-y-3">
-<div className="flex items-center justify-between text-sm">
-<div className="flex items-center gap-2">
-<span className="w-3 h-3 rounded-full bg-dealer-tertiary-fixed"></span>
-<span className="text-dealer-on-surface-variant font-medium">0-30 Days</span>
-</div>
-<span className="font-bold">64 units</span>
-</div>
-<div className="flex items-center justify-between text-sm">
-<div className="flex items-center gap-2">
-<span className="w-3 h-3 rounded-full bg-dealer-tertiary"></span>
-<span className="text-dealer-on-surface-variant font-medium">31-60 Days</span>
-</div>
-<span className="font-bold">48 units</span>
-</div>
-<div className="flex items-center justify-between text-sm">
-<div className="flex items-center gap-2">
-<span className="w-3 h-3 rounded-full bg-dealer-primary"></span>
-<span className="text-dealer-on-surface-variant font-medium">60+ Days</span>
-</div>
-<span className="font-bold">30 units</span>
-</div>
+    <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-slate-600"></span>
+            <span className="text-dealer-on-surface-variant font-medium">0-30 Days</span>
+        </div>
+        <span className="font-bold">{aging.fresh} units</span>
+    </div>
+    <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-blue-700"></span>
+            <span className="text-dealer-on-surface-variant font-medium">31-60 Days</span>
+        </div>
+        <span className="font-bold">{aging.over30} units</span>
+    </div>
+    <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-cyan-400"></span>
+            <span className="text-dealer-on-surface-variant font-medium">60+ Days</span>
+        </div>
+        <span className="font-bold">{(aging.over60 || 0) + (aging.over90 || 0)} units</span>
+    </div>
 </div>
 </div>
 {/*  Monthly Financial Summary (Editorial Metric Grid)  */}
@@ -105,19 +138,32 @@ export const SalesReports: React.FC = () => {
 </div>
 </div>
 </div>
-<div className="mt-8 pt-8 border-t border-slate-50 flex-1">
-<div className="flex justify-between items-end h-24 gap-2">
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[40%]"></div>
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[65%]"></div>
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[55%]"></div>
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[80%]"></div>
-<div className="flex-1 bg-dealer-primary rounded-t-lg h-[95%]"></div>
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[70%]"></div>
-<div className="flex-1 bg-slate-100 rounded-t-lg h-[60%]"></div>
-</div>
-<div className="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-</div>
+<div className="mt-8 pt-8 border-t border-slate-50 flex-1 flex flex-col justify-end">
+    {revenueTrends.length > 0 ? (
+        <>
+            <div className="flex justify-between items-end h-32 gap-2">
+                {revenueTrends.map((rt, i) => {
+                    const maxRev = Math.max(...revenueTrends.map(r => r.revenue || 1));
+                    const percentage = Math.max(((rt.revenue || 0) / maxRev) * 100, 5);
+                    return (
+                        <div key={i} className="flex-1 flex flex-col justify-end items-center group relative cursor-pointer">
+                            <div className="absolute -top-8 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                ${Number(rt.revenue).toLocaleString()}
+                            </div>
+                            <div className={`w-full ${i === revenueTrends.length - 1 ? 'bg-dealer-primary' : 'bg-slate-200'} rounded-t-lg transition-all`} style={{ height: `${percentage}%` }}></div>
+                        </div>
+                    );
+                })}
+            </div>
+            <div className="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                {revenueTrends.map((rt, i) => (
+                    <span key={i} className="text-center w-full">{new Date(rt.date).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                ))}
+            </div>
+        </>
+    ) : (
+        <div className="flex items-center justify-center h-full text-sm text-slate-400">Loading trends...</div>
+    )}
 </div>
 </div>
 {/*  Sales by Consultant (Heat Map / Ranked List)  */}
@@ -192,30 +238,24 @@ export const SalesReports: React.FC = () => {
 <span className="text-xs font-bold px-2 py-1 bg-dealer-secondary-container text-dealer-on-secondary-container rounded-md">Quarterly</span>
 </div>
 <div className="flex-1 grid grid-cols-2 gap-4">
-<div className="bg-dealer-surface-container-low p-4 rounded-2xl flex flex-col justify-center text-center">
-<span className="text-[10px] uppercase font-bold text-slate-400 mb-1">Search Ads</span>
-<span className="text-2xl font-bold font-headline text-slate-800">4.2x</span>
-<div className="mt-2 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full inline-block mx-auto">+0.4</div>
-</div>
-<div className="bg-dealer-surface-container-low p-4 rounded-2xl flex flex-col justify-center text-center">
-<span className="text-[10px] uppercase font-bold text-slate-400 mb-1">Social Media</span>
-<span className="text-2xl font-bold font-headline text-slate-800">2.8x</span>
-<div className="mt-2 text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full inline-block mx-auto">-0.2</div>
-</div>
-<div className="bg-dealer-surface-container-low p-4 rounded-2xl flex flex-col justify-center text-center">
-<span className="text-[10px] uppercase font-bold text-slate-400 mb-1">Email CRM</span>
-<span className="text-2xl font-bold font-headline text-slate-800">8.5x</span>
-<div className="mt-2 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full inline-block mx-auto">+1.2</div>
-</div>
-<div className="bg-dealer-primary text-white p-4 rounded-2xl flex flex-col justify-center text-center">
-<span className="text-[10px] uppercase font-bold opacity-70 mb-1">Referral</span>
-<span className="text-2xl font-bold font-headline">12.1x</span>
-<div className="mt-2 text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full inline-block mx-auto">Peak</div>
-</div>
+    {['SEARCH_ADS', 'SOCIAL_MEDIA', 'EMAIL', 'REFERRAL', 'WEBSITE', 'WALK_IN'].map((channel) => {
+        const count = roi[channel] || 0;
+        if (count === 0 && !loading) return null;
+        return (
+            <div key={channel} className="bg-dealer-surface-container-low p-4 rounded-2xl flex flex-col justify-center text-center">
+                <span className="text-[10px] uppercase font-bold text-slate-400 mb-1">{channel.replace('_', ' ')}</span>
+                <span className="text-2xl font-bold font-headline text-slate-800">{count}</span>
+                <div className="mt-2 text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full inline-block mx-auto">Leads</div>
+            </div>
+        );
+    })}
+    {Object.keys(roi).length === 0 && !loading && (
+        <div className="col-span-2 text-center text-sm text-slate-400 py-4">No data available</div>
+    )}
 </div>
 <p className="mt-6 text-xs text-dealer-on-surface-variant leading-relaxed italic">
-                        "Referral programs continue to deliver the highest LTV (Lifetime Value) per acquisition dollar spent."
-                    </p>
+    "Referral programs continue to deliver the highest LTV (Lifetime Value) per acquisition dollar spent."
+</p>
 </div>
 </div>
 {/*  Detailed Activity Feed / Secondary Reports  */}
@@ -230,59 +270,20 @@ export const SalesReports: React.FC = () => {
 </div>
 </div>
 <div className="grid grid-cols-7 gap-2">
-{/*  Simplified Heatmap visualization  */}
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">08:00</div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-<div className="aspect-square bg-slate-100 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/20 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">10:00</div>
-<div className="aspect-square bg-dealer-primary/30 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/60 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/80 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">12:00</div>
-<div className="aspect-square bg-dealer-primary rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/90 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/70 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">14:00</div>
-<div className="aspect-square bg-dealer-primary/50 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/40 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">16:00</div>
-<div className="aspect-square bg-dealer-primary/20 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/10 rounded-lg"></div>
-<div className="aspect-square bg-dealer-primary/60 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">18:00</div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-</div>
-<div className="space-y-2">
-<div className="text-[10px] font-bold text-slate-400 text-center uppercase">20:00</div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
-<div className="aspect-square bg-slate-50 rounded-lg"></div>
+{/* Simplified Heatmap visualization */}
+{[8, 10, 12, 14, 16, 18, 20].map((hour) => (
+    <div key={hour} className="space-y-2">
+        <div className="text-[10px] font-bold text-slate-400 text-center uppercase">{hour}:00</div>
+        <div className="aspect-square bg-slate-50 rounded-lg"></div>
+        <div className="aspect-square bg-slate-100 rounded-lg"></div>
+        <div className="aspect-square bg-slate-50 rounded-lg"></div>
+    </div>
+))}
 </div>
 </div>
 </div>
 </div>
-</div>
-{/*  Footer Decoration  */}
-
 </main>
-{/*  Mobile Navigation (BottomNavBar)  */}
-
-
-        </div>
+</div>
     );
 };

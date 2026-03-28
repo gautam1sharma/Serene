@@ -40,7 +40,11 @@ export const CarDetails: React.FC = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [testDriveDate, setTestDriveDate] = useState('');
   const [testDriveTime, setTestDriveTime] = useState('');
-  const [inquiryMessage, setInquiryMessage] = useState('');  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [inquiryMessage, setInquiryMessage] = useState('');  
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+  const [guestPhone, setGuestPhone] = useState('');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
   // Use React Query to cache car details — going back and forward is instant
   const { data: car, isLoading } = useQuery<CarType | null>({
@@ -62,11 +66,6 @@ export const CarDetails: React.FC = () => {
   });
 
   const handleScheduleTestDrive = async () => {
-    if (!user) {
-      toast.info('Please sign in to schedule a test drive');
-      navigate('/login');
-      return;
-    }
     if (!car) return;
 
     if (!testDriveDate || !testDriveTime) {
@@ -74,11 +73,17 @@ export const CarDetails: React.FC = () => {
       return;
     }
 
+    const isGuestValid = guestName.trim() && guestEmail.trim();
+    if (!user && !isGuestValid) {
+      toast.error('Please provide your name and email to proceed.');
+      return;
+    }
+
     const response = await testDriveService.scheduleTestDrive({
-      customerId: user.id,
-      customerName: `${user.firstName} ${user.lastName}`,
-      customerEmail: user.email,
-      customerPhone: user.phone || '',
+      customerId: user ? user.id : (null as unknown as string), // Backend handles null for auto-lead
+      customerName: user ? `${user.firstName} ${user.lastName}` : guestName,
+      customerEmail: user ? user.email : guestEmail,
+      customerPhone: user ? (user.phone || '') : guestPhone,
       carId: car.id,
       carModel: car.model,
       dealershipId: car.dealershipId,
@@ -96,11 +101,6 @@ export const CarDetails: React.FC = () => {
   };
 
   const handleSubmitInquiry = async () => {
-    if (!user) {
-      toast.info('Please sign in to submit an inquiry');
-      navigate('/login');
-      return;
-    }
     if (!car) return;
 
     if (!inquiryMessage.trim()) {
@@ -108,11 +108,17 @@ export const CarDetails: React.FC = () => {
       return;
     }
 
+    const isGuestValid = guestName.trim() && guestEmail.trim();
+    if (!user && !isGuestValid) {
+      toast.error('Please provide your name and email to proceed.');
+      return;
+    }
+
     const response = await inquiryService.createInquiry({
-      customerId: user.id,
-      customerName: `${user.firstName} ${user.lastName}`,
-      customerEmail: user.email,
-      customerPhone: user.phone || '',
+      customerId: user ? user.id : (null as unknown as string),
+      customerName: user ? `${user.firstName} ${user.lastName}` : guestName,
+      customerEmail: user ? user.email : guestEmail,
+      customerPhone: user ? (user.phone || '') : guestPhone,
       carId: car.id,
       carModel: car.model,
       message: inquiryMessage
@@ -327,6 +333,22 @@ export const CarDetails: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-4">
+            {!user && (
+              <div className="space-y-4 mb-2 pb-4 border-b border-gray-100">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <input type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                  <input type="email" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="john@example.com" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <input type="tel" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="+1 (555) 000-0000" />
+                </div>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Preferred Date
@@ -381,6 +403,22 @@ export const CarDetails: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-4">
+            {!user && (
+              <div className="space-y-4 mb-2 pb-4 border-b border-gray-100">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <input type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                  <input type="email" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="john@example.com" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <input type="tel" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="+1 (555) 000-0000" />
+                </div>
+              </div>
+            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Your Message

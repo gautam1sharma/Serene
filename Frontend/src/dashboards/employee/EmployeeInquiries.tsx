@@ -1,294 +1,254 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { inquiryService } from '@/services/inquiryService';
+import type { CarInquiry } from '@/types';
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
+
+const statusColors: Record<string, string> = {
+  pending:   'bg-amber-100 text-amber-700 border-l-amber-400',
+  responded: 'bg-blue-100 text-blue-700 border-l-blue-400',
+  closed:    'bg-emerald-100 text-emerald-700 border-l-emerald-400',
+};
+
+const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
+  <div className={`animate-pulse bg-slate-200 rounded-lg ${className}`} />
+);
+
+const initials = (name: string) =>
+  name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
 export const EmployeeInquiries: React.FC = () => {
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { user } = useAuth();
+  const [inquiries, setInquiries] = useState<CarInquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'all' | 'pending' | 'responded' | 'closed'>('all');
+  const [selected, setSelected] = useState<CarInquiry | null>(null);
+  const [acting, setActing] = useState(false);
 
-    return (
-        <div className="w-full">
-<div className="p-8 max-w-7xl mx-auto">
-<div className="flex justify-between items-end mb-8">
-<div>
-<h1 className="font-headline text-3xl font-extrabold text-einq-on-surface tracking-tight">Active Inquiries</h1>
-<p className="text-einq-on-surface-variant text-sm mt-1">Manage your pipeline and lead conversions with precision.</p>
-</div>
-<div className="flex gap-3">
-<div className="bg-einq-surface-container-low rounded-lg p-1 flex gap-1">
-<button className="px-4 py-1.5 bg-white shadow-sm rounded-md text-xs font-bold text-einq-primary">Active</button>
-<button className="px-4 py-1.5 text-xs font-medium text-einq-on-surface-variant hover:text-einq-primary transition-colors">Pending</button>
-<button className="px-4 py-1.5 text-xs font-medium text-einq-on-surface-variant hover:text-einq-primary transition-colors">Won</button>
-</div>
-</div>
-</div>
-<div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-{/*  Main Inquiry List (Left Column)  */}
-<div className="lg:col-span-8 space-y-4">
-{/*  Lead Card 1 (Active/Open)  */}
-<div className="bg-einq-surface-container-lowest rounded-xl p-5 border border-slate-200/10 shadow-[0px_12px_32px_rgba(30,41,59,0.03)] group transition-all hover:shadow-[0px_12px_32px_rgba(30,41,59,0.05)] border-l-4 border-l-primary">
-<div className="flex justify-between items-start mb-4">
-<div className="flex gap-4">
-<div className="w-11 h-11 rounded-xl bg-einq-surface-container-low flex items-center justify-center text-einq-primary font-bold font-headline text-base">
-                                JW
-                            </div>
-<div>
-<div className="flex items-center gap-2">
-<h3 className="font-headline font-bold text-base text-einq-on-surface">Julian Weber</h3>
-<span className="w-2 h-2 rounded-full bg-einq-tertiary shadow-[0_0_8px_rgba(0,101,146,0.3)]"></span>
-<span className="text-[9px] font-bold uppercase tracking-wider text-einq-tertiary">Hot Lead</span>
-</div>
-<p className="text-einq-on-surface-variant text-xs flex items-center gap-1.5 mt-0.5">
-<span className="material-symbols-outlined text-[14px]" data-icon="directions_car">directions_car</span>
-                                    2024 Porsche 911 Carrera S
-                                </p>
-</div>
-</div>
-<button className="bg-einq-surface-container-high hover:bg-einq-surface-container-highest transition-colors px-4 py-1.5 rounded-lg font-headline font-bold text-xs text-einq-on-surface flex items-center gap-2" onClick={() => setIsDrawerOpen(true)}>
-<span className="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
-                            Update Lead
-                        </button>
-</div>
-<div className="grid grid-cols-3 gap-6 pt-4 border-t border-slate-100">
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Status</p>
-<span className="bg-einq-tertiary/10 text-einq-tertiary px-2 py-0.5 rounded text-[10px] font-bold">Negotiation</span>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Likelihood</p>
-<div className="flex items-center gap-2">
-<div className="flex-1 h-1.5 bg-einq-surface-container rounded-full overflow-hidden max-w-[80px]">
-<div className="h-full bg-einq-primary rounded-full" style={{ width: '82%' }}></div>
-</div>
-<span className="text-xs font-bold text-einq-on-surface">82%</span>
-</div>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Last Contact</p>
-<p className="text-xs font-semibold text-einq-on-surface">14 mins ago</p>
-</div>
-</div>
-</div>
-{/*  Lead Card 2  */}
-<div className="bg-einq-surface-container-lowest rounded-xl p-5 border border-slate-200/10 shadow-[0px_4px_12px_rgba(30,41,59,0.02)] group transition-all hover:shadow-[0px_12px_32px_rgba(30,41,59,0.05)]">
-<div className="flex justify-between items-start mb-4">
-<div className="flex gap-4">
-<div className="w-11 h-11 rounded-xl bg-einq-surface-container-low flex items-center justify-center text-einq-primary font-bold font-headline text-base">
-                                SR
-                            </div>
-<div>
-<div className="flex items-center gap-2">
-<h3 className="font-headline font-bold text-base text-einq-on-surface">Sarah Richardson</h3>
-<span className="w-2 h-2 rounded-full bg-einq-outline-variant"></span>
-<span className="text-[9px] font-bold uppercase tracking-wider text-einq-outline-variant">Casual Inquiry</span>
-</div>
-<p className="text-einq-on-surface-variant text-xs flex items-center gap-1.5 mt-0.5">
-<span className="material-symbols-outlined text-[14px]" data-icon="directions_car">directions_car</span>
-                                    2024 Mercedes-Benz GLE 450
-                                </p>
-</div>
-</div>
-<button className="bg-einq-surface-container-high hover:bg-einq-surface-container-highest transition-colors px-4 py-1.5 rounded-lg font-headline font-bold text-xs text-einq-on-surface flex items-center gap-2" onClick={() => setIsDrawerOpen(true)}>
-<span className="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
-                            Update Lead
-                        </button>
-</div>
-<div className="grid grid-cols-3 gap-6 pt-4 border-t border-slate-100">
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Status</p>
-<span className="bg-einq-surface-container-high text-einq-on-surface-variant px-2 py-0.5 rounded text-[10px] font-bold">New Inquiry</span>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Likelihood</p>
-<div className="flex items-center gap-2">
-<div className="flex-1 h-1.5 bg-einq-surface-container rounded-full overflow-hidden max-w-[80px]">
-<div className="h-full bg-einq-outline-variant rounded-full" style={{ width: '15%' }}></div>
-</div>
-<span className="text-xs font-bold text-einq-on-surface">15%</span>
-</div>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Last Contact</p>
-<p className="text-xs font-semibold text-einq-on-surface">2 hours ago</p>
-</div>
-</div>
-</div>
-{/*  Lead Card 3  */}
-<div className="bg-einq-surface-container-lowest rounded-xl p-5 border border-slate-200/10 shadow-[0px_4px_12px_rgba(30,41,59,0.02)] group transition-all hover:shadow-[0px_12px_32px_rgba(30,41,59,0.05)]">
-<div className="flex justify-between items-start mb-4">
-<div className="flex gap-4">
-<div className="w-11 h-11 rounded-xl bg-einq-surface-container-low flex items-center justify-center text-einq-primary font-bold font-headline text-base">
-                                MD
-                            </div>
-<div>
-<div className="flex items-center gap-2">
-<h3 className="font-headline font-bold text-base text-einq-on-surface">Marcus Dupont</h3>
-<span className="w-2 h-2 rounded-full bg-einq-error"></span>
-<span className="text-[9px] font-bold uppercase tracking-wider text-einq-error">Cold - Inactive</span>
-</div>
-<p className="text-einq-on-surface-variant text-xs flex items-center gap-1.5 mt-0.5">
-<span className="material-symbols-outlined text-[14px]" data-icon="directions_car">directions_car</span>
-                                    2023 Audi RS7 · Daytona Gray
-                                </p>
-</div>
-</div>
-<button className="bg-einq-surface-container-high hover:bg-einq-surface-container-highest transition-colors px-4 py-1.5 rounded-lg font-headline font-bold text-xs text-einq-on-surface flex items-center gap-2" onClick={() => setIsDrawerOpen(true)}>
-<span className="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
-                            Update Lead
-                        </button>
-</div>
-<div className="grid grid-cols-3 gap-6 pt-4 border-t border-slate-100">
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Status</p>
-<span className="bg-einq-error/10 text-einq-error px-2 py-0.5 rounded text-[10px] font-bold">Cold</span>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Likelihood</p>
-<div className="flex items-center gap-2">
-<div className="flex-1 h-1.5 bg-einq-surface-container rounded-full overflow-hidden max-w-[80px]">
-<div className="h-full bg-einq-error rounded-full" style={{ width: '5%' }}></div>
-</div>
-<span className="text-xs font-bold text-einq-on-surface">5%</span>
-</div>
-</div>
-<div>
-<p className="text-[9px] font-bold uppercase tracking-widest text-einq-outline-variant mb-1">Last Contact</p>
-<p className="text-xs font-semibold text-einq-on-surface">Yesterday</p>
-</div>
-</div>
-</div>
-</div>
-{/*  Dashboard Context / Metrics (Right Column)  */}
-<div className="lg:col-span-4 space-y-6">
-{/*  Performance Bento Card  */}
-<div className="bg-einq-primary rounded-2xl p-6 text-einq-on-primary shadow-xl overflow-hidden relative">
-<div className="relative z-10">
-<p className="text-[10px] font-bold uppercase tracking-widest text-einq-on-primary/70 mb-2">Lead Velocity</p>
-<h2 className="font-headline text-4xl font-extrabold mb-4">42</h2>
-<p className="text-xs text-einq-on-primary/80 leading-relaxed mb-6">New inquiries assigned to you this week. <span className="font-bold text-einq-tertiary-container">+12% increase</span> vs last week.</p>
-<div className="flex gap-2">
-<span className="px-2 py-0.5 bg-white/10 rounded-full text-[9px] font-bold uppercase">Efficiency: 94%</span>
-<span className="px-2 py-0.5 bg-white/10 rounded-full text-[9px] font-bold uppercase">Rank: #2</span>
-</div>
-</div>
-<div className="absolute -right-12 -bottom-12 w-48 h-48 bg-white/5 rounded-full blur-3xl"></div>
-</div>
-{/*  Inventory Highlight Card  */}
-<div className="bg-einq-surface-container-low rounded-2xl p-5 border border-slate-200/10">
-<p className="text-[10px] font-bold uppercase tracking-widest text-einq-outline-variant mb-4">Inventory Suggestion</p>
-<div className="rounded-xl overflow-hidden mb-4 h-32 relative">
-<img className="w-full h-full object-cover" data-alt="High-end luxury car in showroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW46jvDMNS4E_outw_kVGl3YuAGDxlqh0yQ1-kph6dKTCNdnkQ3c5QzGmLX4dE_qlVkI6taTzBg8aIcvD7Csv2JZx4qJNjKJjLuvgp_ISabcKtM_X5QoA38MfaUZTEGUnlhythDDWRUlyqN6fy3iAOtAFHOIyjfBQCNv9PRHAoecPIemCawq1s0GJPBHkEcZgEbjBDe9C-N6b6AiJwlxiMYE3WLX_SwF7x-LQd0mTYrSG-m01AlBtpq1Ti2ixOqXO3itlqeRvwQdg8"/>
-<div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex flex-col justify-end p-3">
-<p className="text-white text-[9px] font-bold uppercase tracking-wider">Arriving Soon</p>
-<p className="text-white font-headline font-bold text-sm">Ferrari F8 Tributo</p>
-</div>
-</div>
-<p className="text-[11px] text-einq-on-surface-variant leading-relaxed mb-4">4 clients interested in mid-engine exotics. Prepare templates.</p>
-<button className="w-full py-2 rounded-xl border border-einq-primary/20 text-einq-primary font-bold text-[10px] font-headline hover:bg-einq-primary/5 transition-colors">View Interested Leads</button>
-</div>
-{/*  Activity Ticker  */}
-<div className="bg-white rounded-2xl p-6 border border-slate-200/5 shadow-sm">
-<p className="text-[10px] font-bold uppercase tracking-widest text-einq-outline-variant mb-4">Live Activity</p>
-<div className="space-y-4">
-<div className="flex gap-3 items-start">
-<div className="w-1.5 h-1.5 rounded-full bg-einq-tertiary mt-1.5"></div>
-<div>
-<p className="text-[11px] font-bold text-einq-on-surface leading-tight">New email: Julian Weber</p>
-<p className="text-[9px] text-einq-outline-variant">14 minutes ago</p>
-</div>
-</div>
-<div className="flex gap-3 items-start">
-<div className="w-1.5 h-1.5 rounded-full bg-slate-300 mt-1.5"></div>
-<div>
-<p className="text-[11px] font-bold text-einq-on-surface leading-tight">Updated discount: #2243</p>
-<p className="text-[9px] text-einq-outline-variant">2 hours ago</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-{/*  Update Lead Drawer (Slide-out Sidebar)  */}
-{/*  Variation 1: Main variation (shown by default)  */}
-<div className={`fixed inset-0 z-[100] bg-einq-inverse-surface/30 backdrop-blur-[2px] transition-opacity duration-300 ${isDrawerOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} id="drawerOverlay" onClick={() => setIsDrawerOpen(false)}>
-<div className={`absolute inset-y-0 right-0 w-full max-w-[420px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out ${isDrawerOpen ? 'translate-x-0' : 'translate-x-full'}`} id="drawerContent" onClick={(e) => e.stopPropagation()}>
-{/*  Drawer Header  */}
-<div className="p-6 border-b border-einq-outline-variant/15 flex justify-between items-center bg-einq-surface-container-low">
-<div>
-<h3 className="font-headline font-bold text-lg text-einq-on-surface">Update Lead</h3>
-<p className="text-[10px] text-einq-on-surface-variant font-bold uppercase tracking-wider">Inquiry ID: #PM-98231</p>
-</div>
-<button className="p-2 hover:bg-einq-surface-container-high rounded-full transition-all" onClick={() => setIsDrawerOpen(false)}>
-<span className="material-symbols-outlined" data-icon="close">close</span>
-</button>
-</div>
-{/*  Drawer Body  */}
-<div className="flex-1 overflow-y-auto p-6 space-y-8 hide-scrollbar">
-{/*  Status Selection  */}
-<section>
-<label className="text-[10px] font-bold uppercase tracking-wider text-einq-on-surface-variant mb-3 block">Update Status</label>
-<div className="grid grid-cols-2 gap-3">
-<button className="flex items-center gap-3 p-3 rounded-xl border-2 border-einq-primary bg-einq-primary-container/10 text-left transition-all">
-<span className="material-symbols-outlined text-einq-primary text-xl" data-icon="check_circle" style={{ fontVariationSettings: `'FILL' 1` }}>check_circle</span>
-<span className="text-xs font-bold text-einq-on-surface">Negotiation</span>
-</button>
-<button className="flex items-center gap-3 p-3 rounded-xl border-2 border-transparent bg-einq-surface-container-low text-left hover:border-einq-outline-variant/30 transition-all">
-<span className="material-symbols-outlined text-einq-outline text-xl" data-icon="schedule">schedule</span>
-<span className="text-xs font-bold text-einq-on-surface">Follow-up</span>
-</button>
-<button className="flex items-center gap-3 p-3 rounded-xl border-2 border-transparent bg-einq-surface-container-low text-left hover:border-einq-outline-variant/30 transition-all">
-<span className="material-symbols-outlined text-einq-outline text-xl" data-icon="person">person</span>
-<span className="text-xs font-bold text-einq-on-surface">Assigned</span>
-</button>
-<button className="flex items-center gap-3 p-3 rounded-xl border-2 border-transparent bg-einq-surface-container-low text-left hover:border-einq-outline-variant/30 transition-all">
-<span className="material-symbols-outlined text-einq-outline text-xl" data-icon="cancel">cancel</span>
-<span className="text-xs font-bold text-einq-on-surface">Closed</span>
-</button>
-</div>
-</section>
-{/*  Internal Notes  */}
-<section>
-<label className="text-[10px] font-bold uppercase tracking-wider text-einq-on-surface-variant mb-3 block">Internal Notes</label>
-<div className="space-y-4">
-<div className="p-4 bg-einq-surface-container-low rounded-xl border-l-4 border-einq-primary shadow-sm">
-<div className="flex justify-between items-start mb-2">
-<span className="text-[11px] font-bold text-einq-primary">Alex Mercer (Sales Head)</span>
-<span className="text-[9px] text-einq-on-surface-variant">2h ago</span>
-</div>
-<p className="text-xs text-einq-on-surface leading-relaxed">Customer is interested in the frozen blue finish. Mentioned a trade-in for a 2021 Model S.</p>
-</div>
-<div className="relative">
-<textarea className="w-full h-32 p-4 bg-einq-surface-container-low border-none rounded-xl focus:ring-1 focus:ring-einq-primary/20 text-xs resize-none placeholder:text-einq-outline-variant" placeholder="Add a new note..."></textarea>
-<button className="absolute bottom-3 right-3 p-2 bg-einq-primary text-einq-on-primary rounded-lg shadow-lg shadow-einq-primary/20 active:scale-95 transition-all">
-<span className="material-symbols-outlined text-base" data-icon="send">send</span>
-</button>
-</div>
-</div>
-</section>
-{/*  Lead Details Summary  */}
-<section className="bg-einq-surface-container-highest/30 p-4 rounded-xl border border-einq-outline-variant/10">
-<label className="text-[10px] font-bold uppercase tracking-wider text-einq-on-surface-variant mb-4 block">Quick Details</label>
-<div className="space-y-3">
-<div className="flex justify-between">
-<span className="text-[11px] text-einq-on-surface-variant">Assigned To</span>
-<span className="text-[11px] font-semibold text-einq-on-surface">Sarah Jennings</span>
-</div>
-<div className="flex justify-between">
-<span className="text-[11px] text-einq-on-surface-variant">Source</span>
-<span className="text-[11px] font-semibold text-einq-on-surface">Direct Inquiry</span>
-</div>
-<div className="flex justify-between">
-<span className="text-[11px] text-einq-on-surface-variant">Last Contact</span>
-<span className="text-[11px] font-semibold text-einq-on-surface">Yesterday, 4:15 PM</span>
-</div>
-</div>
-</section>
-</div>
-{/*  Drawer Footer  */}
-<div className="p-6 border-t border-einq-outline-variant/15 flex gap-3">
-<button className="flex-1 py-3 text-xs font-bold border border-einq-outline-variant/30 rounded-xl hover:bg-einq-surface-container-low transition-all" onClick={() => setIsDrawerOpen(false)}>Cancel</button>
-<button className="flex-[2] py-3 text-xs font-bold bg-einq-primary text-einq-on-primary rounded-xl shadow-lg shadow-einq-primary/20 hover:bg-einq-primary-dim transition-all active:scale-[0.98]">Save Changes</button>
-</div>
-</div>
-</div>
+  const load = useCallback(async () => {
+    setLoading(true);
+    const res = await inquiryService.getInquiries(1, 100, {
+      assignedDealerId: user?.id ? String(user.id) : undefined,
+    });
+    if (res.success && res.data) {
+      setInquiries(res.data.data);
+    } else {
+      toast.error('Failed to load inquiries');
+    }
+    setLoading(false);
+  }, [user?.id]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const filtered = tab === 'all'
+    ? inquiries
+    : inquiries.filter(i => i.status === tab);
+
+  const handleUpdateStatus = async (id: string, status: 'responded' | 'closed') => {
+    setActing(true);
+    try {
+      const res = status === 'closed'
+        ? await inquiryService.closeInquiry(id)
+        : await inquiryService.respondToInquiry(id, user?.id ? String(user.id) : '');
+      if (res.success && res.data) {
+        toast.success(`Inquiry marked as ${status}`);
+        setInquiries(prev => prev.map(i => i.id === id ? res.data! : i));
+        if (selected?.id === id) setSelected(res.data);
+      } else {
+        toast.error(res.message || 'Failed to update');
+      }
+    } catch {
+      toast.error('Error updating inquiry');
+    } finally {
+      setActing(false);
+    }
+  };
+
+  const pending   = inquiries.filter(i => i.status === 'pending').length;
+  const responded = inquiries.filter(i => i.status === 'responded').length;
+  const closed    = inquiries.filter(i => i.status === 'closed').length;
+  const convRate  = inquiries.length ? ((closed / inquiries.length) * 100).toFixed(1) : '0';
+
+  const tabs: { key: typeof tab; label: string; count: number }[] = [
+    { key: 'all',       label: 'Active',  count: inquiries.length },
+    { key: 'pending',   label: 'Pending', count: pending },
+    { key: 'responded', label: 'Won',     count: responded },
+    { key: 'closed',    label: 'Closed',  count: closed },
+  ];
+
+  return (
+    <div className="w-full">
+      <div className="p-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h1 className="font-headline text-3xl font-extrabold text-einq-on-surface tracking-tight">Active Inquiries</h1>
+            <p className="text-einq-on-surface-variant text-sm mt-1">Manage your pipeline and lead conversions with precision.</p>
+          </div>
+          <div className="flex gap-3">
+            <div className="bg-einq-surface-container-low rounded-lg p-1 flex gap-1">
+              {tabs.map(t => (
+                <button
+                  key={t.key}
+                  onClick={() => setTab(t.key)}
+                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
+                    tab === t.key
+                      ? 'bg-white shadow-sm text-einq-primary'
+                      : 'text-einq-on-surface-variant hover:text-einq-primary'
+                  }`}
+                >
+                  {t.label}
+                  {t.count > 0 && (
+                    <span className="ml-1.5 bg-einq-primary/10 text-einq-primary px-1.5 py-0.5 rounded-full text-[9px] font-bold">
+                      {t.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-    );
+
+        {/* KPI strip */}
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Total Leads', value: inquiries.length, color: 'text-einq-primary' },
+            { label: 'Pending',     value: pending,          color: 'text-amber-600' },
+            { label: 'Responded',   value: responded,        color: 'text-blue-600' },
+            { label: 'Conversion',  value: `${convRate}%`,   color: 'text-emerald-600' },
+          ].map(kpi => (
+            <div key={kpi.label} className="bg-einq-surface-container-lowest rounded-xl p-4 border border-slate-200/10 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-einq-on-surface-variant mb-1">{kpi.label}</p>
+              {loading
+                ? <Skeleton className="h-7 w-12" />
+                : <p className={`text-2xl font-extrabold font-headline ${kpi.color}`}>{kpi.value}</p>
+              }
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Inquiry List */}
+          <div className="lg:col-span-8 space-y-4">
+            {loading
+              ? [1, 2, 3].map(i => <Skeleton key={i} className="h-32" />)
+              : filtered.length === 0
+                ? (
+                  <div className="py-20 text-center text-einq-on-surface-variant">
+                    <p className="text-4xl mb-3">📭</p>
+                    <p className="font-semibold">No inquiries in this category.</p>
+                  </div>
+                )
+                : filtered.map(inq => (
+                  <div
+                    key={inq.id}
+                    onClick={() => setSelected(inq)}
+                    className={`bg-einq-surface-container-lowest rounded-xl p-5 border border-slate-200/10 shadow-sm border-l-4 cursor-pointer hover:shadow-md transition-all ${statusColors[inq.status] || 'border-l-slate-300'} ${selected?.id === inq.id ? 'ring-2 ring-einq-primary/30' : ''}`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex gap-4">
+                        <div className="w-11 h-11 rounded-xl bg-einq-surface-container-low flex items-center justify-center text-einq-primary font-bold font-headline text-base shrink-0">
+                          {initials(inq.customerName)}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-headline font-bold text-base text-einq-on-surface">{inq.customerName}</h3>
+                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${statusColors[inq.status]?.split(' ').slice(0, 2).join(' ')}`}>
+                              {inq.status}
+                            </span>
+                          </div>
+                          <p className="text-einq-on-surface-variant text-xs mt-0.5">{inq.carModel || 'General Inquiry'}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSelected(inq); }}
+                        className="bg-einq-surface-container-high hover:bg-einq-surface-container-highest transition-colors px-4 py-1.5 rounded-lg font-headline font-bold text-xs text-einq-on-surface flex items-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
+                        Update Lead
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-6 pt-4 border-t border-slate-100">
+                      <div>
+                        <p className="text-[10px] font-semibold text-einq-on-surface-variant uppercase tracking-wider">Email</p>
+                        <p className="text-xs font-semibold text-einq-on-surface truncate">{inq.customerEmail}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-semibold text-einq-on-surface-variant uppercase tracking-wider">Phone</p>
+                        <p className="text-xs font-semibold text-einq-on-surface">{inq.customerPhone || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-semibold text-einq-on-surface-variant uppercase tracking-wider">Created</p>
+                        <p className="text-xs font-semibold text-einq-on-surface">
+                          {new Date(inq.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+            }
+          </div>
+
+          {/* Detail Panel */}
+          <div className="lg:col-span-4">
+            {selected ? (
+              <div className="bg-einq-surface-container-lowest rounded-2xl border border-slate-200/10 shadow-sm overflow-hidden sticky top-6">
+                <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-white">
+                  <h3 className="font-headline font-bold text-einq-on-surface">Lead Detail</h3>
+                  <button onClick={() => setSelected(null)} className="text-einq-on-surface-variant hover:text-einq-on-surface">
+                    <span className="material-symbols-outlined text-sm">close</span>
+                  </button>
+                </div>
+                <div className="p-5 space-y-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-einq-primary/10 flex items-center justify-center font-headline font-bold text-einq-primary">
+                      {initials(selected.customerName)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-einq-on-surface">{selected.customerName}</p>
+                      <p className="text-xs text-einq-on-surface-variant">{selected.customerEmail}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-einq-on-surface-variant">Vehicle Interest</p>
+                    <p className="text-sm font-semibold text-einq-on-surface">{selected.carModel || 'General Inquiry'}</p>
+                  </div>
+
+                  <div className="bg-einq-surface-container-low p-4 rounded-xl text-xs text-einq-on-surface-variant italic leading-relaxed">
+                    "{selected.message || 'No message provided.'}"
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-einq-on-surface-variant">Update Status</p>
+                    <div className="flex gap-2">
+                      <button
+                        disabled={acting || selected.status === 'responded'}
+                        onClick={() => handleUpdateStatus(selected.id, 'responded')}
+                        className="flex-1 py-2 text-xs font-bold rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 transition-all disabled:opacity-40"
+                      >
+                        Respond
+                      </button>
+                      <button
+                        disabled={acting || selected.status === 'closed'}
+                        onClick={() => handleUpdateStatus(selected.id, 'closed')}
+                        className="flex-1 py-2 text-xs font-bold rounded-lg border border-emerald-300 text-emerald-700 hover:bg-emerald-50 transition-all disabled:opacity-40"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-einq-surface-container-lowest rounded-2xl border border-slate-200/10 p-10 text-center text-einq-on-surface-variant">
+                <p className="text-3xl mb-3">👆</p>
+                <p className="text-sm font-medium">Select an inquiry to view details</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

@@ -1,8 +1,9 @@
-﻿import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { User, LoginCredentials, Permission } from '@/types';
 import { UserRole } from '@/types';
 import { authService } from '@/services/authService';
 import { hasPermission as checkPermission } from '@/utils/permissions';
+import { normalizeUser } from '@/lib/normalize';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -32,9 +33,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
-          // Validate token
-          authService.validateToken(token).catch(() => {
-            logout();
+          authService.getCurrentUser().then((res) => {
+            if (!res.success && res.message?.includes('401')) {
+              logout();
+            }
+          }).catch((err) => {
+             if (err?.message?.includes('401') || err?.message?.includes('403')) {
+               logout();
+             }
           });
         } catch {
           logout();
@@ -68,16 +74,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await authService.login(credentials);
       
       if (response.success && response.data) {
-        const { user, token, refreshToken, expiresAt } = response.data;
+        const { token, refreshToken, expiresAt } = response.data;
+        const normalized = normalizeUser(response.data.user as unknown as Record<string, unknown>);
         
-        // Store auth data securely
         localStorage.setItem('serene_auth_token', token);
         localStorage.setItem('serene_auth_refresh', refreshToken);
-        localStorage.setItem('serene_auth_expires', expiresAt.toISOString());
-        localStorage.setItem('serene_auth_user', JSON.stringify(user));
+        localStorage.setItem('serene_auth_expires', String(expiresAt));
+        localStorage.setItem('serene_auth_user', JSON.stringify(normalized));
         
-        setUser(user);
-        toast.success(`Welcome back, ${user.firstName}!`);
+        setUser(normalized);
+        toast.success(`Welcome back, ${normalized.firstName}!`);
         return true;
       }
       

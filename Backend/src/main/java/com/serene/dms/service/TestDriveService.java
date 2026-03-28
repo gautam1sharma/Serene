@@ -1,20 +1,27 @@
 package com.serene.dms.service;
 
-import com.serene.dms.entity.TestDrive;
-import com.serene.dms.entity.User;
-import com.serene.dms.enums.TestDriveStatus;
-import com.serene.dms.exception.ResourceNotFoundException;
-import com.serene.dms.repository.TestDriveRepository;
-import com.serene.dms.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.serene.dms.dto.request.CreateTestDriveRequest;
+import com.serene.dms.entity.Car;
+import com.serene.dms.entity.Dealership;
+import com.serene.dms.entity.TestDrive;
+import com.serene.dms.entity.User;
+import com.serene.dms.enums.TestDriveStatus;
+import com.serene.dms.exception.ResourceNotFoundException;
+import com.serene.dms.repository.CarRepository;
+import com.serene.dms.repository.DealershipRepository;
+import com.serene.dms.repository.TestDriveRepository;
+import com.serene.dms.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +29,8 @@ public class TestDriveService {
 
     private final TestDriveRepository testDriveRepository;
     private final UserRepository userRepository;
+    private final CarRepository carRepository;
+    private final DealershipRepository dealershipRepository;
 
     public Page<TestDrive> getAll(int page, int limit, TestDriveStatus status) {
         PageRequest pageReq = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.ASC, "preferredDate"));
@@ -35,8 +44,49 @@ public class TestDriveService {
     }
 
     @Transactional
-    public TestDrive schedule(TestDrive td) {
-        td.setStatus(TestDriveStatus.PENDING);
+    public TestDrive schedule(CreateTestDriveRequest request) {
+        User customer;
+        if (request.getCustomerId() != null) {
+            customer = userRepository.findById(request.getCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        } else {
+            customer = userRepository.findByEmail(request.getCustomerEmail())
+                    .orElseGet(() -> {
+                        String name = request.getCustomerName() != null ? request.getCustomerName() : "Guest";
+                        int spaceIdx = name.indexOf(" ");
+                        String fn = spaceIdx > 0 ? name.substring(0, spaceIdx) : name;
+                        String ln = spaceIdx > 0 ? name.substring(spaceIdx + 1) : "";
+                        User newUser = User.builder()
+                                .email(request.getCustomerEmail())
+                                .firstName(fn)
+                                .lastName(ln)
+                                .phone(request.getCustomerPhone())
+                                .role(com.serene.dms.enums.UserRole.CUSTOMER)
+                                .status(com.serene.dms.enums.UserStatus.ACTIVE)
+                                .passwordHash("GUEST_" + java.util.UUID.randomUUID().toString())
+                                .build();
+                        return userRepository.save(newUser);
+                    });
+        }
+
+        Car car = carRepository.findById(request.getCarId())
+                .orElseThrow(() -> new ResourceNotFoundException("Car not found"));
+        Dealership dealership = dealershipRepository.findById(request.getDealershipId())
+                .orElseThrow(() -> new ResourceNotFoundException("Dealership not found"));
+
+        TestDrive td = TestDrive.builder()
+                .customer(customer)
+                .customerName(request.getCustomerName())
+                .customerEmail(request.getCustomerEmail())
+                .customerPhone(request.getCustomerPhone())
+                .car(car)
+                .carModel(request.getCarModel())
+                .dealership(dealership)
+                .preferredDate(request.getPreferredDate())
+                .preferredTime(request.getPreferredTime() != null ? request.getPreferredTime() : "")
+                .notes(request.getNotes())
+                .status(TestDriveStatus.PENDING)
+                .build();
         return testDriveRepository.save(td);
     }
 

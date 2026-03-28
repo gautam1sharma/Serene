@@ -3,6 +3,7 @@ package com.serene.dms.controller;
 import com.serene.dms.dto.response.ApiResponse;
 import com.serene.dms.dto.response.PaginatedResponse;
 import com.serene.dms.entity.Order;
+import com.serene.dms.exception.BadRequestException;
 import com.serene.dms.enums.OrderStatus;
 import com.serene.dms.enums.PaymentStatus;
 import com.serene.dms.service.OrderService;
@@ -50,14 +51,28 @@ public class OrderController {
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('DEALER','MANAGER','ADMIN')")
     public ResponseEntity<ApiResponse<Order>> updateStatus(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        OrderStatus s = OrderStatus.valueOf(body.get("status").toUpperCase());
+        String raw = body.get("status");
+        if (raw == null || raw.isBlank()) {
+            throw new BadRequestException("status is required");
+        }
+        OrderStatus s = OrderStatus.fromApi(raw);
+        if (s == null) {
+            throw new BadRequestException("Invalid status");
+        }
         return ResponseEntity.ok(ApiResponse.ok(orderService.updateStatus(id, s)));
     }
 
     @PatchMapping("/{id}/payment")
     @PreAuthorize("hasAnyRole('DEALER','MANAGER','ADMIN')")
     public ResponseEntity<ApiResponse<Order>> updatePayment(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        PaymentStatus ps = PaymentStatus.valueOf(body.get("paymentStatus").toUpperCase());
+        String raw = body.get("paymentStatus");
+        if (raw == null || raw.isBlank()) {
+            throw new BadRequestException("paymentStatus is required");
+        }
+        PaymentStatus ps = PaymentStatus.fromApi(raw);
+        if (ps == null) {
+            throw new BadRequestException("Invalid paymentStatus");
+        }
         return ResponseEntity.ok(ApiResponse.ok(orderService.updatePaymentStatus(id, ps)));
     }
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
     Optional<RefreshToken> findByToken(String token);
-    void deleteByUserId(Long userId);
+    void deleteByUser_Id(Long userId);
 
     @Modifying
     @Query("DELETE FROM RefreshToken rt WHERE rt.expiresAt < CURRENT_TIMESTAMP")

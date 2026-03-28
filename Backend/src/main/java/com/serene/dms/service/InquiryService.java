@@ -1,20 +1,26 @@
 package com.serene.dms.service;
 
-import com.serene.dms.entity.Inquiry;
-import com.serene.dms.entity.User;
-import com.serene.dms.enums.InquiryStatus;
-import com.serene.dms.exception.ResourceNotFoundException;
-import com.serene.dms.repository.InquiryRepository;
-import com.serene.dms.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import com.serene.dms.dto.request.CreateInquiryRequest;
+import com.serene.dms.dto.response.InquiryResponse;
+import com.serene.dms.entity.Car;
+import com.serene.dms.entity.Inquiry;
+import com.serene.dms.entity.User;
+import com.serene.dms.enums.InquiryStatus;
+import com.serene.dms.exception.ResourceNotFoundException;
+import com.serene.dms.repository.CarRepository;
+import com.serene.dms.repository.InquiryRepository;
+import com.serene.dms.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,57 +28,110 @@ public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
     private final UserRepository userRepository;
+    private final CarRepository carRepository;
 
-    public Page<Inquiry> getInquiries(int page, int limit, InquiryStatus status) {
+    @Transactional(readOnly = true)
+    public Page<InquiryResponse> getInquiries(int page, int limit, InquiryStatus status) {
         PageRequest pageReq = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
-        if (status != null) return inquiryRepository.findByStatus(status, pageReq);
-        return inquiryRepository.findAll(pageReq);
+        Page<Inquiry> result = status != null
+                ? inquiryRepository.findByStatus(status, pageReq)
+                : inquiryRepository.findAll(pageReq);
+        return result.map(this::toResponse);
     }
 
-    public Inquiry getById(Long id) {
-        return inquiryRepository.findById(id)
+    @Transactional(readOnly = true)
+    public InquiryResponse getById(Long id) {
+        Inquiry inquiry = inquiryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inquiry not found"));
+        return toResponse(inquiry);
     }
 
     @Transactional
-    public Inquiry create(Inquiry inquiry) {
-        inquiry.setStatus(InquiryStatus.PENDING);
-        return inquiryRepository.save(inquiry);
+    public InquiryResponse create(CreateInquiryRequest request) {
+        User customer;
+        if (request.getCustomerId() != null) {
+            customer = userRepository.findById(request.getCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        } else {
+            customer = userRepository.findByEmail(request.getCustomerEmail())
+                    .orElseGet(() -> {
+                        String name = request.getCustomerName() != null ? request.getCustomerName() : "Guest";
+                        int spaceIdx = name.indexOf(" ");
+                        String fn = spaceIdx > 0 ? name.substring(0, spaceIdx) : name;
+                        String ln = spaceIdx > 0 ? name.substring(spaceIdx + 1) : "";
+                        User newUser = User.builder()
+                                .email(request.getCustomerEmail())
+                                .firstName(fn)
+                                .lastName(ln)
+                                .phone(request.getCustomerPhone())
+                                .role(com.serene.dms.enums.UserRole.CUSTOMER)
+                                .status(com.serene.dms.enums.UserStatus.ACTIVE)
+                                .passwordHash("GUEST_" + java.util.UUID.randomUUID().toString())
+                                .build();
+                        return userRepository.save(newUser);
+                    });
+        }
+
+        Car car = carRepository.findById(request.getCarId())
+                .orElseThrow(() -> new ResourceNotFoundException("Car not found"));
+
+        Inquiry inquiry = Inquiry.builder()
+                .customer(customer)
+                .customerName(request.getCustomerName())
+                .customerEmail(request.getCustomerEmail())
+                .customerPhone(request.getCustomerPhone())
+                .car(car)
+                .carModel(car.getModel())
+                .message(request.getMessage())
+                .status(InquiryStatus.PENDING)
+                .build();
+
+        return toResponse(inquiryRepository.save(inquiry));
     }
 
     @Transactional
-    public Inquiry respond(Long id, Long dealerId) {
-        Inquiry inq = getById(id);
+    public InquiryResponse respond(Long id, Long dealerId) {
+        Inquiry inq = inquiryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inquiry not found"));
         User dealer = userRepository.findById(dealerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dealer not found"));
         inq.setStatus(InquiryStatus.RESPONDED);
         inq.setAssignedDealer(dealer);
-        return inquiryRepository.save(inq);
+        return toResponse(inquiryRepository.save(inq));
     }
 
     @Transactional
-    public Inquiry close(Long id) {
-        Inquiry inq = getById(id);
+    public InquiryResponse close(Long id) {
+        Inquiry inq = inquiryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inquiry not found"));
         inq.setStatus(InquiryStatus.CLOSED);
-        return inquiryRepository.save(inq);
+        return toResponse(inquiryRepository.save(inq));
     }
 
     @Transactional
-    public Inquiry assign(Long id, Long dealerId) {
-        Inquiry inq = getById(id);
+    public InquiryResponse assign(Long id, Long dealerId) {
+        Inquiry inq = inquiryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Inquiry not found"));
         User dealer = userRepository.findById(dealerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dealer not found"));
         inq.setAssignedDealer(dealer);
-        return inquiryRepository.save(inq);
+        return toResponse(inquiryRepository.save(inq));
     }
 
-    public List<Inquiry> getByCustomer(Long customerId) {
-        return inquiryRepository.findByCustomerIdOrderByCreatedAtDesc(customerId);
+    @Transactional(readOnly = true)
+    public List<InquiryResponse> getByCustomer(Long customerId) {
+        return inquiryRepository.findByCustomerIdOrderByCreatedAtDesc(customerId).stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public List<Inquiry> getPending(int limit) {
+    @Transactional(readOnly = true)
+    public List<InquiryResponse> getPending(int limit) {
         return inquiryRepository.findByStatusOrderByCreatedAtDesc(InquiryStatus.PENDING)
-                .stream().limit(limit).toList();
+                .stream()
+                .limit(limit)
+                .map(this::toResponse)
+                .toList();
     }
 
     public Map<String, Long> getStatistics() {
@@ -82,5 +141,23 @@ public class InquiryService {
                 "respondedInquiries", inquiryRepository.countByStatus(InquiryStatus.RESPONDED),
                 "closedInquiries", inquiryRepository.countByStatus(InquiryStatus.CLOSED)
         );
+    }
+
+    private InquiryResponse toResponse(Inquiry i) {
+        return InquiryResponse.builder()
+                .id(String.valueOf(i.getId()))
+                .customerId(String.valueOf(i.getCustomer().getId()))
+                .customerName(i.getCustomerName())
+                .customerEmail(i.getCustomerEmail())
+                .customerPhone(i.getCustomerPhone())
+                .carId(String.valueOf(i.getCar().getId()))
+                .carModel(i.getCarModel())
+                .message(i.getMessage())
+                .status(i.getStatus())
+                .assignedDealerId(i.getAssignedDealer() != null
+                        ? String.valueOf(i.getAssignedDealer().getId()) : null)
+                .createdAt(i.getCreatedAt())
+                .updatedAt(i.getUpdatedAt())
+                .build();
     }
 }
