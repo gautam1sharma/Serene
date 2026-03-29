@@ -23,7 +23,9 @@ import com.serene.dms.repository.UserRepository;
 import com.serene.dms.security.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -45,6 +47,7 @@ public class AuthService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
+        log.info("User logged in: email={}, role={}", user.getEmail(), user.getRole());
         return buildAuthResponse(user);
     }
 
@@ -65,6 +68,7 @@ public class AuthService {
                 .build();
 
         user = userRepository.save(user);
+        log.info("New user registered: email={}, role={}", user.getEmail(), user.getRole());
         return buildAuthResponse(user);
     }
 
@@ -89,6 +93,7 @@ public class AuthService {
     @Transactional
     public void logout(Long userId) {
         refreshTokenRepository.deleteByUser_Id(userId);
+        log.info("User logged out: userId={}", userId);
     }
 
     public AuthResponse.UserDto getCurrentUser(Long userId) {
@@ -125,6 +130,7 @@ public class AuthService {
 
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+        log.info("Password changed for userId={}", userId);
     }
 
     // ── Helpers ──────────────────────────────────────────────
