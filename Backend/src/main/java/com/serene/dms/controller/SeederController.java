@@ -1,40 +1,41 @@
 
 package com.serene.dms.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.serene.dms.entity.Dealership;
 import com.serene.dms.entity.User;
 import com.serene.dms.enums.UserRole;
 import com.serene.dms.enums.UserStatus;
 import com.serene.dms.repository.DealershipRepository;
 import com.serene.dms.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/seeder")
+@RequiredArgsConstructor
 public class SeederController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private DealershipRepository dealershipRepository;
+    private final DealershipRepository dealershipRepository;
     
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/run")
+    @PreAuthorize("hasRole('ADMIN')")
     public String seedDatabase() {
-        try {
-            String defaultPassword = passwordEncoder.encode("password123");
+        String defaultPassword = passwordEncoder.encode("password123");
 
             // Indian Names for generation
             String[] firstNames = {"Aarav", "Vihaan", "Aditya", "Sai", "Arjun", "Siddharth", "Rohan", "Rahul", "Karan", "Gautam", 
@@ -114,11 +115,7 @@ public class SeederController {
                 userRepository.save(customer);
             }
 
-            return "Success!";
-        } catch(Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
+        return "Success!";
     }
 }
 

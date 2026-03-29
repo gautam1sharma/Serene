@@ -1,5 +1,13 @@
 package com.serene.dms.service;
 
+import java.time.LocalDateTime;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.serene.dms.dto.request.LoginRequest;
 import com.serene.dms.dto.request.RegisterRequest;
 import com.serene.dms.dto.response.AuthResponse;
@@ -13,14 +21,8 @@ import com.serene.dms.exception.ResourceNotFoundException;
 import com.serene.dms.repository.RefreshTokenRepository;
 import com.serene.dms.repository.UserRepository;
 import com.serene.dms.security.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -116,6 +118,9 @@ public class AuthService {
 
         if (!passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
             throw new BadRequestException("Current password is incorrect");
+        }
+        if (oldPassword.equals(newPassword)) {
+            throw new BadRequestException("New password must be different from current password");
         }
 
         user.setPasswordHash(passwordEncoder.encode(newPassword));

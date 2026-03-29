@@ -42,18 +42,38 @@ Scope: Frontend + Backend completion pass.
 - Backend now compiles successfully with `mvn clean compile -DskipTests`.
 - Evidence: [Backend/src/main/java/com/serene/dms/service/AnalyticsService.java](Backend/src/main/java/com/serene/dms/service/AnalyticsService.java)
 
+7. Backend now has automated regression tests.
+- Added unit tests for authentication flows (register, refresh token expiry, password change guard, profile update behavior).
+- Added unit tests for analytics behavior (revenue null fallback and marketing channel grouping).
+- Evidence: [Backend/src/test/java/com/serene/dms/service/AuthServiceTest.java](Backend/src/test/java/com/serene/dms/service/AuthServiceTest.java)
+- Evidence: [Backend/src/test/java/com/serene/dms/service/AnalyticsServiceTest.java](Backend/src/test/java/com/serene/dms/service/AnalyticsServiceTest.java)
+
+8. Backend security and validation were hardened.
+- `/auth/me` update endpoints now use validated DTOs instead of untyped maps to avoid invalid payloads reaching business logic.
+- Password changes now reject reusing the current password.
+- Seeder endpoint access is now admin-only and no longer publicly exposed.
+- Evidence: [Backend/src/main/java/com/serene/dms/controller/AuthController.java](Backend/src/main/java/com/serene/dms/controller/AuthController.java)
+- Evidence: [Backend/src/main/java/com/serene/dms/dto/request/UpdateProfileRequest.java](Backend/src/main/java/com/serene/dms/dto/request/UpdateProfileRequest.java)
+- Evidence: [Backend/src/main/java/com/serene/dms/dto/request/ChangePasswordRequest.java](Backend/src/main/java/com/serene/dms/dto/request/ChangePasswordRequest.java)
+- Evidence: [Backend/src/main/java/com/serene/dms/service/AuthService.java](Backend/src/main/java/com/serene/dms/service/AuthService.java)
+- Evidence: [Backend/src/main/java/com/serene/dms/config/SecurityConfig.java](Backend/src/main/java/com/serene/dms/config/SecurityConfig.java)
+- Evidence: [Backend/src/main/java/com/serene/dms/controller/SeederController.java](Backend/src/main/java/com/serene/dms/controller/SeederController.java)
+
+9. Sensitive runtime values are now environment-overridable.
+- MariaDB credentials, JWT secret, JPA DDL mode, and app log level can now be configured by environment variables.
+- Evidence: [Backend/src/main/resources/application.yml](Backend/src/main/resources/application.yml)
+
 ## Remaining
 
-1. Backend still has no automated tests (`mvn test` reports no tests to run), so regression protection is still manual.
-
-2. Non-blocking frontend optimization remains.
+1. Non-blocking frontend optimization remains.
 - Production build completes successfully, but Vite still warns about large chunks that could be split further.
 
-3. Non-blocking polish remains in a few legacy UI files.
+2. Non-blocking polish remains in a few legacy UI files.
 - Some decorative/legacy text artifacts outside core customer flow can still be cleaned incrementally.
 
 ## Verification Snapshot
 
 1. Frontend build is passing (`npm run build`).
 2. Backend clean compile is passing (`mvn clean compile -DskipTests`).
-3. Functional blocker count from this pass: 0.
+3. Backend unit tests are passing (`mvn clean test`, 7 tests).
+4. Functional blocker count from this pass: 0.

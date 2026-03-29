@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/cars/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/dealerships/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/inquiries", "/test-drives").permitAll()
-                .requestMatchers("/actuator/health", "/seeder/**").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
                 // Users endpoint (method security handles roles)
                 .requestMatchers("/users/**").authenticated()
                 // Everything else requires authentication

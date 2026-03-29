@@ -1,22 +1,29 @@
 package com.serene.dms.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.serene.dms.dto.request.ChangePasswordRequest;
 import com.serene.dms.dto.request.LoginRequest;
 import com.serene.dms.dto.request.RefreshTokenRequest;
 import com.serene.dms.dto.request.RegisterRequest;
+import com.serene.dms.dto.request.UpdateProfileRequest;
 import com.serene.dms.dto.response.ApiResponse;
 import com.serene.dms.dto.response.AuthResponse;
 import com.serene.dms.entity.User;
 import com.serene.dms.repository.UserRepository;
 import com.serene.dms.service.AuthService;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -62,19 +69,23 @@ public class AuthController {
     @PutMapping("/me")
     public ResponseEntity<ApiResponse<AuthResponse.UserDto>> updateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody Map<String, String> body) {
+            @Valid @RequestBody UpdateProfileRequest request) {
         Long userId = resolveUserId(userDetails);
         AuthResponse.UserDto dto = authService.updateProfile(
-                userId, body.get("firstName"), body.get("lastName"), body.get("phone"), body.get("avatar"));
+                userId,
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhone(),
+                request.getAvatar());
         return ResponseEntity.ok(ApiResponse.ok(dto, "Profile updated successfully"));
     }
 
     @PutMapping("/me/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody Map<String, String> body) {
+            @Valid @RequestBody ChangePasswordRequest request) {
         Long userId = resolveUserId(userDetails);
-        authService.changePassword(userId, body.get("oldPassword"), body.get("newPassword"));
+        authService.changePassword(userId, request.getOldPassword(), request.getNewPassword());
         return ResponseEntity.ok(ApiResponse.ok(null, "Password changed successfully"));
     }
 
