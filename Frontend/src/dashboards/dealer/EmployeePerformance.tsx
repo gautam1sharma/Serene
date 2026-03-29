@@ -58,7 +58,7 @@ export const EmployeePerformance: React.FC = () => {
 
       if (drivesRes.success && drivesRes.data) {
         const upcoming = drivesRes.data.data.filter(
-          d => d.status === 'scheduled' || d.status === 'pending'
+          d => d.status === 'confirmed' || d.status === 'pending'
         ).length;
         setUpcomingDrives(upcoming);
       }

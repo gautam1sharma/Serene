@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiRequest } from '@/lib/api';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardMetrics {
@@ -38,6 +39,7 @@ const fmt = (n: number) => {
 };
 
 export const ManagerDashboard: React.FC = () => {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
     const [orders, setOrders] = useState<RecentOrder[]>([]);
@@ -54,7 +56,7 @@ export const ManagerDashboard: React.FC = () => {
                         params: dealershipId ? { dealershipId } : {},
                     }),
                     apiRequest<RecentOrder[]>('/analytics/recent-orders', {
-                        params: { limit: 5 },
+                        params: dealershipId ? { limit: 5, dealershipId } : { limit: 5 },
                     }),
                 ]);
                 if (metricsRes.success && metricsRes.data) {
@@ -271,7 +273,10 @@ export const ManagerDashboard: React.FC = () => {
                                 </table>
                             </div>
                             <div className="p-4 bg-slate-50/50 flex justify-center">
-                                <button className="text-xs font-bold text-dealer-primary hover:text-dealer-primary-dim transition-colors uppercase tracking-widest">
+                                <button
+                                    onClick={() => navigate('/manager/reports')}
+                                    className="text-xs font-bold text-dealer-primary hover:text-dealer-primary-dim transition-colors uppercase tracking-widest"
+                                >
                                     View Complete Transaction History
                                 </button>
                             </div>

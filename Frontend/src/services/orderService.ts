@@ -105,9 +105,9 @@ class OrderService {
     return { success: true, data: res.data.map(normalizeOrder) };
   }
 
-  async getRecentOrders(limit: number = 5): Promise<ApiResponse<Order[]>> {
+  async getRecentOrders(limit: number = 5, dealershipId?: string): Promise<ApiResponse<Order[]>> {
     const res = await apiRequest<Record<string, unknown>[]>('/orders/recent', {
-      params: { limit },
+      params: { limit, dealershipId },
     });
     if (!res.success || !res.data) {
       return { success: false, message: res.message || 'Failed to fetch recent orders' };

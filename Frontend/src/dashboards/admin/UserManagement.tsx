@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiRequest } from '@/lib/api';
+import { toast } from 'sonner';
 
 interface UserRecord {
     id: number;
@@ -39,6 +40,7 @@ const ROLES = ['ALL', 'CUSTOMER', 'EMPLOYEE', 'DEALER', 'MANAGER', 'ADMIN'];
 
 export const UserManagement: React.FC = () => {
     const [users, setUsers] = useState<UserRecord[]>([]);
+    const [selectedUser, setSelectedUser] = useState<UserRecord | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
@@ -92,6 +94,15 @@ export const UserManagement: React.FC = () => {
 
     const initials = (u: UserRecord) =>
         `${u.firstName?.[0] ?? ''}${u.lastName?.[0] ?? ''}`.toUpperCase();
+
+    const handleCopyEmail = async (email: string) => {
+        try {
+            await navigator.clipboard.writeText(email);
+            toast.success('Email copied to clipboard');
+        } catch {
+            toast.error('Failed to copy email');
+        }
+    };
 
     return (
         <div className="px-8 py-8 max-w-7xl mx-auto space-y-6">
@@ -217,10 +228,18 @@ export const UserManagement: React.FC = () => {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button className="p-2 text-dealer-on-surface-variant hover:text-dealer-primary hover:bg-dealer-primary/5 rounded-lg transition-all">
+                                                    <button
+                                                        onClick={() => setSelectedUser(u)}
+                                                        className="p-2 text-dealer-on-surface-variant hover:text-dealer-primary hover:bg-dealer-primary/5 rounded-lg transition-all"
+                                                        title="View details"
+                                                    >
                                                         <span className="material-symbols-outlined text-lg">edit</span>
                                                     </button>
-                                                    <button className="p-2 text-dealer-on-surface-variant hover:text-dealer-primary hover:bg-dealer-primary/5 rounded-lg transition-all">
+                                                    <button
+                                                        onClick={() => handleCopyEmail(u.email)}
+                                                        className="p-2 text-dealer-on-surface-variant hover:text-dealer-primary hover:bg-dealer-primary/5 rounded-lg transition-all"
+                                                        title="Copy email"
+                                                    >
                                                         <span className="material-symbols-outlined text-lg">visibility</span>
                                                     </button>
                                                 </div>
@@ -273,6 +292,45 @@ export const UserManagement: React.FC = () => {
                     </>
                 )}
             </div>
+
+            {selectedUser && (
+                <div className="bg-dealer-surface-container-lowest rounded-2xl shadow-sm border border-dealer-outline-variant/10 p-6">
+                    <div className="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 className="text-lg font-bold text-dealer-on-background">
+                                {selectedUser.firstName} {selectedUser.lastName}
+                            </h3>
+                            <p className="text-sm text-dealer-on-surface-variant">User ID: {selectedUser.id}</p>
+                        </div>
+                        <button
+                            onClick={() => setSelectedUser(null)}
+                            className="p-2 rounded-lg text-dealer-on-surface-variant hover:bg-dealer-surface-container-low"
+                            title="Close details"
+                        >
+                            <span className="material-symbols-outlined text-lg">close</span>
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5 text-sm">
+                        <div>
+                            <p className="text-dealer-on-surface-variant">Email</p>
+                            <p className="font-semibold text-dealer-on-background">{selectedUser.email}</p>
+                        </div>
+                        <div>
+                            <p className="text-dealer-on-surface-variant">Phone</p>
+                            <p className="font-semibold text-dealer-on-background">{selectedUser.phone || '—'}</p>
+                        </div>
+                        <div>
+                            <p className="text-dealer-on-surface-variant">Role</p>
+                            <p className="font-semibold text-dealer-on-background">{selectedUser.role}</p>
+                        </div>
+                        <div>
+                            <p className="text-dealer-on-surface-variant">Status</p>
+                            <p className="font-semibold text-dealer-on-background">{selectedUser.status}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

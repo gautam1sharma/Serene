@@ -15,7 +15,13 @@ class InquiryService {
     }
   ): Promise<ApiResponse<PaginatedResponse<CarInquiry>>> {
     const res = await apiRequest<PaginatedResponse<Record<string, unknown>>>('/inquiries', {
-      params: { page, limit, status: filters?.status },
+      params: {
+        page,
+        limit,
+        status: filters?.status,
+        dealershipId: filters?.dealershipId,
+        assignedDealerId: filters?.assignedDealerId,
+      },
     });
     if (!res.success || !res.data) {
       return { success: false, message: res.message || 'Failed to fetch inquiries' };
@@ -106,7 +112,7 @@ class InquiryService {
 
   async getPendingInquiries(dealershipId?: string, limit: number = 5): Promise<ApiResponse<CarInquiry[]>> {
     const res = await apiRequest<Record<string, unknown>[]>('/inquiries/pending', {
-      params: { limit },
+      params: { limit, dealershipId },
     });
     if (!res.success || !res.data) {
       return { success: false, message: res.message || 'Failed to fetch pending inquiries' };

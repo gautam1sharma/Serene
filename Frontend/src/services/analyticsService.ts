@@ -62,7 +62,7 @@ class AnalyticsService {
         params: { dealershipId },
       }),
       apiRequest<Record<string, unknown>[]>('/orders/recent', {
-        params: { limit: 5 },
+        params: { limit: 5, dealershipId },
       }).catch(() => ({ success: false, data: [] as Record<string, unknown>[] }) as ApiResponse<Record<string, unknown>[]>),
     ]);
 

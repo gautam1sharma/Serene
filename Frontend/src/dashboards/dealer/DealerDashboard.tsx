@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { analyticsService } from '@/services/analyticsService';
 import { inquiryService } from '@/services/inquiryService';
 import { orderService } from '@/services/orderService';
@@ -42,6 +43,8 @@ const Skeleton: React.FC<{ className?: string }> = ({ className }) => (
 
 export const DealerDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const dealershipId = user?.dealershipId ? String(user.dealershipId) : undefined;
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [inquiries, setInquiries] = useState<CarInquiry[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -52,10 +55,10 @@ export const DealerDashboard: React.FC = () => {
     const load = async () => {
       setLoading(true);
       const [metricsRes, inquiriesRes, ordersRes, trendRes] = await Promise.all([
-        analyticsService.getDashboardMetrics(),
-        inquiryService.getInquiries(1, 5, { status: 'pending' }),
-        orderService.getRecentOrders(5),
-        analyticsService.getSalesTrend(14),
+        analyticsService.getDashboardMetrics(dealershipId),
+        inquiryService.getInquiries(1, 5, { status: 'pending', dealershipId }),
+        orderService.getRecentOrders(5, dealershipId),
+        analyticsService.getSalesTrend(14, dealershipId),
       ]);
       if (metricsRes.success && metricsRes.data) setMetrics(metricsRes.data);
       else toast.error('Failed to load dashboard metrics');
@@ -65,7 +68,7 @@ export const DealerDashboard: React.FC = () => {
       setLoading(false);
     };
     load();
-  }, []);
+  }, [dealershipId]);
 
   // Split 14-day revenue trend into two 7-day halves to power separate sparklines
   const revenueHalf = revenueTrend.length >= 7 ? revenueTrend.slice(-7) : revenueTrend;

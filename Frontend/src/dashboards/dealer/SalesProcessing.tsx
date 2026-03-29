@@ -41,8 +41,8 @@ export const SalesProcessing: React.FC = () => {
     setLoading(true);
     const dealershipId = (user as any)?.dealershipId ? String((user as any).dealershipId) : undefined;
     const [ordersRes, statsRes, dashRes] = await Promise.all([
-      orderService.getOrders(p, 15, { status: st || undefined }),
-      orderService.getOrderStatistics(),
+      orderService.getOrders(p, 15, { status: st || undefined, dealershipId }),
+      orderService.getOrderStatistics(dealershipId),
       analyticsService.getDashboardMetrics(dealershipId),
     ]);
     if (ordersRes.success && ordersRes.data) {
@@ -77,6 +77,33 @@ export const SalesProcessing: React.FC = () => {
       setOrders(prev => prev.map(o => o.id === orderId ? res.data! : o));
     } else { toast.error(res.message || 'Update failed'); }
     setUpdating(null);
+  };
+
+  const exportOrderSnapshot = (order: Order) => {
+    const lines = [
+      ['Order Number', order.orderNumber],
+      ['Customer Name', order.customerName],
+      ['Customer Email', order.customerEmail],
+      ['Customer Phone', order.customerPhone],
+      ['Car Model', order.carModel],
+      ['Order Status', order.status],
+      ['Payment Status', order.paymentStatus],
+      ['Final Amount', String(order.finalAmount)],
+      ['Created At', new Date(order.createdAt).toISOString()],
+    ];
+    const csv = lines
+      .map(([k, v]) => `"${String(k).replace(/"/g, '""')}","${String(v ?? '').replace(/"/g, '""')}"`)
+      .join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${order.orderNumber || order.id}-snapshot.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Order snapshot exported');
   };
 
   const filtered = search
@@ -211,7 +238,11 @@ export const SalesProcessing: React.FC = () => {
                                 </select>}
                           </td>
                           <td className="px-6 py-5">
-                            <button className="text-dealer-on-surface-variant hover:text-dealer-primary transition-colors">
+                            <button
+                              onClick={() => exportOrderSnapshot(order)}
+                              className="text-dealer-on-surface-variant hover:text-dealer-primary transition-colors"
+                              title="Export order snapshot"
+                            >
                               <span className="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
                             </button>
                           </td>

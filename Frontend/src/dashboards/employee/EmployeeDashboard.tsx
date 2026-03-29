@@ -33,7 +33,7 @@ export const EmployeeDashboard: React.FC = () => {
             }
             if (driveRes.success && driveRes.data) {
                 setUpcomingDrives(
-                    driveRes.data.data.filter(d => d.status === 'scheduled' || d.status === 'pending').length
+                    driveRes.data.data.filter(d => d.status === 'confirmed' || d.status === 'pending').length
                 );
             }
             setLoading(false);

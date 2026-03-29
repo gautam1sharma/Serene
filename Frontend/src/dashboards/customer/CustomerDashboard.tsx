@@ -201,7 +201,7 @@ export const CustomerDashboard: React.FC = () => {
   return (
     <main className="space-y-12 pb-12">
 
-      {/* â•â• HERO WELCOME â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Hero Welcome */}
       <section className="relative overflow-hidden rounded-3xl bg-serene-matte text-white p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between">
         <div className="z-10 relative">
           <h1 className="text-4xl md:text-5xl font-serif mb-4">
@@ -228,7 +228,7 @@ export const CustomerDashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* â•â• SUMMARY STAT CARDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Summary Stat Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           label="My Orders"
@@ -274,7 +274,7 @@ export const CustomerDashboard: React.FC = () => {
         />
       </section>
 
-      {/* â•â• FEATURED VEHICLES â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Featured Vehicles */}
       <section>
         <div className="flex items-end justify-between mb-8">
           <div>
@@ -311,7 +311,7 @@ export const CustomerDashboard: React.FC = () => {
         )}
       </section>
 
-      {/* â•â• ACTIVITY SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Activity Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* ── Upcoming Test Drives ─────────────────────────────── */}

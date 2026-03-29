@@ -118,17 +118,6 @@ public class AnalyticsService {
         return result;
     }
 
-    public Map<String, Long> getMarketingROI() {
-        List<Object[]> rows = inquiryRepository.countByChannel();
-        Map<String, Long> result = new LinkedHashMap<>();
-        for (Object[] row : rows) {
-            String channel = row[0] != null ? row[0].toString() : "OTHER";
-            Long count = row[1] instanceof Long ? (Long) row[1] : ((Number) row[1]).longValue();
-            result.put(channel, count);
-        }
-        return result;
-    }
-
     public List<Map<String, Object>> getRecentOrders(int limit) {
         return orderRepository.findByOrderByCreatedAtDesc(PageRequest.of(0, limit))
                 .stream()

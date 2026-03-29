@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { Search, Bell, LogOut, User, Settings, Menu, X, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserRole } from '@/types';
+import { UserRole, type Notification } from '@/types';
 import { notificationService } from '@/services/notificationService';
 import { cn } from '@/lib/utils';
 import {
@@ -88,17 +88,61 @@ export const TopNav: React.FC = () => {
   const [mobileOpen, setMobileOpen]   = useState(false);
   const [searchOpen, setSearchOpen]   = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const navItems = getNavItems(user?.role);
 
-  // Load notification count
+  const loadNotifications = async () => {
+    if (!user) return;
+    setLoadingNotifications(true);
+    const [countRes, listRes] = await Promise.all([
+      notificationService.getUnreadCount(user.id),
+      notificationService.getNotifications(user.id, { limit: 8 }),
+    ]);
+    if (countRes.success && countRes.data !== undefined) {
+      setUnreadCount(countRes.data);
+    }
+    if (listRes.success && listRes.data) {
+      setNotifications(listRes.data);
+    }
+    setLoadingNotifications(false);
+  };
+
+  const handleMarkAsRead = async (notificationId: string) => {
+    const res = await notificationService.markAsRead(notificationId);
+    if (!res.success) return;
+    setNotifications(prev =>
+      prev.map(item => item.id === notificationId ? { ...item, read: true } : item)
+    );
+    setUnreadCount(prev => Math.max(0, prev - 1));
+  };
+
+  const handleMarkAllAsRead = async () => {
+    if (!user || unreadCount === 0) return;
+    const res = await notificationService.markAllAsRead(user.id);
+    if (!res.success) return;
+    setNotifications(prev => prev.map(item => ({ ...item, read: true })));
+    setUnreadCount(0);
+  };
+
+  const formatTime = (value: Date) => {
+    const date = new Date(value);
+    const now = Date.now();
+    const diffMinutes = Math.floor((now - date.getTime()) / 60000);
+    if (diffMinutes < 1) return 'Just now';
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    const diffHours = Math.floor(diffMinutes / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return date.toLocaleDateString();
+  };
+
+  // Load notifications and unread count
   useEffect(() => {
     if (!user) return;
-    notificationService.getUnreadCount(user.id).then(res => {
-      if (res.success && res.data !== undefined) setUnreadCount(res.data);
-    });
+    loadNotifications();
   }, [user]);
 
   // Focus search input when opened
@@ -111,7 +155,7 @@ export const TopNav: React.FC = () => {
 
   return (
     <>
-      {/* â•â•â• MAIN HEADER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Main Header */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
 
@@ -198,16 +242,56 @@ export const TopNav: React.FC = () => {
                     )}
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-72 p-0 overflow-hidden">
+                <DropdownMenuContent align="end" className="w-80 p-0 overflow-hidden">
                   <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                     <p className="font-semibold text-sm text-serene-matte">Notifications</p>
-                    {unreadCount > 0 && (
-                      <span className="text-[10px] bg-red-50 text-red-600 font-semibold px-2 py-0.5 rounded-full">{unreadCount} new</span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {unreadCount > 0 && (
+                        <span className="text-[10px] bg-red-50 text-red-600 font-semibold px-2 py-0.5 rounded-full">{unreadCount} new</span>
+                      )}
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={handleMarkAllAsRead}
+                          className="text-[10px] uppercase tracking-widest font-semibold text-gray-400 hover:text-serene-matte transition-colors"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="px-4 py-6 text-center">
-                    <Bell className="w-8 h-8 mx-auto mb-2 text-gray-200" />
-                    <p className="text-xs text-gray-400">No new notifications</p>
+                  <div className="max-h-80 overflow-y-auto">
+                    {loadingNotifications ? (
+                      <div className="px-4 py-6 text-center">
+                        <p className="text-xs text-gray-400">Loading notifications...</p>
+                      </div>
+                    ) : notifications.length === 0 ? (
+                      <div className="px-4 py-6 text-center">
+                        <Bell className="w-8 h-8 mx-auto mb-2 text-gray-200" />
+                        <p className="text-xs text-gray-400">No new notifications</p>
+                      </div>
+                    ) : (
+                      notifications.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            if (!item.read) void handleMarkAsRead(item.id);
+                          }}
+                          className={cn(
+                            'w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors',
+                            !item.read ? 'bg-red-50/30' : ''
+                          )}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs font-semibold text-serene-matte">{item.title}</p>
+                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{item.message}</p>
+                            </div>
+                            {!item.read && <span className="mt-1 w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />}
+                          </div>
+                          <p className="text-[10px] text-gray-400 mt-1">{formatTime(item.createdAt)}</p>
+                        </button>
+                      ))
+                    )}
                   </div>
                   <div className="border-t border-gray-100 px-4 py-2.5">
                     <Link to="/notifications" className="text-[10px] uppercase tracking-widest font-semibold text-gray-400 hover:text-serene-matte transition-colors">
@@ -289,7 +373,7 @@ export const TopNav: React.FC = () => {
         </div>
       </header>
 
-      {/* â•â•â• MOBILE DRAWER â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+      {/* Mobile Drawer */}
       <div
         className={cn(
           'md:hidden fixed inset-x-0 top-20 z-40 bg-white border-b border-gray-100 shadow-lg transition-all duration-300 overflow-hidden',
