@@ -9,6 +9,10 @@ import com.serene.dms.enums.CarStatus;
 import com.serene.dms.exception.ResourceNotFoundException;
 import com.serene.dms.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CarService {
@@ -28,7 +33,8 @@ public class CarService {
     private final ObjectMapper objectMapper;
 
     public Page<Car> getCars(int page, int limit, CarCategory category, CarStatus status,
-                             BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId, String search) {
+                             BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId, String search,
+                             String sortBy, String sortDir) {
         Specification<Car> spec = Specification.where(null);
 
         if (category != null) spec = spec.and((root, q, cb) -> cb.equal(root.get("category"), category));
@@ -44,33 +50,52 @@ public class CarService {
             ));
         }
 
-        PageRequest pageReq = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        String resolvedSort = (sortBy != null && !sortBy.isBlank()) ? sortBy : "createdAt";
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageReq = PageRequest.of(page - 1, limit, Sort.by(direction, resolvedSort));
         return carRepository.findAll(spec, pageReq);
     }
 
+    @Cacheable(value = "carById", key = "#id")
     public Car getCarById(Long id) {
+        log.debug("Fetching car by id={}", id);
         return carRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car not found"));
     }
 
     public List<Car> getCarsByDealership(Long dealershipId) {
+        log.debug("Fetching cars for dealership id={}", dealershipId);
         return carRepository.findByDealershipId(dealershipId);
     }
 
+    @Cacheable(value = "featuredCars", key = "#limit")
     public List<Car> getFeaturedCars(int limit) {
+        log.debug("Fetching {} featured cars", limit);
         return carRepository.findByStatusOrderByCreatedAtDesc(CarStatus.AVAILABLE)
                 .stream().limit(limit).toList();
     }
 
     public List<Car> searchCars(String query) {
+        log.debug("Searching cars with query='{}'", query);
         return carRepository.searchCars(query);
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "cars", allEntries = true),
+        @CacheEvict(value = "featuredCars", allEntries = true)
+    })
     @Transactional
     public Car createCar(Car car) {
-        return carRepository.save(car);
+        Car saved = carRepository.save(car);
+        log.info("Car created: id={}, model={}", saved.getId(), saved.getModel());
+        return saved;
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "carById", key = "#id"),
+        @CacheEvict(value = "cars", allEntries = true),
+        @CacheEvict(value = "featuredCars", allEntries = true)
+    })
     @Transactional
     public Car updateCar(Long id, Car updates) {
         Car car = getCarById(id);
@@ -86,20 +111,35 @@ public class CarService {
         if (updates.getFeatures() != null) car.setFeatures(updates.getFeatures());
         if (updates.getImages() != null) car.setImages(updates.getImages());
         if (updates.getDescription() != null) car.setDescription(updates.getDescription());
-        return carRepository.save(car);
+        Car saved = carRepository.save(car);
+        log.info("Car updated: id={}", id);
+        return saved;
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "carById", key = "#id"),
+        @CacheEvict(value = "cars", allEntries = true),
+        @CacheEvict(value = "featuredCars", allEntries = true)
+    })
     @Transactional
     public Car updateCarStatus(Long id, CarStatus status) {
         Car car = getCarById(id);
         car.setStatus(status);
-        return carRepository.save(car);
+        Car saved = carRepository.save(car);
+        log.info("Car status updated: id={}, status={}", id, status);
+        return saved;
     }
 
+    @Caching(evict = {
+        @CacheEvict(value = "carById", key = "#id"),
+        @CacheEvict(value = "cars", allEntries = true),
+        @CacheEvict(value = "featuredCars", allEntries = true)
+    })
     @Transactional
     public void deleteCar(Long id) {
         Car car = getCarById(id);
         carRepository.delete(car);
+        log.info("Car deleted: id={}", id);
     }
 
     public CarResponse toCarResponse(Car car) {
@@ -127,8 +167,9 @@ public class CarService {
 
     @Transactional(readOnly = true)
     public Page<CarResponse> getCarsResponse(int page, int limit, CarCategory category, CarStatus status,
-                                             BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId, String search) {
-        return getCars(page, limit, category, status, minPrice, maxPrice, dealershipId, search)
+                                             BigDecimal minPrice, BigDecimal maxPrice, Long dealershipId,
+                                             String search, String sortBy, String sortDir) {
+        return getCars(page, limit, category, status, minPrice, maxPrice, dealershipId, search, sortBy, sortDir)
                 .map(this::toCarResponse);
     }
 
@@ -163,3 +204,4 @@ public class CarService {
         }
     }
 }
+

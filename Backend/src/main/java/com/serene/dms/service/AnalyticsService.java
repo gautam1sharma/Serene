@@ -3,6 +3,8 @@ package com.serene.dms.service;
 import com.serene.dms.enums.*;
 import com.serene.dms.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AnalyticsService {
@@ -22,7 +25,9 @@ public class AnalyticsService {
     private final InquiryRepository inquiryRepository;
     private final TestDriveRepository testDriveRepository;
 
+    @Cacheable(value = "analytics", key = "'dashboard-' + #dealershipId")
     public Map<String, Object> getDashboardMetrics(Long dealershipId) {
+        log.debug("Computing dashboard metrics for dealershipId={}", dealershipId);
         long totalUsers = userRepository.countByRole(UserRole.CUSTOMER);
         long totalCars = dealershipId != null
                 ? carRepository.countByDealershipId(dealershipId)
@@ -36,7 +41,6 @@ public class AnalyticsService {
         long upcomingTestDrives = testDriveRepository.countByStatusIn(
                 List.of(TestDriveStatus.PENDING, TestDriveStatus.CONFIRMED));
 
-        // Use LinkedHashMap to safely hold all values (Map.of throws NPE on null values)
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("totalUsers", totalUsers);
         result.put("totalCars", totalCars);
