@@ -22,7 +22,9 @@ import com.serene.dms.repository.TestDriveRepository;
 import com.serene.dms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TestDriveService {
@@ -87,13 +89,16 @@ public class TestDriveService {
                 .notes(request.getNotes())
                 .status(TestDriveStatus.PENDING)
                 .build();
-        return testDriveRepository.save(td);
+        TestDrive saved = testDriveRepository.save(td);
+        log.info("Test drive scheduled: id={}, carId={}, date={}", saved.getId(), request.getCarId(), request.getPreferredDate());
+        return saved;
     }
 
     @Transactional
     public TestDrive updateStatus(Long id, TestDriveStatus status) {
         TestDrive td = getById(id);
         td.setStatus(status);
+        log.info("Test drive status updated: id={}, status={}", id, status);
         return testDriveRepository.save(td);
     }
 

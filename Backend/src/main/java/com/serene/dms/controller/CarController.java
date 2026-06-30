@@ -37,9 +37,11 @@ public class CarController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) Long dealershipId,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDir) {
 
-        Page<CarResponse> result = carService.getCarsResponse(page, limit, category, status, minPrice, maxPrice, dealershipId, search);
+        Page<CarResponse> result = carService.getCarsResponse(page, limit, category, status, minPrice, maxPrice, dealershipId, search, sortBy, sortDir);
 
         PaginatedResponse<CarResponse> response = PaginatedResponse.<CarResponse>builder()
                 .data(result.getContent())

@@ -21,7 +21,9 @@ import com.serene.dms.repository.InquiryRepository;
 import com.serene.dms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InquiryService {
@@ -86,7 +88,9 @@ public class InquiryService {
                 .status(InquiryStatus.PENDING)
                 .build();
 
-        return toResponse(inquiryRepository.save(inquiry));
+        InquiryResponse response = toResponse(inquiryRepository.save(inquiry));
+        log.info("Inquiry created: id={}, carId={}, customerEmail={}", response.getId(), request.getCarId(), request.getCustomerEmail());
+        return response;
     }
 
     @Transactional
@@ -97,6 +101,7 @@ public class InquiryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Dealer not found"));
         inq.setStatus(InquiryStatus.RESPONDED);
         inq.setAssignedDealer(dealer);
+        log.info("Inquiry responded: id={}, dealerId={}", id, dealerId);
         return toResponse(inquiryRepository.save(inq));
     }
 
@@ -105,6 +110,7 @@ public class InquiryService {
         Inquiry inq = inquiryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Inquiry not found"));
         inq.setStatus(InquiryStatus.CLOSED);
+        log.info("Inquiry closed: id={}", id);
         return toResponse(inquiryRepository.save(inq));
     }
 

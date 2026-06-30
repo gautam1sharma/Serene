@@ -37,6 +37,11 @@ spring:
       write-dates-as-timestamps: false
     default-property-inclusion: non_null
 
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=10m
+
 jwt:
   secret: ${JWT_SECRET:c2VyZW5lLW1vdG9ycy1kbXMtand0LXNlY3JldC1rZXktZm9yLWhtYWMtc2hhMjU2LXNpZ25pbmc=}
   access-token-expiry: 86400000
@@ -68,3 +73,9 @@ logging:
     com.serene.dms: ${APP_LOG_LEVEL:INFO}
     org.springframework.security: INFO
     org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ${LOG_FILE:logs/serene-dms.log}
+
